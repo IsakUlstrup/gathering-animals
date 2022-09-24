@@ -157,8 +157,8 @@ type alias Model =
 init : () -> ( Model, Cmd Msg )
 init _ =
     ( Model
-        (Animal Idle)
-        (Resource (Alive ( 100, 100 )))
+        (Animal <| Cooldown 1000)
+        (Resource <| Alive ( 100, 100 ))
         []
     , Cmd.none
     )
