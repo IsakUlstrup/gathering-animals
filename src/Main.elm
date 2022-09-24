@@ -3,6 +3,7 @@ module Main exposing (Model, Msg, main)
 import Browser
 import Browser.Events
 import Html exposing (Html, button, div, h3, main_, p, text)
+import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 
 
@@ -31,7 +32,7 @@ setIdle animal =
 
 setInteract : Animal -> Animal
 setInteract animal =
-    { animal | state = Interact 500 }
+    { animal | state = Interact 300 }
 
 
 tickState : Int -> Animal -> Animal
@@ -211,8 +212,20 @@ update msg model =
 
 viewAnimal : Animal -> Html msg
 viewAnimal animal =
-    div []
-        [ h3 [] [ text "Animal" ]
+    let
+        state =
+            case animal.state of
+                Idle ->
+                    "idle"
+
+                Interact _ ->
+                    "interact"
+
+                Cooldown _ ->
+                    "cooldown"
+    in
+    div [ class "animal", class state ]
+        [ h3 [ class "name" ] [ text "Animal" ]
         , p [] [ text <| Debug.toString animal.state ]
         ]
 
