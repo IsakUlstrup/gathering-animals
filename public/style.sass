@@ -15,11 +15,19 @@ $paper-texture: url("./cream-paper.png")
 @function paper-gradient($colors)
     @return texture-gradient($paper-texture, $colors)
 
+body
+    background: #262626
+    min-height: 100vh
+    display: flex
+    flex-direction: column
+    justify-content: center
+    // align-content: center
+
 // MAIN
 main
-    padding: $spacing-large
+    padding: $spacing-medium
     display: flex
-    gap: $spacing-large
+    gap: $spacing-medium
     background: paper-gradient((red, orange))
 
     *
