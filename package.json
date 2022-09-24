@@ -5,7 +5,8 @@
   },
   "devDependencies": {
     "elm-hot": "1.1.6",
-    "node-elm-compiler": "5.0.6"
+    "node-elm-compiler": "5.0.6",
+    "sass": "1.55.0"
   },
   "scripts": {
     "dev": "parcel public/index.html",
