@@ -1,1 +1,26 @@
 @use "sass/reset"
+
+// PALETTE
+$spacing-small: 0.5rem
+$spacing-medium: 1rem
+$spacing-large: 2rem
+
+// ASSETS
+$paper-texture: url("./cream-paper.png")
+
+// FUNCTIONS
+@function texture-gradient($texture, $colors)
+    @return $texture, linear-gradient(to bottom right, $colors)
+
+@function paper-gradient($colors)
+    @return texture-gradient($paper-texture, $colors)
+
+// MAIN
+main
+    padding: $spacing-large
+    display: flex
+    gap: $spacing-large
+    background: paper-gradient((red, orange))
+
+    *
+        flex: 1
