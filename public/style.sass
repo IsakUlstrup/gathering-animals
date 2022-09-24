@@ -16,7 +16,7 @@ $paper-texture: url("./cream-paper.png")
     @return texture-gradient($paper-texture, $colors)
 
 body
-    background: #262626
+    background: $paper-texture beige
     min-height: 100vh
     display: flex
     flex-direction: column
@@ -27,6 +27,7 @@ body
 main
     padding: $spacing-medium
     display: flex
+    align-items: center
     gap: $spacing-medium
     background: paper-gradient((red, orange))
 
@@ -35,7 +36,9 @@ main
 
 // ANIMAL
 .animal
-    transition: transform 100ms ease-in
+    .name
+        transition: transform 100ms ease-in
 
     &.interact
-        transform: translateX(1rem)
+        .name
+            transform: translateX(1rem)

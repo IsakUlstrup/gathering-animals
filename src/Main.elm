@@ -2,7 +2,7 @@ module Main exposing (Model, Msg, main)
 
 import Browser
 import Browser.Events
-import Html exposing (Html, button, div, h3, main_, p, text)
+import Html exposing (Html, button, div, h3, main_, meter, p, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 
@@ -226,13 +226,14 @@ viewAnimal animal =
     in
     div [ class "animal", class state ]
         [ h3 [ class "name" ] [ text "Animal" ]
-        , p [] [ text <| Debug.toString animal.state ]
+
+        -- , p [] [ text <| Debug.toString animal.state ]
         ]
 
 
 viewLoot : Int -> Item -> Html Msg
 viewLoot index item =
-    button [ onClick <| LootItem index ] [ text <| Debug.toString item ]
+    button [ onClick <| LootItem index ] [ text <| String.fromChar item ]
 
 
 viewResource : Resource -> Html Msg
@@ -242,7 +243,12 @@ viewResource resource =
         , p []
             (case resource.state of
                 Alive health ->
-                    [ text "Alive", text <| Debug.toString health ]
+                    [ meter
+                        [ Html.Attributes.max (Tuple.second health |> String.fromInt)
+                        , Html.Attributes.value (Tuple.first health |> String.fromInt)
+                        ]
+                        []
+                    ]
 
                 Regrowing time ->
                     [ text "Regrowing "
@@ -250,7 +256,7 @@ viewResource resource =
                     ]
 
                 Dead items ->
-                    [ text "Dead"
+                    [ text "Dead, loot"
                     , div [] (List.indexedMap viewLoot items)
                     , button [ onClick ResetResource ] [ text "Done" ]
                     ]
