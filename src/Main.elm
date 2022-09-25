@@ -32,7 +32,7 @@ setIdle animal =
 
 setInteract : Animal -> Animal
 setInteract animal =
-    { animal | state = Interact 300 }
+    { animal | state = Interact 200 }
 
 
 tickState : Int -> Animal -> Animal
@@ -238,7 +238,7 @@ viewLoot index item =
 
 viewResource : Resource -> Html Msg
 viewResource resource =
-    div []
+    div [ class "resource" ]
         [ h3 [] [ text "Resource" ]
         , p []
             (case resource.state of

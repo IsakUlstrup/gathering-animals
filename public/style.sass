@@ -21,6 +21,7 @@ body
     display: flex
     flex-direction: column
     justify-content: center
+    font-family: Arial, Helvetica, sans-serif
     // align-content: center
 
 button
@@ -28,20 +29,36 @@ button
 
 // MAIN
 main
-    padding: $spacing-medium
     display: flex
     align-items: center
-    gap: $spacing-medium
-    background: paper-gradient((red, orange))
+    // gap: $spacing-medium
 
     *
         flex: 1
 
 // ANIMAL
+@keyframes slide-in
+    0%
+        opacity: 0
+        max-width: 0rem
+    100%
+        opacity: 1
+        max-width: 20rem
+
 .animal
+    max-width: 0rem
+    overflow: hidden
+    animation: slide-in 300ms ease-out forwards
+
     .name
+        padding: $spacing-medium
         transition: transform 100ms ease-in
 
     &.interact
         .name
             transform: translateX(1rem)
+
+// RESOURCE
+.resource
+    padding: $spacing-medium
+    background: paper-gradient((red, orange))
