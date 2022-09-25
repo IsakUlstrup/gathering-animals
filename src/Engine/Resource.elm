@@ -104,8 +104,8 @@ lootAtIndex index resource =
 rollHit : Generator Bool
 rollHit =
     Random.weighted
-        ( 10, True )
-        [ ( 90, False ) ]
+        ( 25, True )
+        [ ( 75, False ) ]
 
 
 hit : Maybe () -> Seed -> Resource -> ( Resource, Seed )
