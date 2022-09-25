@@ -2,6 +2,9 @@ module Main exposing (Model, Msg, main)
 
 import Browser
 import Browser.Events
+import Engine.Animal exposing (Animal, AnimalState(..))
+import Engine.Item exposing (Item)
+import Engine.Resource exposing (Resource, ResourceState(..))
 import Html exposing (Html, button, div, h3, main_, p, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
@@ -9,139 +12,6 @@ import Html.Events exposing (onClick)
 
 
 -- MODEL
-
-
-type alias Item =
-    Char
-
-
-type AnimalState
-    = Idle
-    | Interact Int
-    | Cooldown Int
-
-
-type alias Animal =
-    { state : AnimalState }
-
-
-setIdle : Animal -> Animal
-setIdle animal =
-    { animal | state = Idle }
-
-
-setInteract : Animal -> Animal
-setInteract animal =
-    { animal | state = Interact 200 }
-
-
-tickState : Int -> Animal -> Animal
-tickState dt animal =
-    case animal.state of
-        Idle ->
-            animal
-
-        Interact time ->
-            { animal | state = Interact <| time - dt }
-
-        Cooldown time ->
-            { animal | state = Cooldown <| time - dt }
-
-
-setCooldown : Animal -> Animal
-setCooldown animal =
-    { animal | state = Cooldown 1000 }
-
-
-
--- Branch
-
-
-tick : Int -> Animal -> Resource -> ( Animal, Resource )
-tick dt animal resource =
-    case ( animal.state, resource.state ) of
-        ( Idle, Alive ) ->
-            ( animal |> setInteract, resource )
-
-        ( Idle, Dead _ ) ->
-            ( animal, resource )
-
-        ( Interact time, _ ) ->
-            if time <= 0 then
-                ( animal |> setCooldown, resource |> hit )
-
-            else
-                ( animal |> tickState dt, resource )
-
-        ( Cooldown time, _ ) ->
-            if time <= 0 then
-                ( animal |> setIdle, resource )
-
-            else
-                ( animal |> tickState dt, resource )
-
-        ( _, Regrowing time ) ->
-            if time <= 0 then
-                ( animal, resource |> setAlive )
-
-            else
-                ( animal, { resource | state = Regrowing (time - dt) } )
-
-
-type ResourceState
-    = Alive
-    | Regrowing Int
-    | Dead (List Item)
-
-
-type alias Resource =
-    { state : ResourceState }
-
-
-setAlive : Resource -> Resource
-setAlive resource =
-    { resource | state = Alive }
-
-
-setRegrowing : Resource -> Resource
-setRegrowing resource =
-    { resource | state = Regrowing 5000 }
-
-
-lootAtIndex : Int -> Resource -> ( Resource, Maybe Item )
-lootAtIndex index resource =
-    case resource.state of
-        Alive ->
-            ( resource, Nothing )
-
-        Regrowing _ ->
-            ( resource, Nothing )
-
-        Dead loot ->
-            let
-                item =
-                    loot |> List.drop index |> List.head
-
-                first =
-                    loot |> List.take index
-
-                second =
-                    loot |> List.drop (index + 1)
-            in
-            ( { resource | state = Dead (first ++ second) }, item )
-
-
-hit : Resource -> Resource
-hit resource =
-    case resource.state of
-        Alive ->
-            { resource | state = Dead [ '🥭', '🥥' ] }
-
-        Regrowing _ ->
-            resource
-
-        Dead _ ->
-            resource
 
 
 type alias Model =
@@ -175,13 +45,9 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Tick dt ->
-            let
-                ( animal, resource ) =
-                    tick dt model.animal model.resource
-            in
             ( { model
-                | animal = animal
-                , resource = resource
+                | animal = Engine.Animal.tick dt model.animal
+                , resource = Engine.Resource.tick dt model.resource
               }
             , Cmd.none
             )
@@ -189,7 +55,7 @@ update msg model =
         LootItem index ->
             let
                 ( resource, item ) =
-                    model.resource |> lootAtIndex index
+                    model.resource |> Engine.Resource.lootAtIndex index
             in
             case item of
                 Just i ->
@@ -199,7 +65,7 @@ update msg model =
                     ( model, Cmd.none )
 
         ResetResource ->
-            ( { model | resource = setRegrowing model.resource }, Cmd.none )
+            ( { model | resource = Engine.Resource.setRegrowing model.resource }, Cmd.none )
 
 
 
