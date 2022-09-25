@@ -45,9 +45,13 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Tick dt ->
+            let
+                ( animal, hit ) =
+                    Engine.Animal.tick dt (Engine.Resource.isAlive model.resource) model.animal
+            in
             ( { model
-                | animal = Engine.Animal.tick dt model.animal
-                , resource = Engine.Resource.tick dt model.resource
+                | animal = animal
+                , resource = Engine.Resource.tick dt model.resource |> Engine.Resource.hit hit
               }
             , Cmd.none
             )

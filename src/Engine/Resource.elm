@@ -1,4 +1,4 @@
-module Engine.Resource exposing (Resource, ResourceState(..), lootAtIndex, setRegrowing, tick)
+module Engine.Resource exposing (Resource, ResourceState(..), hit, isAlive, lootAtIndex, setRegrowing, tick)
 
 import Engine.Item exposing (Item)
 
@@ -32,6 +32,21 @@ setAlive resource =
     { resource | state = Alive }
 
 
+isAlive : Resource -> Bool
+isAlive resource =
+    case resource.state of
+        Alive ->
+            True
+
+        _ ->
+            False
+
+
+setDead : Resource -> Resource
+setDead resource =
+    { resource | state = Dead [ '🍓', '🥥' ] }
+
+
 setRegrowing : Resource -> Resource
 setRegrowing resource =
     { resource | state = Regrowing 5000 }
@@ -60,13 +75,15 @@ lootAtIndex index resource =
             ( { resource | state = Dead (first ++ second) }, item )
 
 
+hit : Maybe () -> Resource -> Resource
+hit mhit resource =
+    if isAlive resource then
+        case mhit of
+            Just _ ->
+                setDead resource
 
--- hit : Resource -> Resource
--- hit resource =
---     case resource.state of
---         Alive ->
---             { resource | state = Dead [ '🥭', '🥥' ] }
---         Regrowing _ ->
---             resource
---         Dead _ ->
---             resource
+            Nothing ->
+                resource
+
+    else
+        resource

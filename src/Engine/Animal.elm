@@ -39,22 +39,26 @@ setCooldown animal =
     { animal | state = Cooldown 1000 }
 
 
-tick : Int -> Animal -> Animal
-tick dt animal =
+tick : Int -> Bool -> Animal -> ( Animal, Maybe () )
+tick dt resourceAlive animal =
     case animal.state of
         Idle ->
-            animal |> setInteract
+            if resourceAlive then
+                ( animal |> setInteract, Nothing )
+
+            else
+                ( animal, Nothing )
 
         Interact time ->
             if time <= 0 then
-                animal |> setCooldown
+                ( animal |> setCooldown, Just () )
 
             else
-                animal |> tickState dt
+                ( animal |> tickState dt, Nothing )
 
         Cooldown time ->
             if time <= 0 then
-                animal |> setIdle
+                ( animal |> setIdle, Nothing )
 
             else
-                animal |> tickState dt
+                ( animal |> tickState dt, Nothing )
