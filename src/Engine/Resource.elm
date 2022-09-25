@@ -58,7 +58,7 @@ setDead resource =
 
 setRegrowing : Resource -> Resource
 setRegrowing resource =
-    { resource | state = Regrowing 5000 }
+    { resource | state = Regrowing 1000 }
 
 
 lootAtIndex : Int -> Resource -> ( Resource, Maybe Item )
