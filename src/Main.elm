@@ -29,7 +29,7 @@ init _ =
         (Animal <| Cooldown 1000)
         (Resource <| Alive)
         []
-        (Random.initialSeed 10)
+        (Random.initialSeed 130)
     , Cmd.none
     )
 
