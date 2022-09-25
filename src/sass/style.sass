@@ -31,10 +31,11 @@ button
 main
     display: flex
     align-items: center
+    justify-content: center
     // gap: $spacing-medium
-
-    *
+    div
         flex: 1
+        border: 1px solid black
 
 // ANIMAL
 @keyframes slide-in
@@ -43,15 +44,13 @@ main
         max-width: 0rem
     100%
         opacity: 1
-        max-width: 20rem
+        max-width: 50rem
 
 .animal
     max-width: 0rem
-    overflow: hidden
     animation: slide-in 300ms ease-out forwards
 
     .name
-        padding: $spacing-medium
         transition: transform 100ms ease-in
 
     &.interact
@@ -60,5 +59,3 @@ main
 
 // RESOURCE
 .resource
-    padding: $spacing-medium
-    background: paper-gradient((red, orange))
