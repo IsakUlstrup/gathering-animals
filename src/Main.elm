@@ -2,7 +2,7 @@ module Main exposing (Model, Msg, main)
 
 import Browser
 import Browser.Events
-import Html exposing (Html, button, div, h3, main_, meter, p, text)
+import Html exposing (Html, button, div, h3, main_, p, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 
@@ -60,7 +60,7 @@ setCooldown animal =
 tick : Int -> Animal -> Resource -> ( Animal, Resource )
 tick dt animal resource =
     case ( animal.state, resource.state ) of
-        ( Idle, Alive _ ) ->
+        ( Idle, Alive ) ->
             ( animal |> setInteract, resource )
 
         ( Idle, Dead _ ) ->
@@ -68,7 +68,7 @@ tick dt animal resource =
 
         ( Interact time, _ ) ->
             if time <= 0 then
-                ( animal |> setCooldown, resource |> hit 10 )
+                ( animal |> setCooldown, resource |> hit )
 
             else
                 ( animal |> tickState dt, resource )
@@ -89,7 +89,7 @@ tick dt animal resource =
 
 
 type ResourceState
-    = Alive ( Int, Int )
+    = Alive
     | Regrowing Int
     | Dead (List Item)
 
@@ -100,7 +100,7 @@ type alias Resource =
 
 setAlive : Resource -> Resource
 setAlive resource =
-    { resource | state = Alive ( 100, 100 ) }
+    { resource | state = Alive }
 
 
 setRegrowing : Resource -> Resource
@@ -111,7 +111,7 @@ setRegrowing resource =
 lootAtIndex : Int -> Resource -> ( Resource, Maybe Item )
 lootAtIndex index resource =
     case resource.state of
-        Alive _ ->
+        Alive ->
             ( resource, Nothing )
 
         Regrowing _ ->
@@ -131,15 +131,11 @@ lootAtIndex index resource =
             ( { resource | state = Dead (first ++ second) }, item )
 
 
-hit : Int -> Resource -> Resource
-hit power resource =
+hit : Resource -> Resource
+hit resource =
     case resource.state of
-        Alive health ->
-            if Tuple.first health - power > 0 then
-                { resource | state = Alive <| Tuple.mapFirst (\h -> h - power) health }
-
-            else
-                { resource | state = Dead [ '🥭', '🥥' ] }
+        Alive ->
+            { resource | state = Dead [ '🥭', '🥥' ] }
 
         Regrowing _ ->
             resource
@@ -159,7 +155,7 @@ init : () -> ( Model, Cmd Msg )
 init _ =
     ( Model
         (Animal <| Cooldown 1000)
-        (Resource <| Alive ( 100, 100 ))
+        (Resource <| Alive)
         []
     , Cmd.none
     )
@@ -242,12 +238,8 @@ viewResource resource =
         [ h3 [] [ text "Resource" ]
         , p []
             (case resource.state of
-                Alive health ->
-                    [ meter
-                        [ Html.Attributes.max (Tuple.second health |> String.fromInt)
-                        , Html.Attributes.value (Tuple.first health |> String.fromInt)
-                        ]
-                        []
+                Alive ->
+                    [ p [] [ text "alive" ]
                     ]
 
                 Regrowing time ->
