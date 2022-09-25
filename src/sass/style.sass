@@ -23,6 +23,7 @@ button
 
 // MAIN
 #app
+    position: relative
     font-family: Arial, Helvetica, sans-serif
     min-height: 100vh
     display: flex
@@ -30,6 +31,18 @@ button
     align-items: stretch
     justify-content: center
 
+// INVENTORY
+.inventory
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    display: flex
+    gap: $spacing-medium
+    padding: $spacing-medium
+    background: rgba(0, 0, 0, 0.3)
+
+// LOCATION
 .location
     display: flex
     flex: auto

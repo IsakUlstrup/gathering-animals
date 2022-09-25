@@ -83,6 +83,16 @@ update msg model =
 -- VIEW
 
 
+viewInventory : List Item -> Html msg
+viewInventory items =
+    let
+        viewItem : Item -> Html msg
+        viewItem i =
+            div [ class "item" ] [ text <| String.fromChar i ]
+    in
+    div [ class "inventory" ] (h3 [] [ text "Inventory" ] :: List.map viewItem items)
+
+
 viewAnimal : Animal -> Html msg
 viewAnimal animal =
     let
@@ -140,7 +150,8 @@ viewResource resource =
 view : Model -> Html Msg
 view model =
     main_ [ id "app" ]
-        [ div [ class "location" ]
+        [ viewInventory model.inventory
+        , div [ class "location" ]
             [ viewAnimal model.animal
             , viewResource model.resource
             ]
