@@ -22,6 +22,13 @@ tick dt resource =
             else
                 { resource | state = Regrowing (time - dt) }
 
+        Hit time ->
+            if time <= 0 then
+                resource |> setDead
+
+            else
+                { resource | state = Hit (time - dt) }
+
         _ ->
             resource
 
@@ -29,6 +36,7 @@ tick dt resource =
 type ResourceState
     = Alive
     | Regrowing Int
+    | Hit Int
     | Dead (List Item)
 
 
@@ -51,6 +59,11 @@ isAlive resource =
             False
 
 
+setHit : Resource -> Resource
+setHit resource =
+    { resource | state = Hit 200 }
+
+
 setDead : Resource -> Resource
 setDead resource =
     { resource | state = Dead [ '🍓', '🥥' ] }
@@ -64,12 +77,6 @@ setRegrowing resource =
 lootAtIndex : Int -> Resource -> ( Resource, Maybe Item )
 lootAtIndex index resource =
     case resource.state of
-        Alive ->
-            ( resource, Nothing )
-
-        Regrowing _ ->
-            ( resource, Nothing )
-
         Dead loot ->
             let
                 item =
@@ -90,6 +97,9 @@ lootAtIndex index resource =
             else
                 ( { resource | state = Dead newLoot }, item )
 
+        _ ->
+            ( resource, Nothing )
+
 
 rollHit : Generator Bool
 rollHit =
@@ -108,7 +118,7 @@ hit mhit seed resource =
                         Random.step rollHit seed
                 in
                 if isHit then
-                    ( setDead resource, newSeed )
+                    ( setHit resource, newSeed )
 
                 else
                     ( resource, newSeed )

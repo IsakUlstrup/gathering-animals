@@ -124,6 +124,10 @@ viewResource resource =
                     , text <| String.fromInt time
                     ]
 
+                Hit _ ->
+                    [ p [ class "hit" ] [ text "hit" ]
+                    ]
+
                 Dead items ->
                     [ text "Dead, loot"
                     , div [] (List.indexedMap viewLoot items)
