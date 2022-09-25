@@ -8,6 +8,7 @@ import Engine.Resource exposing (Resource, ResourceState(..))
 import Html exposing (Html, button, div, h3, main_, p, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
+import Random exposing (Seed)
 
 
 
@@ -18,6 +19,7 @@ type alias Model =
     { animal : Animal
     , resource : Resource
     , inventory : List Item
+    , seed : Seed
     }
 
 
@@ -27,6 +29,7 @@ init _ =
         (Animal <| Cooldown 1000)
         (Resource <| Alive)
         []
+        (Random.initialSeed 10)
     , Cmd.none
     )
 
@@ -48,10 +51,14 @@ update msg model =
             let
                 ( animal, hit ) =
                     Engine.Animal.tick dt (Engine.Resource.isAlive model.resource) model.animal
+
+                ( resource, seed ) =
+                    Engine.Resource.hit hit model.seed model.resource
             in
             ( { model
                 | animal = animal
-                , resource = Engine.Resource.tick dt model.resource |> Engine.Resource.hit hit
+                , resource = resource |> Engine.Resource.tick dt
+                , seed = seed
               }
             , Cmd.none
             )

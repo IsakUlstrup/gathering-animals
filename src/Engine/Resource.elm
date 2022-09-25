@@ -1,6 +1,15 @@
-module Engine.Resource exposing (Resource, ResourceState(..), hit, isAlive, lootAtIndex, setRegrowing, tick)
+module Engine.Resource exposing
+    ( Resource
+    , ResourceState(..)
+    , hit
+    , isAlive
+    , lootAtIndex
+    , setRegrowing
+    , tick
+    )
 
 import Engine.Item exposing (Item)
+import Random exposing (Generator, Seed)
 
 
 tick : Int -> Resource -> Resource
@@ -82,15 +91,30 @@ lootAtIndex index resource =
                 ( { resource | state = Dead newLoot }, item )
 
 
-hit : Maybe () -> Resource -> Resource
-hit mhit resource =
+rollHit : Generator Bool
+rollHit =
+    Random.weighted
+        ( 20, True )
+        [ ( 80, False ) ]
+
+
+hit : Maybe () -> Seed -> Resource -> ( Resource, Seed )
+hit mhit seed resource =
     if isAlive resource then
         case mhit of
             Just _ ->
-                setDead resource
+                let
+                    ( isHit, newSeed ) =
+                        Random.step rollHit seed
+                in
+                if isHit then
+                    ( setDead resource, newSeed )
+
+                else
+                    ( resource, newSeed )
 
             Nothing ->
-                resource
+                ( resource, seed )
 
     else
-        resource
+        ( resource, seed )
