@@ -10,7 +10,7 @@ $paper-texture: url("/cream-paper.png")
 
 // FUNCTIONS
 @function texture-gradient($texture, $colors)
-    @return $texture, linear-gradient(to bottom right, $colors)
+    @return $texture, linear-gradient(to top left, $colors)
 
 @function paper-gradient($colors)
     @return texture-gradient($paper-texture, $colors)
@@ -87,7 +87,7 @@ h3
 // RESOURCE
 
 .resource
-    background: paper-gradient((red, orange))
+    background: paper-gradient((rgb(255, 59, 59), rgb(255, 190, 92)))
     p
         transition: transform 100ms ease-in
         &.hit
