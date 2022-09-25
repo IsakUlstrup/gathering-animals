@@ -6,7 +6,7 @@ import Engine.Animal exposing (Animal, AnimalState(..))
 import Engine.Item exposing (Item)
 import Engine.Resource exposing (Resource, ResourceState(..))
 import Html exposing (Html, button, div, h3, main_, p, text)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, id)
 import Html.Events exposing (onClick)
 import Random exposing (Seed)
 
@@ -139,9 +139,11 @@ viewResource resource =
 
 view : Model -> Html Msg
 view model =
-    main_ []
-        [ viewAnimal model.animal
-        , viewResource model.resource
+    main_ [ id "app" ]
+        [ div [ class "location" ]
+            [ viewAnimal model.animal
+            , viewResource model.resource
+            ]
         ]
 
 
