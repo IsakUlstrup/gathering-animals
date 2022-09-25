@@ -90,7 +90,10 @@ viewInventory items =
         viewItem i =
             div [ class "item" ] [ text <| String.fromChar i ]
     in
-    div [ class "inventory" ] (h3 [] [ text "Inventory" ] :: List.map viewItem items)
+    div [ class "inventory" ]
+        [ h3 [] [ text "Inventory" ]
+        , div [ class "items" ] (List.map viewItem items)
+        ]
 
 
 viewAnimal : Animal -> Html msg
