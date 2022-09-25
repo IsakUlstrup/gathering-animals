@@ -71,8 +71,15 @@ lootAtIndex index resource =
 
                 second =
                     loot |> List.drop (index + 1)
+
+                newLoot =
+                    first ++ second
             in
-            ( { resource | state = Dead (first ++ second) }, item )
+            if List.isEmpty newLoot then
+                ( setRegrowing resource, item )
+
+            else
+                ( { resource | state = Dead newLoot }, item )
 
 
 hit : Maybe () -> Resource -> Resource
