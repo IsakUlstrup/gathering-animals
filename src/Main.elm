@@ -153,11 +153,11 @@ viewResource resource =
 view : Model -> Html Msg
 view model =
     main_ [ id "app" ]
-        [ viewInventory model.inventory
-        , div [ class "location" ]
+        [ div [ class "location" ]
             [ viewAnimal model.animal
             , viewResource model.resource
             ]
+        , div [ class "location" ] [ viewInventory model.inventory ]
         ]
 
 
