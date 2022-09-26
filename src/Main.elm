@@ -87,22 +87,15 @@ update msg model =
             )
 
         LootItem index ->
-            let
-                ( resource, item ) =
-                    model.resource |> Engine.Resource.lootAtIndex index
-            in
-            case item of
-                Just i ->
-                    let
-                        newModel : Model
-                        newModel =
-                            { model | resource = resource, inventory = i :: model.inventory }
-                    in
-                    ( newModel
-                    , Storage.saveInventory newModel.inventory
-                    )
+            case model.resource |> Engine.Resource.lootAtIndex index of
+                ( newResource, Just item ) ->
+                    { model
+                        | resource = newResource
+                        , inventory = item :: model.inventory
+                    }
+                        |> (\m -> ( m, Storage.saveInventory m.inventory ))
 
-                Nothing ->
+                ( _, Nothing ) ->
                     ( model, Cmd.none )
 
         ResetResource ->
