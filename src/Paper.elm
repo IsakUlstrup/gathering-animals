@@ -1,12 +1,28 @@
 module Paper exposing (paperGradient)
 
-import Css exposing (Style, batch)
+import Css exposing (Color, Style, batch)
 
 
-paperGradient : Style
-paperGradient =
+colorToString : Color -> String
+colorToString color =
+    let
+        channelString c =
+            String.fromInt c
+
+        channels =
+            [ color.red, color.green, color.blue ] |> List.map channelString |> List.intersperse ", " |> String.concat
+    in
+    "rgb(" ++ channels ++ ")"
+
+
+paperGradient : List Color -> Style
+paperGradient colors =
+    let
+        colorStops =
+            List.map colorToString colors |> List.intersperse ", " |> String.concat
+    in
     batch
-        [ Css.property "background-image" (textureUrl ++ ", linear-gradient(orange, red)")
+        [ Css.property "background-image" (textureUrl ++ ", linear-gradient( to bottom right, " ++ colorStops ++ ")")
         ]
 
 

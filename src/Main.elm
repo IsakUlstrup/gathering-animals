@@ -5,7 +5,7 @@ module Main exposing (Model, Msg, main)
 
 import Browser
 import Browser.Events
-import Css exposing (px)
+import Css exposing (px, rgb)
 import Css.Transitions as Transitions
 import Engine.Animal as Animal exposing (Animal, AnimalState(..))
 import Engine.Item exposing (Item)
@@ -124,7 +124,7 @@ viewInventory items =
         viewItem i =
             div [ class "item" ] [ text <| String.fromChar <| Engine.Item.toEmoji i ]
     in
-    div [ class "inventory" ]
+    div []
         [ h3 [] [ text "Inventory" ]
         , div [ class "items", css [ Css.displayFlex ] ] (List.map viewItem items)
         ]
@@ -145,7 +145,6 @@ viewAnimal animal =
     div
         [ css
             [ Css.flex <| Css.int 1
-            , Css.border2 (Css.px 1) Css.solid
             , Transitions.transition [ Transitions.transform 1000 ]
             ]
         ]
@@ -161,11 +160,9 @@ viewLoot index item =
 viewResource : Resource -> Html Msg
 viewResource resource =
     div
-        [ class "resource"
-        , css
+        [ css
             [ Css.flex <| Css.int 1
-            , Css.border2 (Css.px 1) Css.dotted
-            , Paper.paperGradient
+            , Paper.paperGradient [ rgb 250 50 0, rgb 255 50 100 ]
             ]
         ]
         [ h3 [] [ text "Resource" ]
@@ -211,6 +208,7 @@ mainStyle =
         , Css.flexDirection Css.column
         , Css.alignItems Css.stretch
         , Css.justifyContent Css.center
+        , Paper.paperGradient [ rgb 255 255 200, rgb 255 255 200 ]
         ]
 
 
