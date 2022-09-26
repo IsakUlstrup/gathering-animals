@@ -1,13 +1,18 @@
 module Main exposing (Model, Msg, main)
 
+-- import Html.Attributes exposing (class, id)
+-- import Html.Events exposing (onClick)
+
 import Browser
 import Browser.Events
+import Css exposing (px)
+import Css.Transitions as Transitions
 import Engine.Animal as Animal exposing (Animal, AnimalState(..))
 import Engine.Item exposing (Item)
 import Engine.Resource as Resource exposing (Resource, ResourceState(..))
-import Html exposing (Html, button, div, h3, main_, p, text)
-import Html.Attributes exposing (class, id)
-import Html.Events exposing (onClick)
+import Html.Styled exposing (Attribute, Html, button, div, h3, main_, p, text, toUnstyled)
+import Html.Styled.Attributes as Html exposing (class, css, id)
+import Html.Styled.Events
 import Json.Decode as Decode exposing (Value)
 import Random exposing (Seed)
 import Storage
@@ -120,40 +125,41 @@ viewInventory items =
     in
     div [ class "inventory" ]
         [ h3 [] [ text "Inventory" ]
-        , div [ class "items" ] (List.map viewItem items)
+        , div [ class "items", css [ Css.displayFlex ] ] (List.map viewItem items)
         ]
 
 
 viewAnimal : Animal -> Html msg
 viewAnimal animal =
     let
-        state : String
+        state : List Css.Style
         state =
             case animal.state of
-                Idle ->
-                    "idle"
-
                 Interact _ ->
-                    "interact"
+                    [ Css.transform <| Css.translate2 (px 100) (px 0) ]
 
-                Cooldown _ ->
-                    "cooldown"
+                _ ->
+                    []
     in
-    div [ class "animal", class state ]
-        [ h3 [ class "name" ] [ text "Animal" ]
-
-        -- , p [] [ text <| Debug.toString animal.state ]
+    div
+        [ css
+            [ Css.flex <| Css.int 1
+            , Css.border2 (Css.px 1) Css.solid
+            , Transitions.transition [ Transitions.transform 1000 ]
+            ]
         ]
+        [ h3 [ css (Transitions.transition [ Transitions.transform 1000 ] :: state) ] [ text "Animal" ] ]
 
 
 viewLoot : Int -> Item -> Html Msg
 viewLoot index item =
-    button [ onClick <| LootItem index ] [ text <| String.fromChar <| Engine.Item.toEmoji item ]
+    button [ Html.Styled.Events.onClick <| LootItem index ]
+        [ text <| String.fromChar <| Engine.Item.toEmoji item ]
 
 
 viewResource : Resource -> Html Msg
 viewResource resource =
-    div [ class "resource" ]
+    div [ class "resource", css [ Css.flex <| Css.int 1, Css.border2 (Css.px 1) Css.dotted ] ]
         [ h3 [] [ text "Resource" ]
         , p []
             (case resource.state of
@@ -173,17 +179,52 @@ viewResource resource =
                 Dead items ->
                     [ text "Dead, loot"
                     , div [] (List.indexedMap viewLoot items)
-                    , button [ onClick ResetResource ] [ text "Done" ]
+                    , button [ Html.Styled.Events.onClick ResetResource ] [ text "Done" ]
                     ]
             )
         ]
 
 
+
+-- position: relative
+--     font-family: Arial, Helvetica, sans-serif
+--     min-height: 100vh
+--     display: flex
+--     flex-direction: column
+--     align-items: stretch
+--     justify-content: center
+-- display: flex
+--     flex: 1 1 0
+--     min-height: 15rem
+
+
+locationStyle : Attribute msg
+locationStyle =
+    css
+        [ Css.displayFlex
+        , Css.flex3 (Css.int 1) (Css.int 1) (Css.int 0)
+        , Css.minHeight (Css.rem 15)
+        ]
+
+
 view : Model -> Html Msg
 view model =
-    main_ [ id "app" ]
-        [ div [ class "location" ] [ div [ class "resource" ] [ h3 [] [ text "Resource" ] ] ]
-        , div [ class "location" ]
+    main_
+        [ id "app"
+        , css
+            [ Css.minHeight <| Css.vh 100
+            , Css.displayFlex
+            , Css.flexDirection Css.column
+            , Css.alignItems Css.stretch
+            , Css.justifyContent Css.center
+            ]
+        ]
+        [ div [ class "location" ]
+            [ div [ class "resource" ] [ h3 [] [ text "Resource" ] ] ]
+        , div
+            [ Html.css
+                [ Css.displayFlex ]
+            ]
             [ viewAnimal model.animal
             , viewResource model.resource
             ]
@@ -208,7 +249,7 @@ main : Program Value Model Msg
 main =
     Browser.element
         { init = init
-        , view = view
+        , view = view >> toUnstyled
         , update = update
         , subscriptions = subscriptions
         }
