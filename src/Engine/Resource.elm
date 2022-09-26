@@ -91,11 +91,7 @@ lootAtIndex index resource =
                 newLoot =
                     first ++ second
             in
-            if List.isEmpty newLoot then
-                ( setRegrowing resource, item )
-
-            else
-                ( { resource | state = Dead newLoot }, item )
+            ( { resource | state = Dead newLoot }, item )
 
         _ ->
             ( resource, Nothing )
