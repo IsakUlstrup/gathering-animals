@@ -14,6 +14,7 @@ import Html.Styled exposing (Attribute, Html, button, div, h3, main_, p, text, t
 import Html.Styled.Attributes as Html exposing (class, css, id)
 import Html.Styled.Events
 import Json.Decode as Decode exposing (Value)
+import Paper
 import Random exposing (Seed)
 import Storage
 
@@ -159,7 +160,14 @@ viewLoot index item =
 
 viewResource : Resource -> Html Msg
 viewResource resource =
-    div [ class "resource", css [ Css.flex <| Css.int 1, Css.border2 (Css.px 1) Css.dotted ] ]
+    div
+        [ class "resource"
+        , css
+            [ Css.flex <| Css.int 1
+            , Css.border2 (Css.px 1) Css.dotted
+            , Paper.paperGradient
+            ]
+        ]
         [ h3 [] [ text "Resource" ]
         , p []
             (case resource.state of
