@@ -8,7 +8,8 @@ type AnimalState
 
 
 type alias Animal =
-    { state : AnimalState }
+    { state : AnimalState
+    }
 
 
 setIdle : Animal -> Animal
@@ -19,6 +20,11 @@ setIdle animal =
 setInteract : Animal -> Animal
 setInteract animal =
     { animal | state = Interact 200 }
+
+
+setCooldown : Animal -> Animal
+setCooldown animal =
+    { animal | state = Cooldown 1000 }
 
 
 tickState : Int -> Animal -> Animal
@@ -34,31 +40,40 @@ tickState dt animal =
             { animal | state = Cooldown <| time - dt }
 
 
-setCooldown : Animal -> Animal
-setCooldown animal =
-    { animal | state = Cooldown 1000 }
+tickHelper : Int -> Int -> Animal -> (Animal -> Animal) -> Animal
+tickHelper time dt animal nextState =
+    if time <= 0 then
+        animal |> nextState
+
+    else
+        animal |> tickState dt
 
 
-tick : Int -> Bool -> Animal -> ( Animal, Maybe () )
+updateIf : Bool -> (Animal -> Animal) -> Animal -> Animal
+updateIf pred f animal =
+    if pred then
+        f animal
+
+    else
+        animal
+
+
+
+-- TODO: This should be a branch that calls helper functions
+
+
+tick : Int -> Bool -> Animal -> ( Animal, Bool )
 tick dt resourceAlive animal =
     case animal.state of
         Idle ->
-            if resourceAlive then
-                ( animal |> setInteract, Nothing )
-
-            else
-                ( animal, Nothing )
+            ( updateIf resourceAlive setInteract animal, False )
 
         Interact time ->
             if time <= 0 then
-                ( animal |> setCooldown, Just () )
+                ( animal |> setCooldown, True )
 
             else
-                ( animal |> tickState dt, Nothing )
+                ( animal |> tickState dt, False )
 
         Cooldown time ->
-            if time <= 0 then
-                ( animal |> setIdle, Nothing )
-
-            else
-                ( animal |> tickState dt, Nothing )
+            ( tickHelper time dt animal setIdle, False )

@@ -104,23 +104,18 @@ rollHit =
         [ ( 75, False ) ]
 
 
-hit : Maybe () -> Seed -> Resource -> ( Resource, Seed )
-hit mhit seed resource =
+hit : Seed -> Resource -> ( Resource, Seed )
+hit seed resource =
     if isAlive resource then
-        case mhit of
-            Just _ ->
-                let
-                    ( isHit, newSeed ) =
-                        Random.step rollHit seed
-                in
-                if isHit then
-                    ( setHit resource, newSeed )
+        let
+            ( isHit, newSeed ) =
+                Random.step rollHit seed
+        in
+        if isHit then
+            ( setHit resource, newSeed )
 
-                else
-                    ( resource, newSeed )
-
-            Nothing ->
-                ( resource, seed )
+        else
+            ( resource, newSeed )
 
     else
         ( resource, seed )

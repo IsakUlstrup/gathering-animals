@@ -76,11 +76,16 @@ update msg model =
                     Engine.Animal.tick dt (Engine.Resource.isAlive model.resource) model.animal
 
                 ( resource, seed ) =
-                    Engine.Resource.hit hit model.seed model.resource
+                    if hit then
+                        Engine.Resource.tick dt model.resource
+                            |> Engine.Resource.hit model.seed
+
+                    else
+                        ( Engine.Resource.tick dt model.resource, model.seed )
             in
             ( { model
                 | animal = animal
-                , resource = resource |> Engine.Resource.tick dt
+                , resource = resource
                 , seed = seed
               }
             , Cmd.none
