@@ -118,7 +118,7 @@ viewInventory items =
     let
         viewItem : Item -> Html msg
         viewItem i =
-            div [ class "item" ] [ text <| Engine.Item.toString i ]
+            div [ class "item" ] [ text <| String.fromChar <| Engine.Item.toEmoji i ]
     in
     div [ class "inventory" ]
         [ h3 [] [ text "Inventory" ]
@@ -149,7 +149,7 @@ viewAnimal animal =
 
 viewLoot : Int -> Item -> Html Msg
 viewLoot index item =
-    button [ onClick <| LootItem index ] [ text <| Engine.Item.toString item ]
+    button [ onClick <| LootItem index ] [ text <| String.fromChar <| Engine.Item.toEmoji item ]
 
 
 viewResource : Resource -> Html Msg

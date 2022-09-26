@@ -1,4 +1,4 @@
-module Engine.Item exposing (Item(..), fromString, toString)
+module Engine.Item exposing (Item(..), fromString, toEmoji, toString)
 
 
 type Item
@@ -14,6 +14,16 @@ toString item =
 
         Strawberry ->
             "Strawberry"
+
+
+toEmoji : Item -> Char
+toEmoji item =
+    case item of
+        Coconut ->
+            '🥥'
+
+        Strawberry ->
+            '🍓'
 
 
 fromString : String -> Maybe Item
