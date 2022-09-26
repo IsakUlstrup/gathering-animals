@@ -1,12 +1,10 @@
-module Storage exposing (saveInventory)
+port module Storage exposing (saveInventory)
 
 import Engine.Item exposing (Item)
 import Json.Encode as Encode exposing (Value)
 
 
-storeInventory : String -> Cmd msg
-storeInventory inventory =
-    Cmd.none
+port storeInventory : String -> Cmd msg
 
 
 itemEncoder : Item -> Value

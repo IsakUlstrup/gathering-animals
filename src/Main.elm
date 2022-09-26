@@ -9,6 +9,7 @@ import Html exposing (Html, button, div, h3, main_, p, text)
 import Html.Attributes exposing (class, id)
 import Html.Events exposing (onClick)
 import Random exposing (Seed)
+import Storage
 
 
 
@@ -70,7 +71,14 @@ update msg model =
             in
             case item of
                 Just i ->
-                    ( { model | resource = resource, inventory = i :: model.inventory }, Cmd.none )
+                    let
+                        newModel : Model
+                        newModel =
+                            { model | resource = resource, inventory = i :: model.inventory }
+                    in
+                    ( newModel
+                    , Storage.saveInventory newModel.inventory
+                    )
 
                 Nothing ->
                     ( model, Cmd.none )
