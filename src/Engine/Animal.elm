@@ -1,6 +1,7 @@
 module Engine.Animal exposing
     ( Animal
     , AnimalState(..)
+    , cooldownState
     , new
     , tick
     )
