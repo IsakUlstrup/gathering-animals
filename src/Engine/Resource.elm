@@ -79,15 +79,19 @@ lootAtIndex index resource =
     case resource.state of
         Dead loot ->
             let
+                item : Maybe Item
                 item =
                     loot |> List.drop index |> List.head
 
+                first : List Item
                 first =
                     loot |> List.take index
 
+                second : List Item
                 second =
                     loot |> List.drop (index + 1)
 
+                newLoot : List Item
                 newLoot =
                     first ++ second
             in

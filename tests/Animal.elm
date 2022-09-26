@@ -1,4 +1,4 @@
-module Animal exposing (..)
+module Animal exposing (constructor)
 
 import Engine.Animal as Animal
 import Expect

@@ -1,6 +1,6 @@
 port module Storage exposing (decodeStoredInventory, saveInventory)
 
-import Engine.Item exposing (Item(..))
+import Engine.Item exposing (Item)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Encode as Encode exposing (Value)
 

@@ -127,6 +127,7 @@ viewInventory items =
 viewAnimal : Animal -> Html msg
 viewAnimal animal =
     let
+        state : String
         state =
             case animal.state of
                 Idle ->
