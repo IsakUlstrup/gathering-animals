@@ -154,9 +154,6 @@ view : Model -> Html Msg
 view model =
     main_ [ id "app" ]
         [ div [ class "location" ] [ div [ class "resource" ] [ h3 [] [ text "Resource" ] ] ]
-        , div [ class "location" ] [ div [ class "resource" ] [ h3 [] [ text "Resource" ] ] ]
-        , div [ class "location" ] [ div [ class "resource" ] [ h3 [] [ text "Resource" ] ] ]
-        , div [ class "location" ] [ div [ class "resource" ] [ h3 [] [ text "Resource" ] ] ]
         , div [ class "location" ]
             [ viewAnimal model.animal
             , viewResource model.resource
