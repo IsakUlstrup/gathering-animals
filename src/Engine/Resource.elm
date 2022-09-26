@@ -8,7 +8,7 @@ module Engine.Resource exposing
     , tick
     )
 
-import Engine.Item exposing (Item)
+import Engine.Item exposing (Item(..))
 import Random exposing (Generator, Seed)
 
 
@@ -66,7 +66,7 @@ setHit resource =
 
 setDead : Resource -> Resource
 setDead resource =
-    { resource | state = Dead [ '🍓', '🥥' ] }
+    { resource | state = Dead [ Strawberry, Coconut ] }
 
 
 setRegrowing : Resource -> Resource

@@ -24,15 +24,26 @@ type alias Model =
     }
 
 
-init : () -> ( Model, Cmd Msg )
-init _ =
-    ( Model
-        (Animal <| Cooldown 1000)
-        (Resource <| Alive)
-        []
-        (Random.initialSeed 130)
-    , Cmd.none
-    )
+init : Maybe String -> ( Model, Cmd Msg )
+init inventory =
+    case Storage.decodeStoredInventory inventory of
+        Result.Ok inv ->
+            ( Model
+                (Animal <| Cooldown 1000)
+                (Resource <| Alive)
+                inv
+                (Random.initialSeed 130)
+            , Cmd.none
+            )
+
+        Result.Err _ ->
+            ( Model
+                (Animal <| Cooldown 1000)
+                (Resource <| Alive)
+                []
+                (Random.initialSeed 130)
+            , Cmd.none
+            )
 
 
 
@@ -96,7 +107,7 @@ viewInventory items =
     let
         viewItem : Item -> Html msg
         viewItem i =
-            div [ class "item" ] [ text <| String.fromChar i ]
+            div [ class "item" ] [ text <| Engine.Item.toString i ]
     in
     div [ class "inventory" ]
         [ h3 [] [ text "Inventory" ]
@@ -127,7 +138,7 @@ viewAnimal animal =
 
 viewLoot : Int -> Item -> Html Msg
 viewLoot index item =
-    button [ onClick <| LootItem index ] [ text <| String.fromChar item ]
+    button [ onClick <| LootItem index ] [ text <| Engine.Item.toString item ]
 
 
 viewResource : Resource -> Html Msg
@@ -183,7 +194,7 @@ subscriptions _ =
 -- MAIN
 
 
-main : Program () Model Msg
+main : Program (Maybe String) Model Msg
 main =
     Browser.element
         { init = init
