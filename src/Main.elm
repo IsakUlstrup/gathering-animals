@@ -185,25 +185,24 @@ viewResource resource =
         ]
 
 
-
--- position: relative
---     font-family: Arial, Helvetica, sans-serif
---     min-height: 100vh
---     display: flex
---     flex-direction: column
---     align-items: stretch
---     justify-content: center
--- display: flex
---     flex: 1 1 0
---     min-height: 15rem
-
-
 locationStyle : Attribute msg
 locationStyle =
     css
         [ Css.displayFlex
         , Css.flex3 (Css.int 1) (Css.int 1) (Css.int 0)
         , Css.minHeight (Css.rem 15)
+        , Css.justifyContent Css.center
+        ]
+
+
+mainStyle : Attribute msg
+mainStyle =
+    css
+        [ Css.minHeight <| Css.vh 100
+        , Css.displayFlex
+        , Css.flexDirection Css.column
+        , Css.alignItems Css.stretch
+        , Css.justifyContent Css.center
         ]
 
 
@@ -211,24 +210,19 @@ view : Model -> Html Msg
 view model =
     main_
         [ id "app"
-        , css
-            [ Css.minHeight <| Css.vh 100
-            , Css.displayFlex
-            , Css.flexDirection Css.column
-            , Css.alignItems Css.stretch
-            , Css.justifyContent Css.center
-            ]
+        , mainStyle
         ]
-        [ div [ class "location" ]
+        [ div
+            [ locationStyle ]
             [ div [ class "resource" ] [ h3 [] [ text "Resource" ] ] ]
         , div
-            [ Html.css
-                [ Css.displayFlex ]
-            ]
+            [ locationStyle ]
             [ viewAnimal model.animal
             , viewResource model.resource
             ]
-        , div [ class "location" ] [ viewInventory model.inventory ]
+        , div
+            [ locationStyle ]
+            [ viewInventory model.inventory ]
         ]
 
 
