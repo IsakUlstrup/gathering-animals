@@ -2,9 +2,9 @@ module Main exposing (Model, Msg, main)
 
 import Browser
 import Browser.Events
-import Engine.Animal exposing (Animal, AnimalState(..))
+import Engine.Animal as Animal exposing (Animal, AnimalState(..))
 import Engine.Item exposing (Item)
-import Engine.Resource exposing (Resource, ResourceState(..))
+import Engine.Resource as Resource exposing (Resource, ResourceState(..))
 import Html exposing (Html, button, div, h3, main_, p, text)
 import Html.Attributes exposing (class, id)
 import Html.Events exposing (onClick)
@@ -40,7 +40,7 @@ init flags =
     case inventory of
         Ok inv ->
             ( Model
-                (Animal <| Cooldown 1000)
+                Animal.new
                 (Resource <| Alive)
                 inv
                 (Random.initialSeed 130)
@@ -49,7 +49,7 @@ init flags =
 
         Err _ ->
             ( Model
-                (Animal <| Cooldown 1000)
+                Animal.new
                 (Resource <| Alive)
                 []
                 (Random.initialSeed 130)
@@ -73,15 +73,15 @@ update msg model =
         Tick dt ->
             let
                 ( animal, hit ) =
-                    Engine.Animal.tick dt model.resource model.animal
+                    Animal.tick dt model.resource model.animal
 
                 ( resource, seed ) =
                     if hit then
-                        Engine.Resource.tick dt model.resource
-                            |> Engine.Resource.hit model.seed
+                        Resource.tick dt model.resource
+                            |> Resource.hit model.seed
 
                     else
-                        ( Engine.Resource.tick dt model.resource, model.seed )
+                        ( Resource.tick dt model.resource, model.seed )
             in
             ( { model
                 | animal = animal
@@ -92,7 +92,7 @@ update msg model =
             )
 
         LootItem index ->
-            case model.resource |> Engine.Resource.lootAtIndex index of
+            case model.resource |> Resource.lootAtIndex index of
                 ( newResource, Just item ) ->
                     { model
                         | resource = newResource
@@ -104,7 +104,7 @@ update msg model =
                     ( model, Cmd.none )
 
         ResetResource ->
-            ( { model | resource = Engine.Resource.setRegrowing model.resource }, Cmd.none )
+            ( { model | resource = Resource.setRegrowing model.resource }, Cmd.none )
 
 
 

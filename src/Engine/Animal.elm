@@ -1,4 +1,9 @@
-module Engine.Animal exposing (Animal, AnimalState(..), tick)
+module Engine.Animal exposing
+    ( Animal
+    , AnimalState(..)
+    , new
+    , tick
+    )
 
 import Engine.Resource exposing (Resource)
 
@@ -9,24 +14,44 @@ type AnimalState
     | Cooldown Int
 
 
+idleState : AnimalState
+idleState =
+    Idle
+
+
+interactState : AnimalState
+interactState =
+    Interact 200
+
+
+cooldownState : AnimalState
+cooldownState =
+    Cooldown 1000
+
+
 type alias Animal =
     { state : AnimalState
     }
 
 
+new : Animal
+new =
+    Animal cooldownState
+
+
 setIdle : Animal -> Animal
 setIdle animal =
-    { animal | state = Idle }
+    { animal | state = idleState }
 
 
 setInteract : Animal -> Animal
 setInteract animal =
-    { animal | state = Interact 200 }
+    { animal | state = interactState }
 
 
 setCooldown : Animal -> Animal
 setCooldown animal =
-    { animal | state = Cooldown 1000 }
+    { animal | state = cooldownState }
 
 
 tickState : Int -> Animal -> Animal
