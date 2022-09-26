@@ -8,6 +8,7 @@ import Engine.Resource exposing (Resource, ResourceState(..))
 import Html exposing (Html, button, div, h3, main_, p, text)
 import Html.Attributes exposing (class, id)
 import Html.Events exposing (onClick)
+import Json.Decode as Decode exposing (Value)
 import Random exposing (Seed)
 import Storage
 
@@ -24,10 +25,20 @@ type alias Model =
     }
 
 
-init : Maybe String -> ( Model, Cmd Msg )
-init inventory =
-    case Storage.decodeStoredInventory inventory of
-        Result.Ok inv ->
+init : Value -> ( Model, Cmd Msg )
+init flags =
+    let
+        inventory : Result String (List Item)
+        inventory =
+            case Decode.decodeValue Decode.string flags of
+                Ok invJson ->
+                    Storage.decodeStoredInventory invJson
+
+                Err _ ->
+                    Err "Invalid data from port"
+    in
+    case inventory of
+        Ok inv ->
             ( Model
                 (Animal <| Cooldown 1000)
                 (Resource <| Alive)
@@ -36,7 +47,7 @@ init inventory =
             , Cmd.none
             )
 
-        Result.Err _ ->
+        Err _ ->
             ( Model
                 (Animal <| Cooldown 1000)
                 (Resource <| Alive)
@@ -194,7 +205,7 @@ subscriptions _ =
 -- MAIN
 
 
-main : Program (Maybe String) Model Msg
+main : Program Value Model Msg
 main =
     Browser.element
         { init = init

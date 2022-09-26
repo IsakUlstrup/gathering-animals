@@ -41,16 +41,11 @@ saveInventory items =
         |> storeInventory
 
 
-decodeStoredInventory : Maybe String -> Result String (List Item)
+decodeStoredInventory : String -> Result String (List Item)
 decodeStoredInventory inventoryJson =
-    case inventoryJson of
-        Just inv ->
-            case Decode.decodeString inventoryDecoder inv of
-                Ok items ->
-                    Ok items
+    case Decode.decodeString inventoryDecoder inventoryJson of
+        Ok items ->
+            Ok items
 
-                Err _ ->
-                    Err "Error decoding items"
-
-        Nothing ->
-            Err "No inventory data"
+        Err _ ->
+            Err "Error decoding items"

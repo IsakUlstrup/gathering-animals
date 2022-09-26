@@ -1,7 +1,7 @@
 import { Elm } from '../src/Main.elm';
 
 const storedState = localStorage.getItem('inventory');
-console.log("Retrieved state: ", storedState);
+console.log("JS: Retrieved state: ", storedState);
 const startingState = storedState ? JSON.parse(storedState) : null;
 
 const app = Elm.Main.init({
@@ -13,6 +13,6 @@ app.ports.storeInventory.subscribe(function (items) {
   if (items.length > 0) {
     const itemsJson = JSON.stringify(items);
     localStorage.setItem('inventory', itemsJson);
-    console.log("Saved state: ", itemsJson);
+    console.log("JS: Saved state: ", itemsJson);
   }
 });
