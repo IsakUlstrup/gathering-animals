@@ -73,7 +73,7 @@ update msg model =
         Tick dt ->
             let
                 ( animal, hit ) =
-                    Engine.Animal.tick dt (Engine.Resource.isAlive model.resource) model.animal
+                    Engine.Animal.tick dt model.resource model.animal
 
                 ( resource, seed ) =
                     if hit then

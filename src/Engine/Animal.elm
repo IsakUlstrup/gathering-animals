@@ -1,5 +1,7 @@
 module Engine.Animal exposing (Animal, AnimalState(..), tick)
 
+import Engine.Resource exposing (Resource)
+
 
 type AnimalState
     = Idle
@@ -58,15 +60,11 @@ updateIf pred f animal =
         animal
 
 
-
--- TODO: This should be a branch that calls helper functions
-
-
-tick : Int -> Bool -> Animal -> ( Animal, Bool )
-tick dt resourceAlive animal =
+tick : Int -> Resource -> Animal -> ( Animal, Bool )
+tick dt resource animal =
     case animal.state of
         Idle ->
-            ( updateIf resourceAlive setInteract animal, False )
+            ( updateIf (Engine.Resource.isAlive resource) setInteract animal, False )
 
         Interact time ->
             if time <= 0 then
