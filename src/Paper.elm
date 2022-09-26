@@ -1,4 +1,4 @@
-module Paper exposing (paperGradient)
+module Paper exposing (paperGradient, paperSolid)
 
 import Css exposing (Color, Style, batch)
 
@@ -24,6 +24,12 @@ paperGradient colors =
     batch
         [ Css.property "background-image" (textureUrl ++ ", linear-gradient( to bottom right, " ++ colorStops ++ ")")
         ]
+
+
+paperSolid : Color -> Style
+paperSolid color =
+    batch
+        [ Css.property "background" (textureUrl ++ ", " ++ colorToString color) ]
 
 
 textureUrl : String

@@ -208,7 +208,7 @@ mainStyle =
         , Css.flexDirection Css.column
         , Css.alignItems Css.stretch
         , Css.justifyContent Css.center
-        , Paper.paperGradient [ rgb 255 255 200, rgb 255 255 200 ]
+        , Paper.paperSolid <| rgb 255 255 200
         ]
 
 
