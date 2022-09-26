@@ -26,7 +26,8 @@ itemHelp itemString =
 
 itemDecoder : Decoder Item
 itemDecoder =
-    Decode.string |> Decode.andThen itemHelp
+    Decode.string
+        |> Decode.andThen itemHelp
 
 
 inventoryDecoder : Decoder (List Item)
@@ -43,9 +44,5 @@ saveInventory items =
 
 decodeStoredInventory : String -> Result String (List Item)
 decodeStoredInventory inventoryJson =
-    case Decode.decodeString inventoryDecoder inventoryJson of
-        Ok items ->
-            Ok items
-
-        Err _ ->
-            Err "Error decoding items"
+    Decode.decodeString inventoryDecoder inventoryJson
+        |> Result.mapError (always "Error decoding items")
