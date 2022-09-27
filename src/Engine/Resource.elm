@@ -4,6 +4,7 @@ module Engine.Resource exposing
     , getLoot
     , hit
     , isAlive
+    , isEvade
     , isExhausted
     , isHit
     , isRegrowing
@@ -23,6 +24,7 @@ type ResourceState
     = Alive
     | Regrowing Int
     | Hit Int
+    | Evade Int
     | Exhausted (List Item)
 
 
@@ -52,6 +54,21 @@ isAlive : Resource -> Bool
 isAlive resource =
     case resource.state of
         Alive ->
+            True
+
+        _ ->
+            False
+
+
+setEvade : Resource -> Resource
+setEvade resource =
+    { resource | state = Evade 200 }
+
+
+isEvade : Resource -> Bool
+isEvade resource =
+    case resource.state of
+        Evade _ ->
             True
 
         _ ->
@@ -183,7 +200,7 @@ hit seed resource =
             ( setHit resource, newSeed )
 
         else
-            ( resource, newSeed )
+            ( setEvade resource, newSeed )
 
     else
         ( resource, seed )
@@ -207,6 +224,13 @@ tick dt resource =
 
             else
                 { resource | state = Hit (time - dt) }
+
+        Evade time ->
+            if (time - dt) <= 0 then
+                resource |> setAlive
+
+            else
+                { resource | state = Evade (time - dt) }
 
         _ ->
             resource

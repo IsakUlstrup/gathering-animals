@@ -49,7 +49,7 @@ init flags =
                 Animal.new
                 Resource.new
                 inv
-                (Random.initialSeed 130)
+                (Random.initialSeed 1)
             , Cmd.none
             )
 
@@ -58,7 +58,7 @@ init flags =
                 Animal.new
                 Resource.new
                 []
-                (Random.initialSeed 130)
+                (Random.initialSeed 1)
             , Cmd.none
             )
 

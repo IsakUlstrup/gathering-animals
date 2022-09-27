@@ -21,12 +21,19 @@ constructor =
 state : Test
 state =
     describe "State stuff"
-        [ test "Hit alive resource, state should be hit" <|
+        [ test "Hit alive resource with hardcoded seed that will roll hit, state should be hit" <|
             \_ ->
                 Resource.new
                     |> Resource.hit (Random.initialSeed 0)
                     |> Tuple.first
                     |> Resource.isHit
+                    |> Expect.equal True
+        , test "Hit alive resource with hardcoded seed that will roll miss, state should be miss" <|
+            \_ ->
+                Resource.new
+                    |> Resource.hit (Random.initialSeed 1)
+                    |> Tuple.first
+                    |> Resource.isEvade
                     |> Expect.equal True
         , fuzz int "Hit alive resource, tick by random dt, get loot. If randomInt is above hit state time of 200 should return some loot" <|
             \randomInt ->
