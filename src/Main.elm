@@ -144,6 +144,7 @@ viewAnimal animal =
             else
                 []
 
+        enterAnimation : Css.Animations.Keyframes {}
         enterAnimation =
             Css.Animations.keyframes
                 [ ( 0, [ Css.Animations.custom "max-width" "0rem" ] )
