@@ -26,7 +26,7 @@ state =
             \randomInt ->
                 Animal.new
                     |> Animal.tick randomInt
-                    |> Animal.tick 1
+                    |> Animal.tick 0
                     |> Animal.isIdle
                     |> Expect.equal
                         (randomInt >= 1000)
@@ -34,7 +34,7 @@ state =
             \randomInt ->
                 Animal.new
                     |> Animal.tick randomInt
-                    |> Animal.tick 1
+                    |> Animal.tick 0
                     |> Animal.interact Resource.new
                     |> Tuple.first
                     |> Animal.isInteracting
@@ -44,7 +44,7 @@ state =
             \randomInt ->
                 Animal.new
                     |> Animal.tick randomInt
-                    |> Animal.tick 1
+                    |> Animal.tick 0
                     |> Animal.interact (Resource.new |> Resource.hit (Random.initialSeed 0) |> Tuple.first)
                     |> Tuple.second
                     |> Expect.equal
@@ -53,7 +53,7 @@ state =
             \randomInt ->
                 Animal.new
                     |> Animal.tick randomInt
-                    |> Animal.tick 1
+                    |> Animal.tick 0
                     |> Animal.interact Resource.new
                     |> Tuple.first
                     |> Animal.isInteracting
@@ -63,7 +63,7 @@ state =
             \randomInt ->
                 Animal.new
                     |> Animal.tick 2000
-                    |> Animal.tick 1
+                    |> Animal.tick 0
                     |> Animal.interact Resource.new
                     |> Tuple.first
                     |> Animal.tick randomInt
@@ -75,11 +75,11 @@ state =
             \randomInt ->
                 Animal.new
                     |> Animal.tick 1000
-                    |> Animal.tick 1
+                    |> Animal.tick 0
                     |> Animal.interact Resource.new
                     |> Tuple.first
                     |> Animal.tick randomInt
-                    |> Animal.tick 1
+                    |> Animal.tick 0
                     |> Animal.isCooling
                     |> Expect.equal
                         (randomInt >= 200)
