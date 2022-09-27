@@ -78,12 +78,14 @@ update msg model =
     case msg of
         Tick dt ->
             let
-                ( animal, hit ) =
-                    Animal.tick dt model.resource model.animal
+                ( animal, action ) =
+                    Animal.tick dt model.animal
+                        |> Animal.interact model.resource
 
                 ( resource, seed ) =
-                    if hit then
-                        Resource.tick dt model.resource
+                    if action then
+                        model.resource
+                            |> Resource.tick dt
                             |> Resource.hit model.seed
 
                     else

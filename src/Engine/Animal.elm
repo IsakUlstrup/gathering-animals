@@ -1,12 +1,15 @@
 module Engine.Animal exposing
     ( Animal
     , AnimalState(..)
-    , cooldownState
+    , interact
+    , isCooling
+    , isDoneCooling
+    , isIdle
     , new
     , tick
     )
 
-import Engine.Resource exposing (Resource)
+import Engine.Resource as Resource exposing (Resource)
 
 
 type AnimalState
@@ -45,6 +48,16 @@ setIdle animal =
     { animal | state = idleState }
 
 
+isIdle : Animal -> Bool
+isIdle animal =
+    case animal.state of
+        Idle ->
+            True
+
+        _ ->
+            False
+
+
 setInteract : Animal -> Animal
 setInteract animal =
     { animal | state = interactState }
@@ -53,6 +66,26 @@ setInteract animal =
 setCooldown : Animal -> Animal
 setCooldown animal =
     { animal | state = cooldownState }
+
+
+isCooling : Animal -> Bool
+isCooling animal =
+    case animal.state of
+        Cooldown _ ->
+            True
+
+        _ ->
+            False
+
+
+isDoneCooling : Animal -> Bool
+isDoneCooling animal =
+    case animal.state of
+        Cooldown 0 ->
+            True
+
+        _ ->
+            False
 
 
 tickState : Int -> Animal -> Animal
@@ -68,36 +101,69 @@ tickState dt animal =
             { animal | state = Cooldown <| time - dt }
 
 
+{-| Advance to next state if timer is done, otherwise reduce current state timer
+-}
 tickHelper : Int -> Int -> Animal -> (Animal -> Animal) -> Animal
 tickHelper time dt animal nextState =
-    if time <= 0 then
+    if (time - dt) <= 0 then
         animal |> nextState
 
     else
         animal |> tickState dt
 
 
-updateIf : Bool -> (Animal -> Animal) -> Animal -> Animal
-updateIf pred f animal =
-    if pred then
-        f animal
 
-    else
-        animal
+-- updateIf : Bool -> (Animal -> Animal) -> Animal -> Animal
+-- updateIf pred f animal =
+--     if pred then
+--         f animal
+--     else
+--         animal
 
 
-tick : Int -> Resource -> Animal -> ( Animal, Bool )
-tick dt resource animal =
+{-| Tick state by dt in ms
+-}
+tick : Int -> Animal -> Animal
+tick dt animal =
     case animal.state of
         Idle ->
-            ( updateIf (Engine.Resource.isAlive resource) setInteract animal, False )
+            animal
 
+        --  updateIf (Engine.Resource.isAlive resource) setInteract animal
         Interact time ->
-            if time <= 0 then
-                ( animal |> setCooldown, True )
+            -- { animal | state = Interact <| max 0 (time - dt) }
+            tickHelper time dt animal setCooldown
 
-            else
-                ( animal |> tickState dt, False )
-
+        -- if time <= 0 then
+        --      animal |> setCooldown
+        -- else
+        --      animal |> tickState dt
         Cooldown time ->
-            ( tickHelper time dt animal setIdle, False )
+            tickHelper time dt animal setIdle
+
+
+{-| If resource is alive and animal is idle, set state to interact and return action
+-}
+interact : Resource -> Animal -> ( Animal, Bool )
+interact resource animal =
+    if Resource.isAlive resource && isIdle animal then
+        ( setInteract animal, True )
+
+    else
+        ( animal, False )
+
+
+
+-- { animal | state = Cooldown <| max 0 (time - dt) }
+-- tick : Int -> Resource -> Animal -> ( Animal, Bool )
+-- tick dt resource animal =
+--     case animal.state of
+--         Idle ->
+--             ( updateIf (Engine.Resource.isAlive resource) setInteract animal, False )
+--         Interact time ->
+--             if time <= 0 then
+--                 ( animal |> setCooldown, True )
+--             else
+--                 ( animal |> tickState dt, False )
+--         Cooldown time ->
+--             ( tickHelper time dt animal setIdle, False )
