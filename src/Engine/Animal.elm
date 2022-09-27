@@ -93,6 +93,16 @@ isInteracting animal =
             False
 
 
+isDoneInteracting : Animal -> Bool
+isDoneInteracting animal =
+    case animal.state of
+        Interact 0 ->
+            True
+
+        _ ->
+            False
+
+
 {-| Set animal state to cooldown
 -}
 setCooldown : Animal -> Animal
@@ -136,7 +146,7 @@ tickState dt animal =
 -}
 tickHelper : Int -> Int -> Animal -> (Animal -> Animal) -> Animal
 tickHelper time dt animal nextState =
-    if (time - dt) <= 0 then
+    if time <= 0 then
         animal |> nextState
 
     else
@@ -163,7 +173,10 @@ tick dt animal =
 interact : Resource -> Animal -> ( Animal, Bool )
 interact resource animal =
     if Resource.isAlive resource && isIdle animal then
-        ( setInteract animal, True )
+        ( setInteract animal, False )
+
+    else if isDoneInteracting animal then
+        ( animal, True )
 
     else
         ( animal, False )

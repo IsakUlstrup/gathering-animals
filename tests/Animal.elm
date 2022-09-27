@@ -26,6 +26,7 @@ state =
             \randomInt ->
                 Animal.new
                     |> Animal.tick randomInt
+                    |> Animal.tick 1
                     |> Animal.isIdle
                     |> Expect.equal
                         (randomInt >= 1000)
@@ -33,14 +34,17 @@ state =
             \randomInt ->
                 Animal.new
                     |> Animal.tick randomInt
+                    |> Animal.tick 1
                     |> Animal.interact Resource.new
-                    |> Tuple.second
+                    |> Tuple.first
+                    |> Animal.isInteracting
                     |> Expect.equal
                         (randomInt >= 1000)
         , fuzz int "Tick new animal by random dt, get action based on dead resource. Should be false" <|
             \randomInt ->
                 Animal.new
                     |> Animal.tick randomInt
+                    |> Animal.tick 1
                     |> Animal.interact (Resource.new |> Resource.hit (Random.initialSeed 0) |> Tuple.first)
                     |> Tuple.second
                     |> Expect.equal
@@ -49,18 +53,33 @@ state =
             \randomInt ->
                 Animal.new
                     |> Animal.tick randomInt
+                    |> Animal.tick 1
                     |> Animal.interact Resource.new
                     |> Tuple.first
                     |> Animal.isInteracting
                     |> Expect.equal
                         (randomInt >= 1000)
+        , fuzz int "Tick ineracting animal by random dt, get hit, should be true if randomInt is above interact time of 200" <|
+            \randomInt ->
+                Animal.new
+                    |> Animal.tick 2000
+                    |> Animal.tick 1
+                    |> Animal.interact Resource.new
+                    |> Tuple.first
+                    |> Animal.tick randomInt
+                    |> Animal.interact Resource.new
+                    |> Tuple.second
+                    |> Expect.equal
+                        (randomInt >= 200)
         , fuzz int "Tick interacting animal by random dt, state should be cooling down if randomInt is above interact time of 200" <|
             \randomInt ->
                 Animal.new
                     |> Animal.tick 1000
+                    |> Animal.tick 1
                     |> Animal.interact Resource.new
                     |> Tuple.first
                     |> Animal.tick randomInt
+                    |> Animal.tick 1
                     |> Animal.isCooling
                     |> Expect.equal
                         (randomInt >= 200)

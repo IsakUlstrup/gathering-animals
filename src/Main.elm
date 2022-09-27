@@ -80,7 +80,8 @@ update msg model =
         Tick dt ->
             let
                 ( animal, action ) =
-                    Animal.tick dt model.animal
+                    model.animal
+                        |> Animal.tick dt
                         |> Animal.interact model.resource
 
                 ( resource, seed ) =
