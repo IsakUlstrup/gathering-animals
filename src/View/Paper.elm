@@ -1,4 +1,4 @@
-module Paper exposing (paperGradient, paperSolid)
+module View.Paper exposing (paperGradient, paperSolid)
 
 import Css exposing (Color, Style, batch)
 

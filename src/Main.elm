@@ -14,9 +14,9 @@ import Html.Styled exposing (Attribute, Html, button, div, h3, main_, p, text, t
 import Html.Styled.Attributes exposing (class, css, id)
 import Html.Styled.Events
 import Json.Decode as Decode exposing (Value)
-import Paper
 import Random exposing (Seed)
 import Storage
+import View.Paper
 
 
 
@@ -163,7 +163,7 @@ viewResource resource =
     div
         [ css
             [ Css.flex <| Css.int 1
-            , Paper.paperGradient [ rgb 250 50 0, rgb 255 50 100 ]
+            , View.Paper.paperGradient [ rgb 250 50 0, rgb 255 50 100 ]
             ]
         ]
         [ h3 [] [ text "Resource" ]
@@ -214,7 +214,7 @@ mainStyle =
         , Css.flexDirection Css.column
         , Css.alignItems Css.stretch
         , Css.justifyContent Css.center
-        , Paper.paperSolid <| rgb 255 255 200
+        , View.Paper.paperSolid <| rgb 255 255 200
         ]
 
 
