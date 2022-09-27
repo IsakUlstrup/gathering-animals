@@ -7,7 +7,7 @@ import Browser
 import Browser.Events
 import Css exposing (px, rgb)
 import Css.Transitions as Transitions
-import Engine.Animal as Animal exposing (Animal, AnimalState(..))
+import Engine.Animal as Animal exposing (Animal)
 import Engine.Item exposing (Item)
 import Engine.Resource as Resource exposing (Resource, ResourceState(..))
 import Html.Styled exposing (Attribute, Html, button, div, h3, main_, p, text, toUnstyled)
@@ -137,12 +137,11 @@ viewAnimal animal =
     let
         state : List Css.Style
         state =
-            case animal.state of
-                Interact _ ->
-                    [ Css.transform <| Css.translate2 (px 100) (px 0) ]
+            if Animal.isInteracting animal then
+                [ Css.transform <| Css.translate2 (px 100) (px 0) ]
 
-                _ ->
-                    []
+            else
+                []
     in
     div
         [ css

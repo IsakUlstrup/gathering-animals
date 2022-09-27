@@ -1,9 +1,10 @@
 module Engine.Animal exposing
     ( Animal
-    , AnimalState(..)
+    , AnimalState
     , interact
     , isCooling
     , isIdle
+    , isInteracting
     , new
     , tick
     )
@@ -60,6 +61,16 @@ isIdle animal =
 setInteract : Animal -> Animal
 setInteract animal =
     { animal | state = interactState }
+
+
+isInteracting : Animal -> Bool
+isInteracting animal =
+    case animal.state of
+        Interact _ ->
+            True
+
+        _ ->
+            False
 
 
 setCooldown : Animal -> Animal
