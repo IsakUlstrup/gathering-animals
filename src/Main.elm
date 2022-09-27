@@ -226,9 +226,6 @@ view model =
         ]
         [ div
             [ locationStyle ]
-            [ div [ class "resource" ] [ h3 [] [ text "Resource" ] ] ]
-        , div
-            [ locationStyle ]
             [ viewAnimal model.animal
             , viewResource model.resource
             ]
@@ -242,9 +239,18 @@ view model =
 -- SUBSCRIPTIONS
 
 
+disableTick : Model -> Bool
+disableTick model =
+    Resource.isExhausted model.resource && Animal.isIdle model.animal
+
+
 subscriptions : Model -> Sub Msg
-subscriptions _ =
-    Browser.Events.onAnimationFrameDelta (round >> Tick)
+subscriptions model =
+    if disableTick model then
+        Sub.none
+
+    else
+        Browser.Events.onAnimationFrameDelta (round >> Tick)
 
 
 
