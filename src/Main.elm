@@ -5,7 +5,7 @@ module Main exposing (Model, Msg, main)
 
 import Browser
 import Browser.Events
-import Css exposing (px, rgb)
+import Css exposing (Style, px, rgb)
 import Css.Transitions as Transitions
 import Engine.Animal as Animal exposing (Animal)
 import Engine.Item exposing (Item)
@@ -126,9 +126,9 @@ viewInventory items =
         viewItem i =
             div [ class "item" ] [ text <| String.fromChar <| Engine.Item.toEmoji i ]
     in
-    div []
+    div [ css [ Css.padding <| Css.rem 1 ] ]
         [ h3 [] [ text "Inventory" ]
-        , div [ class "items", css [ Css.displayFlex ] ] (List.map viewItem items)
+        , div [ class "items", css [ Css.displayFlex, Css.flexWrap Css.wrap ] ] (List.map viewItem items)
         ]
 
 
@@ -147,6 +147,7 @@ viewAnimal animal =
         [ css
             [ Css.flex <| Css.int 1
             , Transitions.transition [ Transitions.transform 1000 ]
+            , flexCenter
             ]
         ]
         [ h3 [ css (Transitions.transition [ Transitions.transform 1000 ] :: state) ] [ text "Animal" ] ]
@@ -164,45 +165,48 @@ viewResource resource =
         [ css
             [ Css.flex <| Css.int 1
             , View.Paper.paperGradient [ rgb 250 50 0, rgb 255 50 100 ]
+            , flexCenter
             ]
         ]
-        [ h3 [] [ text "Resource" ]
-        , p []
-            (if Resource.isAlive resource then
-                [ p [] [ text "alive" ]
-                ]
+        [ div []
+            [ h3 [] [ text "Resource" ]
+            , p []
+                (if Resource.isAlive resource then
+                    [ p [] [ text "alive" ]
+                    ]
 
-             else if Resource.isRegrowing resource then
-                [ text "Regrowing "
-                ]
+                 else if Resource.isRegrowing resource then
+                    [ text "Regrowing "
+                    ]
 
-             else if Resource.isHit resource then
-                [ p [ class "hit" ] [ text "hit" ]
-                ]
+                 else if Resource.isHit resource then
+                    [ p [ class "hit" ] [ text "hit" ]
+                    ]
 
-             else if Resource.isEvade resource then
-                [ p [ class "evade" ] [ text "evade" ]
-                ]
+                 else if Resource.isEvade resource then
+                    [ p [ class "evade" ] [ text "evade" ]
+                    ]
 
-             else
-                case Resource.getLoot resource of
-                    Just items ->
-                        [ text "exhausted, loot"
-                        , div [] (List.indexedMap viewLoot items)
-                        , button [ Html.Styled.Events.onClick ResetResource ] [ text "Done" ]
-                        ]
+                 else
+                    case Resource.getLoot resource of
+                        Just items ->
+                            [ text "exhausted, loot"
+                            , div [] (List.indexedMap viewLoot items)
+                            , button [ Html.Styled.Events.onClick ResetResource ] [ text "Done" ]
+                            ]
 
-                    Nothing ->
-                        [ text "exhausted, loot"
-                        , button [ Html.Styled.Events.onClick ResetResource ] [ text "Done" ]
-                        ]
-            )
+                        Nothing ->
+                            [ text "exhausted, loot"
+                            , button [ Html.Styled.Events.onClick ResetResource ] [ text "Done" ]
+                            ]
+                )
+            ]
         ]
 
 
-locationStyle : Attribute msg
+locationStyle : Style
 locationStyle =
-    css
+    Css.batch
         [ Css.displayFlex
         , Css.flex3 (Css.int 1) (Css.int 1) (Css.int 0)
         , Css.minHeight (Css.rem 15)
@@ -222,6 +226,15 @@ mainStyle =
         ]
 
 
+flexCenter : Style
+flexCenter =
+    Css.batch
+        [ Css.displayFlex
+        , Css.justifyContent Css.center
+        , Css.alignItems Css.center
+        ]
+
+
 view : Model -> Html Msg
 view model =
     main_
@@ -229,12 +242,17 @@ view model =
         , mainStyle
         ]
         [ div
-            [ locationStyle ]
+            [ css [ locationStyle ] ]
             [ viewAnimal model.animal
             , viewResource model.resource
             ]
         , div
-            [ locationStyle ]
+            [ css
+                [ locationStyle
+                , View.Paper.paperGradient [ rgb 130 50 70, rgb 30 50 100 ]
+                , flexCenter
+                ]
+            ]
             [ viewInventory model.inventory ]
         ]
 
