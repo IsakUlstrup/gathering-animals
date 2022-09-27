@@ -157,7 +157,7 @@ viewAnimal animal =
             , Transitions.transition [ Transitions.transform 1000 ]
             , flexCenter
             , Css.animationName enterAnimation
-            , Css.animationDuration <| Css.ms 500
+            , Css.animationDuration <| Css.ms 1500
             ]
         ]
         [ h3 [ css (Transitions.transition [ Transitions.transform 1000 ] :: state) ] [ text "Animal" ] ]
