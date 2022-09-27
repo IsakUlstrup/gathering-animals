@@ -6,9 +6,11 @@ import Css exposing (Color, Style, batch)
 colorToString : Color -> String
 colorToString color =
     let
+        channelString : Int -> String
         channelString c =
             String.fromInt c
 
+        channels : String
         channels =
             [ color.red, color.green, color.blue ] |> List.map channelString |> List.intersperse ", " |> String.concat
     in
@@ -18,6 +20,7 @@ colorToString color =
 paperGradient : List Color -> Style
 paperGradient colors =
     let
+        colorStops : String
         colorStops =
             List.map colorToString colors |> List.intersperse ", " |> String.concat
     in

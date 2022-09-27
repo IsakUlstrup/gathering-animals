@@ -11,7 +11,7 @@ import Engine.Animal as Animal exposing (Animal, AnimalState(..))
 import Engine.Item exposing (Item)
 import Engine.Resource as Resource exposing (Resource, ResourceState(..))
 import Html.Styled exposing (Attribute, Html, button, div, h3, main_, p, text, toUnstyled)
-import Html.Styled.Attributes as Html exposing (class, css, id)
+import Html.Styled.Attributes exposing (class, css, id)
 import Html.Styled.Events
 import Json.Decode as Decode exposing (Value)
 import Paper
