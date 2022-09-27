@@ -234,6 +234,7 @@ mainStyle =
         , Css.alignItems Css.stretch
         , Css.justifyContent Css.center
         , View.Paper.paperSolid <| rgb 255 255 200
+        , Css.fontFamily Css.sansSerif
         ]
 
 
