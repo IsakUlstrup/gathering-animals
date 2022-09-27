@@ -128,9 +128,24 @@ viewInventory items =
         viewItem i =
             div [ class "item" ] [ text <| String.fromChar <| Engine.Item.toEmoji i ]
     in
-    div [ css [ Css.padding <| Css.rem 1 ] ]
+    div
+        [ css
+            [ Css.padding <| Css.rem 1
+            , Css.displayFlex
+            , Css.flexDirection Css.column
+            , Css.property "gap" "0.5rem"
+            ]
+        ]
         [ h3 [] [ text "Inventory" ]
-        , div [ class "items", css [ Css.displayFlex, Css.flexWrap Css.wrap ] ] (List.map viewItem items)
+        , div
+            [ class "items"
+            , css
+                [ Css.displayFlex
+                , Css.flexWrap Css.wrap
+                , Css.property "gap" "0.5rem"
+                ]
+            ]
+            (List.map viewItem items)
         ]
 
 
