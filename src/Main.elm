@@ -1,8 +1,5 @@
 module Main exposing (Model, Msg, main)
 
--- import Html.Attributes exposing (class, id)
--- import Html.Events exposing (onClick)
-
 import Browser
 import Browser.Events
 import Css exposing (Style, px, rgb)
@@ -17,6 +14,7 @@ import Html.Styled.Events
 import Json.Decode as Decode exposing (Value)
 import Random exposing (Seed)
 import Storage
+import View.CssExtra
 import View.Paper
 
 
@@ -133,7 +131,7 @@ viewInventory items =
             [ Css.padding <| Css.rem 1
             , Css.displayFlex
             , Css.flexDirection Css.column
-            , Css.property "gap" "0.5rem"
+            , View.CssExtra.gap 0.5
             ]
         ]
         [ h3 [] [ text "Inventory" ]
@@ -142,7 +140,7 @@ viewInventory items =
             , css
                 [ Css.displayFlex
                 , Css.flexWrap Css.wrap
-                , Css.property "gap" "0.5rem"
+                , View.CssExtra.gap 1
                 ]
             ]
             (List.map viewItem items)
@@ -163,8 +161,8 @@ viewAnimal animal =
         enterAnimation : Css.Animations.Keyframes {}
         enterAnimation =
             Css.Animations.keyframes
-                [ ( 0, [ Css.Animations.custom "max-width" "0rem" ] )
-                , ( 100, [ Css.Animations.custom "max-width" "200rem" ] )
+                [ ( 0, [ View.CssExtra.maxWidthAnim 0 ] )
+                , ( 100, [ View.CssExtra.maxWidthAnim 200 ] )
                 ]
     in
     div
@@ -217,7 +215,7 @@ viewResource resource =
                     case Resource.getLoot resource of
                         Just items ->
                             [ text "exhausted, loot"
-                            , div [] (List.indexedMap viewLoot items)
+                            , div [ css [ Css.displayFlex, View.CssExtra.gap 0.5 ] ] (List.indexedMap viewLoot items)
                             , button [ Html.Styled.Events.onClick ResetResource ] [ text "Done" ]
                             ]
 
