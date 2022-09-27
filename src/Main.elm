@@ -6,6 +6,7 @@ module Main exposing (Model, Msg, main)
 import Browser
 import Browser.Events
 import Css exposing (Style, px, rgb)
+import Css.Animations
 import Css.Transitions as Transitions
 import Engine.Animal as Animal exposing (Animal)
 import Engine.Item exposing (Item)
@@ -142,12 +143,20 @@ viewAnimal animal =
 
             else
                 []
+
+        enterAnimation =
+            Css.Animations.keyframes
+                [ ( 0, [ Css.Animations.custom "max-width" "0rem" ] )
+                , ( 100, [ Css.Animations.custom "max-width" "200rem" ] )
+                ]
     in
     div
         [ css
-            [ Css.flex <| Css.int 1
+            [ Css.flex (Css.int 1)
             , Transitions.transition [ Transitions.transform 1000 ]
             , flexCenter
+            , Css.animationName enterAnimation
+            , Css.animationDuration <| Css.ms 500
             ]
         ]
         [ h3 [ css (Transitions.transition [ Transitions.transform 1000 ] :: state) ] [ text "Animal" ] ]
