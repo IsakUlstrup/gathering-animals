@@ -180,6 +180,10 @@ viewResource resource =
                 [ p [ class "hit" ] [ text "hit" ]
                 ]
 
+             else if Resource.isEvade resource then
+                [ p [ class "evade" ] [ text "evade" ]
+                ]
+
              else
                 case Resource.getLoot resource of
                     Just items ->
