@@ -1,9 +1,10 @@
 module Animal exposing (constructor, state)
 
 import Engine.Animal as Animal
-import Engine.Resource exposing (Resource, ResourceState(..))
+import Engine.Resource as Resource
 import Expect
 import Fuzz exposing (int)
+import Random
 import Test exposing (Test, describe, fuzz, test)
 
 
@@ -32,7 +33,7 @@ state =
             \randomInt ->
                 Animal.new
                     |> Animal.tick randomInt
-                    |> Animal.interact (Resource Alive)
+                    |> Animal.interact Resource.new
                     |> Tuple.second
                     |> Expect.equal
                         (randomInt >= 1000)
@@ -40,7 +41,7 @@ state =
             \randomInt ->
                 Animal.new
                     |> Animal.tick randomInt
-                    |> Animal.interact (Resource <| Dead [])
+                    |> Animal.interact (Resource.new |> Resource.hit (Random.initialSeed 0) |> Tuple.first)
                     |> Tuple.second
                     |> Expect.equal
                         False
@@ -48,7 +49,7 @@ state =
             \randomInt ->
                 Animal.new
                     |> Animal.tick randomInt
-                    |> Animal.interact (Resource <| Alive)
+                    |> Animal.interact Resource.new
                     |> Tuple.first
                     |> Animal.isInteracting
                     |> Expect.equal
@@ -57,7 +58,7 @@ state =
             \randomInt ->
                 Animal.new
                     |> Animal.tick 1000
-                    |> Animal.interact (Resource <| Alive)
+                    |> Animal.interact Resource.new
                     |> Tuple.first
                     |> Animal.tick randomInt
                     |> Animal.isCooling

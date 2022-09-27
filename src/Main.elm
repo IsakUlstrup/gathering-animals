@@ -9,7 +9,7 @@ import Css exposing (px, rgb)
 import Css.Transitions as Transitions
 import Engine.Animal as Animal exposing (Animal)
 import Engine.Item exposing (Item)
-import Engine.Resource as Resource exposing (Resource, ResourceState(..))
+import Engine.Resource as Resource exposing (Resource)
 import Html.Styled exposing (Attribute, Html, button, div, h3, main_, p, text, toUnstyled)
 import Html.Styled.Attributes exposing (class, css, id)
 import Html.Styled.Events
@@ -47,7 +47,7 @@ init flags =
         Ok inv ->
             ( Model
                 Animal.new
-                (Resource <| Alive)
+                Resource.new
                 inv
                 (Random.initialSeed 130)
             , Cmd.none
@@ -56,7 +56,7 @@ init flags =
         Err _ ->
             ( Model
                 Animal.new
-                (Resource <| Alive)
+                Resource.new
                 []
                 (Random.initialSeed 130)
             , Cmd.none
@@ -168,25 +168,30 @@ viewResource resource =
         ]
         [ h3 [] [ text "Resource" ]
         , p []
-            (case resource.state of
-                Alive ->
-                    [ p [] [ text "alive" ]
-                    ]
+            (if Resource.isAlive resource then
+                [ p [] [ text "alive" ]
+                ]
 
-                Regrowing time ->
-                    [ text "Regrowing "
-                    , text <| String.fromInt time
-                    ]
+             else if Resource.isRegrowing resource then
+                [ text "Regrowing "
+                ]
 
-                Hit _ ->
-                    [ p [ class "hit" ] [ text "hit" ]
-                    ]
+             else if Resource.isHit resource then
+                [ p [ class "hit" ] [ text "hit" ]
+                ]
 
-                Dead items ->
-                    [ text "Dead, loot"
-                    , div [] (List.indexedMap viewLoot items)
-                    , button [ Html.Styled.Events.onClick ResetResource ] [ text "Done" ]
-                    ]
+             else
+                case Resource.getLoot resource of
+                    Just items ->
+                        [ text "exhausted, loot"
+                        , div [] (List.indexedMap viewLoot items)
+                        , button [ Html.Styled.Events.onClick ResetResource ] [ text "Done" ]
+                        ]
+
+                    Nothing ->
+                        [ text "exhausted, loot"
+                        , button [ Html.Styled.Events.onClick ResetResource ] [ text "Done" ]
+                        ]
             )
         ]
 

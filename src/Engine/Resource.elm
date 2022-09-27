@@ -1,9 +1,13 @@
 module Engine.Resource exposing
     ( Resource
-    , ResourceState(..)
+    , ResourceState
+    , getLoot
     , hit
     , isAlive
+    , isHit
+    , isRegrowing
     , lootAtIndex
+    , new
     , setRegrowing
     , tick
     )
@@ -12,36 +16,20 @@ import Engine.Item exposing (Item(..))
 import Random exposing (Generator, Seed)
 
 
-tick : Int -> Resource -> Resource
-tick dt resource =
-    case resource.state of
-        Regrowing time ->
-            if time <= 0 then
-                resource |> setAlive
-
-            else
-                { resource | state = Regrowing (time - dt) }
-
-        Hit time ->
-            if time <= 0 then
-                resource |> setDead
-
-            else
-                { resource | state = Hit (time - dt) }
-
-        _ ->
-            resource
-
-
 type ResourceState
     = Alive
     | Regrowing Int
     | Hit Int
-    | Dead (List Item)
+    | Exhausted (List Item)
 
 
 type alias Resource =
     { state : ResourceState }
+
+
+new : Resource
+new =
+    Resource Alive
 
 
 setAlive : Resource -> Resource
@@ -64,9 +52,29 @@ setHit resource =
     { resource | state = Hit 200 }
 
 
-setDead : Resource -> Resource
-setDead resource =
-    { resource | state = Dead [ Strawberry, Coconut ] }
+isHit : Resource -> Bool
+isHit resource =
+    case resource.state of
+        Hit _ ->
+            True
+
+        _ ->
+            False
+
+
+setExhausted : Resource -> Resource
+setExhausted resource =
+    { resource | state = Exhausted [ Strawberry, Coconut ] }
+
+
+getLoot : Resource -> Maybe (List Item)
+getLoot resource =
+    case resource.state of
+        Exhausted items ->
+            Just items
+
+        _ ->
+            Nothing
 
 
 setRegrowing : Resource -> Resource
@@ -74,10 +82,20 @@ setRegrowing resource =
     { resource | state = Regrowing 1000 }
 
 
+isRegrowing : Resource -> Bool
+isRegrowing resource =
+    case resource.state of
+        Regrowing _ ->
+            True
+
+        _ ->
+            False
+
+
 lootAtIndex : Int -> Resource -> ( Resource, Maybe Item )
 lootAtIndex index resource =
     case resource.state of
-        Dead loot ->
+        Exhausted loot ->
             let
                 item : Maybe Item
                 item =
@@ -95,7 +113,7 @@ lootAtIndex index resource =
                 newLoot =
                     first ++ second
             in
-            ( { resource | state = Dead newLoot }, item )
+            ( { resource | state = Exhausted newLoot }, item )
 
         _ ->
             ( resource, Nothing )
@@ -112,10 +130,10 @@ hit : Seed -> Resource -> ( Resource, Seed )
 hit seed resource =
     if isAlive resource then
         let
-            ( isHit, newSeed ) =
+            ( hitRoll, newSeed ) =
                 Random.step rollHit seed
         in
-        if isHit then
+        if hitRoll then
             ( setHit resource, newSeed )
 
         else
@@ -123,3 +141,24 @@ hit seed resource =
 
     else
         ( resource, seed )
+
+
+tick : Int -> Resource -> Resource
+tick dt resource =
+    case resource.state of
+        Regrowing time ->
+            if time <= 0 then
+                resource |> setAlive
+
+            else
+                { resource | state = Regrowing (time - dt) }
+
+        Hit time ->
+            if time <= 0 then
+                resource |> setExhausted
+
+            else
+                { resource | state = Hit (time - dt) }
+
+        _ ->
+            resource
