@@ -35,7 +35,7 @@ state =
                 Animal.new
                     |> Animal.tick randomInt
                     |> Animal.tick 0
-                    |> Animal.interact Resource.new
+                    |> Animal.interact (Resource.new [])
                     |> Tuple.first
                     |> Animal.isInteracting
                     |> Expect.equal
@@ -45,7 +45,7 @@ state =
                 Animal.new
                     |> Animal.tick randomInt
                     |> Animal.tick 0
-                    |> Animal.interact (Resource.new |> Resource.hit (Random.initialSeed 0) |> Tuple.first)
+                    |> Animal.interact (Resource.new [] |> Resource.hit (Random.initialSeed 0) |> Tuple.first)
                     |> Tuple.second
                     |> Expect.equal
                         False
@@ -54,7 +54,7 @@ state =
                 Animal.new
                     |> Animal.tick randomInt
                     |> Animal.tick 0
-                    |> Animal.interact Resource.new
+                    |> Animal.interact (Resource.new [])
                     |> Tuple.first
                     |> Animal.isInteracting
                     |> Expect.equal
@@ -64,10 +64,10 @@ state =
                 Animal.new
                     |> Animal.tick 2000
                     |> Animal.tick 0
-                    |> Animal.interact Resource.new
+                    |> Animal.interact (Resource.new [])
                     |> Tuple.first
                     |> Animal.tick randomInt
-                    |> Animal.interact Resource.new
+                    |> Animal.interact (Resource.new [])
                     |> Tuple.second
                     |> Expect.equal
                         (randomInt >= 200)
@@ -76,7 +76,7 @@ state =
                 Animal.new
                     |> Animal.tick 1000
                     |> Animal.tick 0
-                    |> Animal.interact Resource.new
+                    |> Animal.interact (Resource.new [])
                     |> Tuple.first
                     |> Animal.tick randomInt
                     |> Animal.tick 0

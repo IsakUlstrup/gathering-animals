@@ -46,7 +46,7 @@ init flags =
         Ok inv ->
             ( Model
                 Animal.new
-                Resource.new
+                (Resource.new [])
                 inv
                 (Random.initialSeed 1)
             , Cmd.none
@@ -55,7 +55,7 @@ init flags =
         Err _ ->
             ( Model
                 Animal.new
-                Resource.new
+                (Resource.new [])
                 []
                 (Random.initialSeed 1)
             , Cmd.none

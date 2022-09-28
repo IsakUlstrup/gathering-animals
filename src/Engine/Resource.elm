@@ -1,5 +1,6 @@
 module Engine.Resource exposing
-    ( Resource
+    ( DropTable
+    , Resource
     , ResourceState
     , getLoot
     , hit
@@ -29,17 +30,23 @@ type ResourceState
     | Exhausted (List Item)
 
 
+type alias DropTable =
+    List ( Float, Maybe Item )
+
+
 {-| Resource type, just the state for now
 -}
 type alias Resource =
-    { state : ResourceState }
+    { state : ResourceState
+    , dropTable : DropTable
+    }
 
 
 {-| Resource constructor
 -}
-new : Resource
-new =
-    Resource Alive
+new : DropTable -> Resource
+new dropTable =
+    Resource Alive dropTable
 
 
 {-| Set state to alive
@@ -235,3 +242,11 @@ tick dt resource =
 
         _ ->
             resource
+
+
+
+-- rollLoot : DropTable -> Generator (Maybe Item)
+-- rollLoot dropTable =
+--     Random.weighted
+--         ( 0, Nothing )
+--         dropTable
