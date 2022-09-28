@@ -42,23 +42,31 @@ init flags =
 
                 Err _ ->
                     Err "Invalid data from port"
+
+        resource : Resource
+        resource =
+            Resource.new
+                [ ( 1, Content.Items.mango )
+                , ( 9, Content.Items.coconut )
+                , ( 90, Content.Items.strawberry )
+                ]
     in
     case inventory of
         Ok inv ->
             ( Model
                 Animal.new
-                (Resource.new [ ( 10, Content.Items.coconut ), ( 90, Content.Items.strawberry ) ])
+                resource
                 inv
-                (Random.initialSeed 1)
+                (Random.initialSeed 134857)
             , Cmd.none
             )
 
         Err _ ->
             ( Model
                 Animal.new
-                (Resource.new [ ( 10, Content.Items.coconut ), ( 90, Content.Items.strawberry ) ])
+                resource
                 []
-                (Random.initialSeed 1)
+                (Random.initialSeed 134857)
             , Cmd.none
             )
 

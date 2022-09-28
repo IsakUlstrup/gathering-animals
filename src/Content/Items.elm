@@ -1,4 +1,4 @@
-module Content.Items exposing (coconut, strawberry)
+module Content.Items exposing (coconut, mango, strawberry)
 
 import Engine.Item as Item exposing (Item)
 
@@ -11,3 +11,8 @@ coconut =
 strawberry : Item
 strawberry =
     Item.new '🍓'
+
+
+mango : Item
+mango =
+    Item.new '🥭'
