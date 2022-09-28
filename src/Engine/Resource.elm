@@ -197,8 +197,8 @@ rollHit =
 
 {-| Attempt to hit resource
 -}
-hit : Seed -> Resource -> ( Resource, Seed )
-hit seed resource =
+hit : ( Resource, Seed ) -> ( Resource, Seed )
+hit ( resource, seed ) =
     if isAlive resource then
         let
             ( hitRoll, newSeed ) =
@@ -216,32 +216,38 @@ hit seed resource =
 
 {-| Tick resource by dt in ms
 -}
-tick : Int -> Resource -> Resource
-tick dt resource =
+tick : Int -> ( Resource, Seed ) -> ( Resource, Seed )
+tick dt ( resource, seed ) =
     case resource.state of
         Regrowing time ->
-            if (time - dt) <= 0 then
+            ( if (time - dt) <= 0 then
                 resource |> setAlive
 
-            else
+              else
                 { resource | state = Regrowing (time - dt) }
+            , seed
+            )
 
         Hit time ->
-            if (time - dt) <= 0 then
+            ( if (time - dt) <= 0 then
                 resource |> setExhausted
 
-            else
+              else
                 { resource | state = Hit (time - dt) }
+            , seed
+            )
 
         Evade time ->
-            if (time - dt) <= 0 then
+            ( if (time - dt) <= 0 then
                 resource |> setAlive
 
-            else
+              else
                 { resource | state = Evade (time - dt) }
+            , seed
+            )
 
         _ ->
-            resource
+            ( resource, seed )
 
 
 

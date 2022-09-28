@@ -83,13 +83,9 @@ update msg model =
                         |> Animal.interact model.resource
 
                 ( resource, seed ) =
-                    if action then
-                        model.resource
-                            |> Resource.tick dt
-                            |> Resource.hit model.seed
-
-                    else
-                        ( Resource.tick dt model.resource, model.seed )
+                    ( model.resource, model.seed )
+                        |> Resource.tick dt
+                        |> Resource.hit
             in
             ( { model
                 | animal = animal
