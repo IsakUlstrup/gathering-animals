@@ -224,9 +224,11 @@ rollItem dropTable =
 
 {-| Generate a list of items based on drop table
 -}
-rollLoot : Int -> DropTable -> Generator (List Item)
-rollLoot quantity dropTable =
-    Random.list quantity (rollItem dropTable) |> Random.map (List.filterMap identity)
+rollLoot : DropTable -> Generator (List Item)
+rollLoot dropTable =
+    Random.int 1 5
+        |> Random.andThen
+            (\quantity -> Random.list quantity (rollItem dropTable) |> Random.map (List.filterMap identity))
 
 
 {-| Tick resource by dt in ms
@@ -247,7 +249,7 @@ tick dt ( resource, seed ) =
             if (time - dt) <= 0 then
                 let
                     ( loot, newSeed ) =
-                        Random.step (rollLoot 5 resource.dropTable) seed
+                        Random.step (rollLoot resource.dropTable) seed
                 in
                 ( resource |> setExhausted loot, newSeed )
 
