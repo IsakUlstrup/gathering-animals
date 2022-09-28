@@ -1,7 +1,7 @@
 module Engine.Animal exposing
     ( Animal
     , AnimalState
-    , interact
+    , interactIf
     , isCooling
     , isIdle
     , isInteracting
@@ -9,11 +9,10 @@ module Engine.Animal exposing
     , tick
     )
 
-import Engine.Resource as Resource exposing (Resource)
-
-
 {-| Animal state, the integers represent remaining time in each state
 -}
+
+
 type AnimalState
     = Idle
     | Interact Int
@@ -170,9 +169,9 @@ tick dt animal =
 
 {-| If resource is alive and animal is idle, set state to interact and return action
 -}
-interact : Resource -> Animal -> ( Animal, Bool )
-interact resource animal =
-    if Resource.isAlive resource && isIdle animal then
+interactIf : Bool -> Animal -> ( Animal, Bool )
+interactIf shouldInteract animal =
+    if shouldInteract && isIdle animal then
         ( setInteract animal, False )
 
     else if isDoneInteracting animal then

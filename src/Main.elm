@@ -89,7 +89,7 @@ update msg model =
                 ( animal, action ) =
                     model.animal
                         |> Animal.tick dt
-                        |> Animal.interact model.resource
+                        |> Animal.interactIf (Resource.isAlive model.resource)
 
                 ( resource, seed ) =
                     ( model.resource, model.seed )

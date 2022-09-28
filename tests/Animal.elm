@@ -35,7 +35,7 @@ state =
                 Animal.new
                     |> Animal.tick randomInt
                     |> Animal.tick 0
-                    |> Animal.interact (Resource.new [])
+                    |> Animal.interactIf (Resource.isAlive <| Resource.new [])
                     |> Tuple.first
                     |> Animal.isInteracting
                     |> Expect.equal
@@ -45,7 +45,7 @@ state =
                 Animal.new
                     |> Animal.tick randomInt
                     |> Animal.tick 0
-                    |> Animal.interact (( Resource.new [], Random.initialSeed 0 ) |> Resource.hitIf True |> Tuple.first)
+                    |> Animal.interactIf (( Resource.new [], Random.initialSeed 0 ) |> Resource.hitIf True |> Tuple.first |> Resource.isAlive)
                     |> Tuple.second
                     |> Expect.equal
                         False
@@ -54,7 +54,7 @@ state =
                 Animal.new
                     |> Animal.tick randomInt
                     |> Animal.tick 0
-                    |> Animal.interact (Resource.new [])
+                    |> Animal.interactIf (Resource.isAlive <| Resource.new [])
                     |> Tuple.first
                     |> Animal.isInteracting
                     |> Expect.equal
@@ -64,10 +64,10 @@ state =
                 Animal.new
                     |> Animal.tick 2000
                     |> Animal.tick 0
-                    |> Animal.interact (Resource.new [])
+                    |> Animal.interactIf (Resource.isAlive <| Resource.new [])
                     |> Tuple.first
                     |> Animal.tick randomInt
-                    |> Animal.interact (Resource.new [])
+                    |> Animal.interactIf (Resource.isAlive <| Resource.new [])
                     |> Tuple.second
                     |> Expect.equal
                         (randomInt >= 200)
@@ -76,7 +76,7 @@ state =
                 Animal.new
                     |> Animal.tick 1000
                     |> Animal.tick 0
-                    |> Animal.interact (Resource.new [])
+                    |> Animal.interactIf (Resource.isAlive <| Resource.new [])
                     |> Tuple.first
                     |> Animal.tick randomInt
                     |> Animal.tick 0
