@@ -85,7 +85,7 @@ update msg model =
                 ( resource, seed ) =
                     ( model.resource, model.seed )
                         |> Resource.tick dt
-                        |> Resource.hit
+                        |> Resource.hitIf action
             in
             ( { model
                 | animal = animal

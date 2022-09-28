@@ -3,7 +3,7 @@ module Engine.Resource exposing
     , Resource
     , ResourceState
     , getLoot
-    , hit
+    , hitIf
     , isAlive
     , isEvade
     , isExhausted
@@ -197,9 +197,9 @@ rollHit =
 
 {-| Attempt to hit resource
 -}
-hit : ( Resource, Seed ) -> ( Resource, Seed )
-hit ( resource, seed ) =
-    if isAlive resource then
+hitIf : Bool -> ( Resource, Seed ) -> ( Resource, Seed )
+hitIf shouldHit ( resource, seed ) =
+    if isAlive resource && shouldHit then
         let
             ( hitRoll, newSeed ) =
                 Random.step rollHit seed

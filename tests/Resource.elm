@@ -24,21 +24,21 @@ state =
         [ test "Hit alive resource with hardcoded seed that will roll hit, state should be hit" <|
             \_ ->
                 ( Resource.new [], Random.initialSeed 0 )
-                    |> Resource.hit
+                    |> Resource.hitIf True
                     |> Tuple.first
                     |> Resource.isHit
                     |> Expect.equal True
         , test "Hit alive resource with hardcoded seed that will roll miss, state should be miss" <|
             \_ ->
                 ( Resource.new [], Random.initialSeed 1 )
-                    |> Resource.hit
+                    |> Resource.hitIf True
                     |> Tuple.first
                     |> Resource.isEvade
                     |> Expect.equal True
         , fuzz int "Hit alive resource, tick by random dt, get loot. If randomInt is above hit state time of 200 should return some loot" <|
             \randomInt ->
                 ( Resource.new [], Random.initialSeed 0 )
-                    |> Resource.hit
+                    |> Resource.hitIf True
                     |> Resource.tick randomInt
                     |> Tuple.first
                     |> Resource.isExhausted
@@ -54,7 +54,7 @@ state =
         , test "Set exhausted resource to regrow." <|
             \_ ->
                 ( Resource.new [], Random.initialSeed 0 )
-                    |> Resource.hit
+                    |> Resource.hitIf True
                     |> Resource.tick 200
                     |> Tuple.first
                     |> Resource.setRegrowing
@@ -64,7 +64,7 @@ state =
         , fuzz int "Tick regrowing resource by random dt, if above grow time of 1000 should be alive" <|
             \randomInt ->
                 ( Resource.new [], Random.initialSeed 0 )
-                    |> Resource.hit
+                    |> Resource.hitIf True
                     |> Resource.tick 200
                     |> (\( r, s ) -> ( Resource.setRegrowing r, s ))
                     |> Resource.tick randomInt
@@ -91,7 +91,7 @@ loot =
         [ test "Get loot from exhausted resource" <|
             \_ ->
                 ( Resource.new [], Random.initialSeed 0 )
-                    |> Resource.hit
+                    |> Resource.hitIf True
                     |> Resource.tick 200
                     |> Tuple.first
                     |> Resource.getLoot
@@ -106,7 +106,7 @@ loot =
         , fuzz int "Loot at random index in loot list with length of 2, check item" <|
             \randomInt ->
                 ( Resource.new [], Random.initialSeed 0 )
-                    |> Resource.hit
+                    |> Resource.hitIf True
                     |> Resource.tick 200
                     |> Tuple.first
                     |> Resource.lootAtIndex randomInt
