@@ -31,7 +31,7 @@ type ResourceState
 
 
 type alias DropTable =
-    List ( Float, Maybe Item )
+    List ( Float, Item )
 
 
 {-| Resource type, just the state for now
