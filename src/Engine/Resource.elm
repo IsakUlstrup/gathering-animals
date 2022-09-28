@@ -104,9 +104,9 @@ isHit resource =
 
 {-| Set state to exhausted with some hardcoded items
 -}
-setExhausted : Resource -> Resource
-setExhausted resource =
-    { resource | state = Exhausted [ Content.Items.coconut, Content.Items.strawberry ] }
+setExhausted : List Item -> Resource -> Resource
+setExhausted loot resource =
+    { resource | state = Exhausted loot }
 
 
 {-| Is state exhausted predicate
@@ -230,7 +230,7 @@ tick dt ( resource, seed ) =
 
         Hit time ->
             ( if (time - dt) <= 0 then
-                resource |> setExhausted
+                resource |> setExhausted [ Content.Items.coconut, Content.Items.strawberry ]
 
               else
                 { resource | state = Hit (time - dt) }
