@@ -226,7 +226,7 @@ rollItem dropTable =
 -}
 rollLoot : DropTable -> Generator (List Item)
 rollLoot dropTable =
-    Random.int 1 5
+    Random.weighted ( 40, 1 ) [ ( 30, 2 ), ( 20, 3 ), ( 9, 4 ), ( 1, 5 ) ]
         |> Random.andThen
             (\quantity -> Random.list quantity (rollItem dropTable) |> Random.map (List.filterMap identity))
 
