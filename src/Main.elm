@@ -124,7 +124,7 @@ viewInventory items =
     let
         viewItem : Item -> Html msg
         viewItem i =
-            div [ class "item" ] [ text <| String.fromChar <| Engine.Item.toEmoji i ]
+            div [ class "item" ] [ text <| Engine.Item.iconString i ]
     in
     div
         [ css
@@ -180,7 +180,7 @@ viewAnimal animal =
 viewLoot : Int -> Item -> Html Msg
 viewLoot index item =
     button [ Html.Styled.Events.onClick <| LootItem index ]
-        [ text <| String.fromChar <| Engine.Item.toEmoji item ]
+        [ text <| Engine.Item.iconString item ]
 
 
 viewResource : Resource -> Html Msg

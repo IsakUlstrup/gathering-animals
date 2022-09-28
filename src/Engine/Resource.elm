@@ -14,7 +14,7 @@ module Engine.Resource exposing
     , tick
     )
 
-import Engine.Item exposing (Item(..))
+import Engine.Item as Item exposing (Item)
 import Random exposing (Generator, Seed)
 
 
@@ -98,7 +98,7 @@ isHit resource =
 -}
 setExhausted : Resource -> Resource
 setExhausted resource =
-    { resource | state = Exhausted [ Strawberry, Coconut ] }
+    { resource | state = Exhausted [ Item.new '🥥', Item.new '🍓' ] }
 
 
 {-| Is state exhausted predicate

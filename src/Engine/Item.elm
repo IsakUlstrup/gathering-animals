@@ -1,39 +1,25 @@
-module Engine.Item exposing (Item(..), fromString, toEmoji, toString)
+module Engine.Item exposing
+    ( Item
+    , iconString
+    , new
+    )
 
 
-type Item
-    = Coconut
-    | Strawberry
+type alias Item =
+    { icon : Char
+
+    -- , name : String
+    -- , description: String
+    }
 
 
-toString : Item -> String
-toString item =
-    case item of
-        Coconut ->
-            "Coconut"
-
-        Strawberry ->
-            "Strawberry"
+new : Char -> Item
+new icon =
+    Item icon
 
 
-toEmoji : Item -> Char
-toEmoji item =
-    case item of
-        Coconut ->
-            '🥥'
-
-        Strawberry ->
-            '🍓'
-
-
-fromString : String -> Maybe Item
-fromString string =
-    case string of
-        "Coconut" ->
-            Just Coconut
-
-        "Strawberry" ->
-            Just Strawberry
-
-        _ ->
-            Nothing
+iconString : Item -> String
+iconString item =
+    item
+        |> .icon
+        |> String.fromChar

@@ -1,7 +1,7 @@
 port module Storage exposing (decodeStoredInventory, saveInventory)
 
 import Engine.Item exposing (Item)
-import Json.Decode as Decode exposing (Decoder)
+import Json.Decode as Decode exposing (Decoder, string)
 import Json.Encode as Encode exposing (Value)
 
 
@@ -10,24 +10,38 @@ port storeInventory : String -> Cmd msg
 
 itemEncoder : Item -> Value
 itemEncoder item =
-    Encode.string <| Engine.Item.toString item
+    Encode.object
+        [ ( "icon", Encode.string <| String.fromChar item.icon )
+        ]
 
 
-itemHelp : String -> Decoder Item
-itemHelp itemString =
-    case Engine.Item.fromString itemString of
-        Just item ->
-            Decode.succeed item
 
-        Nothing ->
+-- <| Engine.Item.toString item
+-- itemHelp : String -> Decoder Item
+-- itemHelp itemString =
+--     case Engine.Item.fromString itemString of
+--         Just item ->
+--             Decode.succeed item
+--         Nothing ->
+--             Decode.fail <|
+--                 "Invalid item data"
+
+
+itemHelp2 : String -> Decoder Item
+itemHelp2 itemString =
+    case String.toList itemString of
+        [ i ] ->
+            Decode.succeed <| Engine.Item.new i
+
+        _ ->
             Decode.fail <|
-                "Invalid item data"
+                "Invalid Char"
 
 
 itemDecoder : Decoder Item
 itemDecoder =
-    Decode.string
-        |> Decode.andThen itemHelp
+    Decode.field "icon" string
+        |> Decode.andThen itemHelp2
 
 
 inventoryDecoder : Decoder (List Item)
