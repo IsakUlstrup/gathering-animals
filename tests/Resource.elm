@@ -1,5 +1,6 @@
 module Resource exposing (constructor, loot, state)
 
+import Content.Items
 import Engine.Resource as Resource
 import Expect
 import Fuzz exposing (int)
@@ -103,9 +104,9 @@ loot =
                     |> Resource.getLoot
                     |> isJust
                     |> Expect.equal False
-        , fuzz int "Loot at random index in loot list with length of 2, check item" <|
+        , fuzz int "Loot at random index in loot list with length of 3, check item" <|
             \randomInt ->
-                ( Resource.new [], Random.initialSeed 0 )
+                ( Resource.new [ ( 100, Content.Items.coconut ) ], Random.initialSeed 0 )
                     |> Resource.hitIf True
                     |> Resource.tick 200
                     |> Tuple.first
@@ -113,5 +114,5 @@ loot =
                     |> Tuple.second
                     |> isJust
                     |> Expect.equal
-                        (randomInt >= 0 && randomInt <= 1)
+                        (randomInt >= 0 && randomInt <= 4)
         ]

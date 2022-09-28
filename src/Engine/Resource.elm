@@ -15,7 +15,6 @@ module Engine.Resource exposing
     , tick
     )
 
-import Content.Items
 import Engine.Item exposing (Item)
 import Random exposing (Generator, Seed)
 
@@ -214,6 +213,22 @@ hitIf shouldHit ( resource, seed ) =
         ( resource, seed )
 
 
+{-| Generates an item based on drop table, an empty table will allways return Nothing
+-}
+rollItem : DropTable -> Generator (Maybe Item)
+rollItem dropTable =
+    Random.weighted
+        ( 0, Nothing )
+        (List.map (Tuple.mapSecond Just) dropTable)
+
+
+{-| Generate a list of items based on drop table
+-}
+rollLoot : Int -> DropTable -> Generator (List Item)
+rollLoot quantity dropTable =
+    Random.list quantity (rollItem dropTable) |> Random.map (List.filterMap identity)
+
+
 {-| Tick resource by dt in ms
 -}
 tick : Int -> ( Resource, Seed ) -> ( Resource, Seed )
@@ -229,13 +244,15 @@ tick dt ( resource, seed ) =
             )
 
         Hit time ->
-            ( if (time - dt) <= 0 then
-                resource |> setExhausted [ Content.Items.coconut, Content.Items.strawberry ]
+            if (time - dt) <= 0 then
+                let
+                    ( loot, newSeed ) =
+                        Random.step (rollLoot 5 resource.dropTable) seed
+                in
+                ( resource |> setExhausted loot, newSeed )
 
-              else
-                { resource | state = Hit (time - dt) }
-            , seed
-            )
+            else
+                ( { resource | state = Hit (time - dt) }, seed )
 
         Evade time ->
             ( if (time - dt) <= 0 then
@@ -248,11 +265,3 @@ tick dt ( resource, seed ) =
 
         _ ->
             ( resource, seed )
-
-
-
--- rollLoot : DropTable -> Generator (Maybe Item)
--- rollLoot dropTable =
---     Random.weighted
---         ( 0, Nothing )
---         dropTable

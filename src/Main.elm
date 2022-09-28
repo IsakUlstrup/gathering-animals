@@ -2,6 +2,7 @@ module Main exposing (Model, Msg, main)
 
 import Browser
 import Browser.Events
+import Content.Items
 import Css exposing (Style, px, rgb)
 import Css.Animations
 import Css.Transitions as Transitions
@@ -46,7 +47,7 @@ init flags =
         Ok inv ->
             ( Model
                 Animal.new
-                (Resource.new [])
+                (Resource.new [ ( 10, Content.Items.coconut ), ( 90, Content.Items.strawberry ) ])
                 inv
                 (Random.initialSeed 1)
             , Cmd.none
@@ -55,7 +56,7 @@ init flags =
         Err _ ->
             ( Model
                 Animal.new
-                (Resource.new [])
+                (Resource.new [ ( 10, Content.Items.coconut ), ( 90, Content.Items.strawberry ) ])
                 []
                 (Random.initialSeed 1)
             , Cmd.none
