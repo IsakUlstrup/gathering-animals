@@ -1,4 +1,4 @@
-module Engine.StateMachine exposing (State(..), getState, tick, transition)
+module Engine.StateMachine exposing (State(..), getState, isDone, tick, transition)
 
 {-| Idle state (list of possible transitions)
 
@@ -63,3 +63,15 @@ getState state =
 
         Timer _ s _ ->
             s
+
+
+{-| Does state match the given one and is timer done?
+-}
+isDone : s -> State s -> Bool
+isDone s state =
+    case state of
+        Timer 0 currState _ ->
+            s == currState
+
+        _ ->
+            False

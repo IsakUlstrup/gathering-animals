@@ -96,4 +96,12 @@ timed =
                     |> State.tick 0
                     |> Expect.equal
                         (Idle (Dead loot) [ Alive ])
+        , test "Check if timed state is done (timer == 0)" <|
+            \_ ->
+                aliveState
+                    |> State.transition hitState
+                    |> State.tick 500
+                    |> State.isDone Hit
+                    |> Expect.equal
+                        True
         ]
