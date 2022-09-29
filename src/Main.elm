@@ -201,7 +201,7 @@ viewResource resource =
             [ h3 [] [ text "Resource" ]
             , p []
                 (if Resource.isAlive resource then
-                    [ p [] [ text "alive" ]
+                    [ p [] [ text "done" ]
                     ]
 
                  else if Resource.isRegrowing resource then
@@ -219,13 +219,13 @@ viewResource resource =
                  else
                     case Resource.getLoot resource of
                         Just items ->
-                            [ text "exhausted, loot"
+                            [ text "exhausted"
                             , div [ css [ Css.displayFlex, View.CssExtra.gap 0.5 ] ] (List.indexedMap viewLoot items)
                             , button [ Html.Styled.Events.onClick ResetResource ] [ text "Done" ]
                             ]
 
                         Nothing ->
-                            [ text "exhausted, loot"
+                            [ text "exhausted, no loot"
                             , button [ Html.Styled.Events.onClick ResetResource ] [ text "Done" ]
                             ]
                 )
