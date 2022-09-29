@@ -20,6 +20,16 @@ loot =
     [ Content.Items.coconut, Content.Items.mango ]
 
 
+getLoot : State TestState -> Maybe (List Item)
+getLoot state =
+    case State.getState state of
+        Dead items ->
+            Just items
+
+        _ ->
+            Nothing
+
+
 {-| Alive state, can transition to hit or miss
 -}
 aliveState : State TestState
@@ -136,4 +146,13 @@ get =
                     |> State.isDone Miss
                     |> Expect.equal
                         False
+        , test "get loot from dead state" <|
+            \_ ->
+                aliveState
+                    |> State.transition hitState
+                    |> State.tick 500
+                    |> State.tick 0
+                    |> getLoot
+                    |> Expect.equal
+                        (Just [ Content.Items.coconut, Content.Items.mango ])
         ]
