@@ -1,9 +1,10 @@
-module StateMachine exposing (timed, transition)
+module StateMachine exposing (get, timed, transition)
 
 import Content.Items
 import Engine.Item exposing (Item)
 import Engine.StateMachine as State exposing (State(..))
 import Expect
+import Fuzz exposing (int)
 import Test exposing (Test, describe, test)
 
 
@@ -96,7 +97,22 @@ timed =
                     |> State.tick 0
                     |> Expect.equal
                         (Idle (Dead loot) [ Alive ])
-        , test "Check if timed state is done (timer == 0)" <|
+        ]
+
+
+get : Test
+get =
+    describe "State getters"
+        [ test "State.getState should return current state" <|
+            \_ ->
+                aliveState
+                    |> State.transition hitState
+                    |> State.tick 500
+                    |> State.tick 0
+                    |> State.getState
+                    |> Expect.equal
+                        (Dead [ Content.Items.coconut, Content.Items.mango ])
+        , test "Check if timed state is done (timer == 0), should be true" <|
             \_ ->
                 aliveState
                     |> State.transition hitState
@@ -104,4 +120,20 @@ timed =
                     |> State.isDone Hit
                     |> Expect.equal
                         True
+        , Test.fuzz int "Check if state timer is done with random tick" <|
+            \randomInt ->
+                aliveState
+                    |> State.transition hitState
+                    |> State.tick randomInt
+                    |> State.isDone Hit
+                    |> Expect.equal
+                        (randomInt >= 300)
+        , test "Check if state timer is done, but provide wrong type. Should be false" <|
+            \_ ->
+                aliveState
+                    |> State.transition hitState
+                    |> State.tick 500
+                    |> State.isDone Miss
+                    |> Expect.equal
+                        False
         ]
