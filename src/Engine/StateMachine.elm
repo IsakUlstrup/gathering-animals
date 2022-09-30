@@ -1,6 +1,12 @@
-module Engine.StateMachine exposing (State(..), getState, isDone, tick, transition)
+module Engine.StateMachine exposing
+    ( State(..)
+    , getState
+    , isDone
+    , tick
+    , transition
+    )
 
-{-| Idle state (list of possible transitions)
+{-| State state (list of possible transitions)
 
 Timer time state (state to transition to when timer is done)
 
@@ -8,24 +14,24 @@ Timer time state (state to transition to when timer is done)
 
 
 type State s
-    = Idle s (List s)
-    | Timer Int s (State s)
+    = State s (List s)
+    | TimedState Int s (State s)
 
 
-{-| Tick state by dt is ms, does nothing if state is idle
+{-| Tick state by dt is ms, does nothing if state is State
 -}
 tick : Int -> State s -> State s
 tick dt state =
     case state of
-        Idle _ _ ->
+        State _ _ ->
             state
 
-        Timer time from to ->
+        TimedState time from to ->
             if time <= 0 then
                 to
 
             else
-                Timer (time - dt |> max 0) from to
+                TimedState (time - dt |> max 0) from to
 
 
 {-| transition state based on constraints
@@ -33,23 +39,23 @@ tick dt state =
 transition : State s -> State s -> State s
 transition newState state =
     case state of
-        Idle _ allowedStates ->
+        State _ allowedStates ->
             case newState of
-                Idle ns _ ->
+                State ns _ ->
                     if List.member ns allowedStates then
                         newState
 
                     else
                         state
 
-                Timer _ from _ ->
+                TimedState _ from _ ->
                     if List.member from allowedStates then
                         newState
 
                     else
                         state
 
-        Timer _ _ _ ->
+        TimedState _ _ _ ->
             state
 
 
@@ -58,10 +64,10 @@ transition newState state =
 getState : State s -> s
 getState state =
     case state of
-        Idle s _ ->
+        State s _ ->
             s
 
-        Timer _ s _ ->
+        TimedState _ s _ ->
             s
 
 
@@ -70,7 +76,7 @@ getState state =
 isDone : s -> State s -> Bool
 isDone s state =
     case state of
-        Timer 0 currState _ ->
+        TimedState 0 currState _ ->
             s == currState
 
         _ ->
