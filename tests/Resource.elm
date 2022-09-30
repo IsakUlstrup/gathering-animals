@@ -40,6 +40,7 @@ state =
                 ( Resource.new [], Random.initialSeed 0 )
                     |> Resource.hitIf True
                     |> Resource.tick randomInt
+                    |> Resource.tick 0
                     |> Tuple.first
                     |> Resource.isExhausted
                     |> Expect.equal
@@ -56,6 +57,7 @@ state =
                 ( Resource.new [], Random.initialSeed 0 )
                     |> Resource.hitIf True
                     |> Resource.tick 200
+                    |> Resource.tick 0
                     |> Tuple.first
                     |> Resource.setRegrowing
                     |> Resource.isRegrowing
@@ -66,6 +68,7 @@ state =
                 ( Resource.new [], Random.initialSeed 0 )
                     |> Resource.hitIf True
                     |> Resource.tick 200
+                    |> Resource.tick 0
                     |> (\( r, s ) -> ( Resource.setRegrowing r, s ))
                     |> Resource.tick randomInt
                     |> Tuple.first
@@ -93,6 +96,7 @@ loot =
                 ( Resource.new [], Random.initialSeed 0 )
                     |> Resource.hitIf True
                     |> Resource.tick 200
+                    |> Resource.tick 0
                     |> Tuple.first
                     |> Resource.getLoot
                     |> isJust
