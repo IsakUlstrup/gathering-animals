@@ -9,12 +9,11 @@ module Engine.Animal exposing
     , tick
     )
 
-{-| Animal state, the integers represent remaining time in each state
--}
-
 import Engine.StateMachine as State exposing (State(..))
 
 
+{-| Animal state
+-}
 type AnimalState
     = Idle
     | Interact
@@ -68,11 +67,11 @@ isIdle animal =
             False
 
 
-{-| Set animal state to interact
+{-| Transition animal state to interact
 -}
 setInteract : Animal -> Animal
 setInteract animal =
-    { animal | state = interactState }
+    { animal | state = State.transition interactState animal.state }
 
 
 {-| Is animal interacting predicate
@@ -87,6 +86,8 @@ isInteracting animal =
             False
 
 
+{-| Is animal done interacting predicate
+-}
 isDoneInteracting : Animal -> Bool
 isDoneInteracting animal =
     State.isDone Interact animal.state
@@ -111,7 +112,10 @@ tick dt animal =
     { animal | state = State.tick dt animal.state }
 
 
-{-| If resource is alive and animal is idle, set state to interact and return action
+{-| If animal is idle and flag is true, set state to interact.
+
+If interact state timer is done return action
+
 -}
 interactIf : Bool -> Animal -> ( Animal, Bool )
 interactIf shouldInteract animal =
