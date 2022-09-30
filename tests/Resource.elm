@@ -23,25 +23,25 @@ state =
     describe "State stuff"
         [ test "Hit alive resource with hardcoded seed that will roll hit, state should be hit" <|
             \_ ->
-                ( Resource.new [], Random.initialSeed 0 )
-                    |> Resource.hitIf True
+                Resource.new []
+                    |> Resource.hitIf True (Random.initialSeed 0)
                     |> Tuple.first
                     |> Resource.isHit
                     |> Expect.equal True
         , test "Hit alive resource with hardcoded seed that will roll miss, state should be miss" <|
             \_ ->
-                ( Resource.new [], Random.initialSeed 1 )
-                    |> Resource.hitIf True
+                Resource.new []
+                    |> Resource.hitIf True (Random.initialSeed 1)
                     |> Tuple.first
                     |> Resource.isEvade
                     |> Expect.equal True
         , fuzz int "Hit alive resource, tick by random dt, get loot. If randomInt is above hit state time of 200 should return some loot" <|
             \randomInt ->
-                ( Resource.new [], Random.initialSeed 0 )
-                    |> Resource.hitIf True
+                Resource.new []
+                    |> Resource.hitIf True (Random.initialSeed 0)
+                    |> Tuple.first
                     |> Resource.tick randomInt
                     |> Resource.tick 0
-                    |> Tuple.first
                     |> Resource.isExhausted
                     |> Expect.equal
                         (randomInt >= 200)
@@ -54,24 +54,25 @@ state =
                         True
         , test "Set exhausted resource to regrow." <|
             \_ ->
-                ( Resource.new [], Random.initialSeed 0 )
-                    |> Resource.hitIf True
+                Resource.new []
+                    |> Resource.hitIf True (Random.initialSeed 0)
+                    |> Tuple.first
                     |> Resource.tick 200
                     |> Resource.tick 0
-                    |> Tuple.first
                     |> Resource.setRegrowing
                     |> Resource.isRegrowing
                     |> Expect.equal
                         True
         , fuzz int "Tick regrowing resource by random dt, if above grow time of 1000 should be alive" <|
             \randomInt ->
-                ( Resource.new [], Random.initialSeed 0 )
-                    |> Resource.hitIf True
+                Resource.new []
+                    |> Resource.hitIf True (Random.initialSeed 0)
+                    |> Tuple.first
                     |> Resource.tick 200
                     |> Resource.tick 0
-                    |> (\( r, s ) -> ( Resource.setRegrowing r, s ))
+                    |> Resource.setRegrowing
                     |> Resource.tick randomInt
-                    |> Tuple.first
+                    |> Resource.tick 0
                     |> Resource.isAlive
                     |> Expect.equal
                         (randomInt >= 1000)
@@ -93,11 +94,11 @@ loot =
     describe "Loot"
         [ test "Get loot from exhausted resource" <|
             \_ ->
-                ( Resource.new [], Random.initialSeed 0 )
-                    |> Resource.hitIf True
+                Resource.new []
+                    |> Resource.hitIf True (Random.initialSeed 0)
+                    |> Tuple.first
                     |> Resource.tick 200
                     |> Resource.tick 0
-                    |> Tuple.first
                     |> Resource.getLoot
                     |> isJust
                     |> Expect.equal True

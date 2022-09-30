@@ -45,7 +45,7 @@ state =
                 Animal.new
                     |> Animal.tick randomInt
                     |> Animal.tick 0
-                    |> Animal.interactIf (( Resource.new [], Random.initialSeed 0 ) |> Resource.hitIf True |> Tuple.first |> Resource.isAlive)
+                    |> Animal.interactIf (Resource.new [] |> Resource.hitIf True (Random.initialSeed 0) |> Tuple.first |> Resource.isAlive)
                     |> Tuple.second
                     |> Expect.equal
                         False

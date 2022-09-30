@@ -16,6 +16,7 @@ module Engine.Resource exposing
     )
 
 import Engine.Item exposing (Item)
+import Engine.StateMachine as State exposing (State(..))
 import Random exposing (Generator, Seed)
 
 
@@ -23,10 +24,35 @@ import Random exposing (Generator, Seed)
 -}
 type ResourceState
     = Alive
-    | Regrowing Int
-    | Hit Int
-    | Evade Int
+    | Hit
+    | Evade
     | Exhausted (List Item)
+    | Regrowing
+
+
+aliveState : State ResourceState
+aliveState =
+    State Alive [ Hit, Evade ]
+
+
+hitState : List Item -> State ResourceState
+hitState items =
+    TimedState 200 Hit (exhaustedState items)
+
+
+evadeState : State ResourceState
+evadeState =
+    TimedState 200 Evade aliveState
+
+
+exhaustedState : List Item -> State ResourceState
+exhaustedState items =
+    State (Exhausted items) [ Regrowing ]
+
+
+regrowingState : State ResourceState
+regrowingState =
+    TimedState 1000 Regrowing aliveState
 
 
 type alias DropTable =
@@ -36,7 +62,7 @@ type alias DropTable =
 {-| Resource type, just the state for now
 -}
 type alias Resource =
-    { state : ResourceState
+    { state : State ResourceState
     , dropTable : DropTable
     }
 
@@ -45,21 +71,14 @@ type alias Resource =
 -}
 new : DropTable -> Resource
 new dropTable =
-    Resource Alive dropTable
-
-
-{-| Set state to alive
--}
-setAlive : Resource -> Resource
-setAlive resource =
-    { resource | state = Alive }
+    Resource aliveState dropTable
 
 
 {-| Is state alive predicate
 -}
 isAlive : Resource -> Bool
 isAlive resource =
-    case resource.state of
+    case State.getState resource.state of
         Alive ->
             True
 
@@ -67,52 +86,49 @@ isAlive resource =
             False
 
 
+{-| transition to evade state
+-}
 setEvade : Resource -> Resource
 setEvade resource =
-    { resource | state = Evade 200 }
+    { resource | state = State.transition evadeState resource.state }
 
 
+{-| Is state evade predicate
+-}
 isEvade : Resource -> Bool
 isEvade resource =
-    case resource.state of
-        Evade _ ->
+    case State.getState resource.state of
+        Evade ->
             True
 
         _ ->
             False
-
-
-{-| Set state to hit
--}
-setHit : Resource -> Resource
-setHit resource =
-    { resource | state = Hit 200 }
 
 
 {-| Is state hit predicate
 -}
 isHit : Resource -> Bool
 isHit resource =
-    case resource.state of
-        Hit _ ->
+    case State.getState resource.state of
+        Hit ->
             True
 
         _ ->
             False
 
 
-{-| Set state to exhausted with some hardcoded items
+{-| Given some loot, transition state to hit. Will transition into exhausted at timer end
 -}
-setExhausted : List Item -> Resource -> Resource
-setExhausted loot resource =
-    { resource | state = Exhausted loot }
+setHit : List Item -> Resource -> Resource
+setHit items resource =
+    { resource | state = State.transition (hitState items) resource.state }
 
 
 {-| Is state exhausted predicate
 -}
 isExhausted : Resource -> Bool
 isExhausted resource =
-    case resource.state of
+    case State.getState resource.state of
         Exhausted _ ->
             True
 
@@ -124,7 +140,7 @@ isExhausted resource =
 -}
 getLoot : Resource -> Maybe (List Item)
 getLoot resource =
-    case resource.state of
+    case State.getState resource.state of
         Exhausted items ->
             Just items
 
@@ -136,20 +152,15 @@ getLoot resource =
 -}
 setRegrowing : Resource -> Resource
 setRegrowing resource =
-    case resource.state of
-        Exhausted _ ->
-            { resource | state = Regrowing 1000 }
-
-        _ ->
-            resource
+    { resource | state = State.transition regrowingState resource.state }
 
 
 {-| Is state regrowing predicate
 -}
 isRegrowing : Resource -> Bool
 isRegrowing resource =
-    case resource.state of
-        Regrowing _ ->
+    case State.getState resource.state of
+        Regrowing ->
             True
 
         _ ->
@@ -160,7 +171,7 @@ isRegrowing resource =
 -}
 lootAtIndex : Int -> Resource -> ( Resource, Maybe Item )
 lootAtIndex index resource =
-    case ( resource.state, index >= 0 ) of
+    case ( State.getState resource.state, index >= 0 ) of
         ( Exhausted loot, True ) ->
             let
                 item : Maybe Item
@@ -179,7 +190,7 @@ lootAtIndex index resource =
                 newLoot =
                     first ++ second
             in
-            ( { resource | state = Exhausted newLoot }, item )
+            ( { resource | state = exhaustedState newLoot }, item )
 
         _ ->
             ( resource, Nothing )
@@ -194,20 +205,30 @@ rollHit =
         [ ( 75, False ) ]
 
 
+{-| Roll hit chance, set state based on result
+-}
+resolveHit : Seed -> Resource -> ( Resource, Seed )
+resolveHit seed resource =
+    let
+        ( hitRoll, newSeed ) =
+            Random.step rollHit seed
+
+        ( loot, newSeed2 ) =
+            Random.step (rollLoot resource.dropTable) newSeed
+    in
+    if hitRoll then
+        ( setHit loot resource, newSeed2 )
+
+    else
+        ( setEvade resource, newSeed )
+
+
 {-| Attempt to hit resource
 -}
-hitIf : Bool -> ( Resource, Seed ) -> ( Resource, Seed )
-hitIf shouldHit ( resource, seed ) =
+hitIf : Bool -> Seed -> Resource -> ( Resource, Seed )
+hitIf shouldHit seed resource =
     if isAlive resource && shouldHit then
-        let
-            ( hitRoll, newSeed ) =
-                Random.step rollHit seed
-        in
-        if hitRoll then
-            ( setHit resource, newSeed )
-
-        else
-            ( setEvade resource, newSeed )
+        resolveHit seed resource
 
     else
         ( resource, seed )
@@ -233,37 +254,6 @@ rollLoot dropTable =
 
 {-| Tick resource by dt in ms
 -}
-tick : Int -> ( Resource, Seed ) -> ( Resource, Seed )
-tick dt ( resource, seed ) =
-    case resource.state of
-        Regrowing time ->
-            ( if (time - dt) <= 0 then
-                resource |> setAlive
-
-              else
-                { resource | state = Regrowing (time - dt) }
-            , seed
-            )
-
-        Hit time ->
-            if (time - dt) <= 0 then
-                let
-                    ( loot, newSeed ) =
-                        Random.step (rollLoot resource.dropTable) seed
-                in
-                ( resource |> setExhausted loot, newSeed )
-
-            else
-                ( { resource | state = Hit (time - dt) }, seed )
-
-        Evade time ->
-            ( if (time - dt) <= 0 then
-                resource |> setAlive
-
-              else
-                { resource | state = Evade (time - dt) }
-            , seed
-            )
-
-        _ ->
-            ( resource, seed )
+tick : Int -> Resource -> Resource
+tick dt resource =
+    { resource | state = State.tick dt resource.state }

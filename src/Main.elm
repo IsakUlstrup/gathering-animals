@@ -92,9 +92,9 @@ update msg model =
                         |> Animal.interactIf (Resource.isAlive model.resource)
 
                 ( resource, seed ) =
-                    ( model.resource, model.seed )
+                    model.resource
                         |> Resource.tick dt
-                        |> Resource.hitIf action
+                        |> Resource.hitIf action model.seed
             in
             ( { model
                 | animal = animal
