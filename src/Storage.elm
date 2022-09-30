@@ -1,11 +1,22 @@
-port module Storage exposing (decodeStoredInventory, saveInventory)
+port module Storage exposing (inventoryDecoder, saveInventory)
 
 import Engine.Item exposing (Item)
-import Json.Decode as Decode exposing (Decoder, string)
+import Json.Decode as Decode exposing (Decoder)
 import Json.Encode as Encode exposing (Value)
 
 
 port storeInventory : String -> Cmd msg
+
+
+
+-- ENCODE
+
+
+saveInventory : List Item -> Cmd msg
+saveInventory items =
+    Encode.list itemEncoder items
+        |> Encode.encode 0
+        |> storeInventory
 
 
 itemEncoder : Item -> Value
@@ -16,47 +27,27 @@ itemEncoder item =
 
 
 
--- <| Engine.Item.toString item
--- itemHelp : String -> Decoder Item
--- itemHelp itemString =
---     case Engine.Item.fromString itemString of
---         Just item ->
---             Decode.succeed item
---         Nothing ->
---             Decode.fail <|
---                 "Invalid item data"
-
-
-itemHelp2 : String -> Decoder Item
-itemHelp2 itemString =
-    case String.toList itemString of
-        [ i ] ->
-            Decode.succeed <| Engine.Item.new i
-
-        _ ->
-            Decode.fail <|
-                "Invalid Char"
+-- DECODE
 
 
 itemDecoder : Decoder Item
 itemDecoder =
-    Decode.field "icon" string
-        |> Decode.andThen itemHelp2
+    let
+        charHelper : String -> Decoder Char
+        charHelper s =
+            case String.toList s of
+                [ c ] ->
+                    Decode.succeed c
+
+                _ ->
+                    Decode.fail "Invalid char"
+    in
+    Decode.map Engine.Item.new
+        (Decode.field "icon" Decode.string
+            |> Decode.andThen charHelper
+        )
 
 
 inventoryDecoder : Decoder (List Item)
 inventoryDecoder =
     Decode.list itemDecoder
-
-
-saveInventory : List Item -> Cmd msg
-saveInventory items =
-    Encode.list itemEncoder items
-        |> Encode.encode 0
-        |> storeInventory
-
-
-decodeStoredInventory : String -> Result String (List Item)
-decodeStoredInventory inventoryJson =
-    Decode.decodeString inventoryDecoder inventoryJson
-        |> Result.mapError (always "Error decoding items")

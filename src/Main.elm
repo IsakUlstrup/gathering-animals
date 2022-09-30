@@ -12,7 +12,7 @@ import Engine.Resource as Resource exposing (Resource)
 import Html.Styled exposing (Attribute, Html, button, div, h3, main_, p, text, toUnstyled)
 import Html.Styled.Attributes exposing (class, css, id)
 import Html.Styled.Events
-import Json.Decode as Decode exposing (Value)
+import Json.Decode as Decode exposing (Decoder, Value)
 import Random exposing (Seed)
 import Storage
 import View.CssExtra
@@ -31,18 +31,22 @@ type alias Model =
     }
 
 
+type alias Config =
+    { saveData : List Item
+    , time : Int
+    }
+
+
+configDecoder : Decoder Config
+configDecoder =
+    Decode.map2 Config
+        (Decode.field "saveData" Storage.inventoryDecoder)
+        (Decode.field "time" Decode.int)
+
+
 init : Value -> ( Model, Cmd Msg )
 init flags =
     let
-        inventory : Result String (List Item)
-        inventory =
-            case Decode.decodeValue Decode.string flags of
-                Ok invJson ->
-                    Storage.decodeStoredInventory invJson
-
-                Err _ ->
-                    Err "Invalid data from port"
-
         resource : Resource
         resource =
             Resource.new
@@ -51,13 +55,13 @@ init flags =
                 , ( 90, Content.Items.strawberry )
                 ]
     in
-    case inventory of
-        Ok inv ->
+    case Decode.decodeValue configDecoder flags of
+        Ok cfg ->
             ( Model
                 Animal.new
                 resource
-                inv
-                (Random.initialSeed 134857)
+                cfg.saveData
+                (Random.initialSeed cfg.time)
             , Cmd.none
             )
 
