@@ -2,7 +2,7 @@ module Main exposing (Model, Msg, main)
 
 import Browser
 import Browser.Events
-import Content.Items
+import Content.Resources
 import Css exposing (Style, px, rgb)
 import Css.Animations
 import Css.Transitions as Transitions
@@ -46,20 +46,11 @@ configDecoder =
 
 init : Value -> ( Model, Cmd Msg )
 init flags =
-    let
-        resource : Resource
-        resource =
-            Resource.new
-                [ ( 1, Content.Items.mango )
-                , ( 9, Content.Items.coconut )
-                , ( 90, Content.Items.strawberry )
-                ]
-    in
     case Decode.decodeValue configDecoder flags of
         Ok cfg ->
             ( Model
                 Animal.new
-                resource
+                Content.Resources.test
                 cfg.saveData
                 (Random.initialSeed cfg.time)
             , Cmd.none
@@ -68,7 +59,7 @@ init flags =
         Err _ ->
             ( Model
                 Animal.new
-                resource
+                Content.Resources.test
                 []
                 (Random.initialSeed 134857)
             , Cmd.none
