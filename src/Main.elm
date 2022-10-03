@@ -7,6 +7,7 @@ import Css exposing (Style, px, rgb)
 import Css.Animations
 import Css.Transitions as Transitions
 import Engine.Animal as Animal exposing (Animal)
+import Engine.Inventory exposing (Inventory, ItemStack)
 import Engine.Item exposing (Item)
 import Engine.Resource as Resource exposing (Resource)
 import Html.Styled exposing (Attribute, Html, button, div, h3, main_, p, text, toUnstyled)
@@ -26,7 +27,7 @@ import View.Paper
 type alias Model =
     { animal : Animal
     , resource : Resource
-    , inventory : List Item
+    , inventory : Inventory
     , seed : Seed
     }
 
@@ -51,7 +52,7 @@ init flags =
             ( Model
                 Animal.new
                 Content.Resources.test
-                cfg.saveData
+                []
                 (Random.initialSeed cfg.time)
             , Cmd.none
             )
@@ -102,12 +103,14 @@ update msg model =
         LootItem index ->
             case model.resource |> Resource.lootAtIndex index of
                 ( newResource, Just item ) ->
-                    { model
+                    ( { model
                         | resource = newResource
-                        , inventory = item :: model.inventory
-                    }
-                        |> (\m -> ( m, Storage.saveInventory m.inventory ))
+                        , inventory = Engine.Inventory.add item model.inventory
+                      }
+                    , Cmd.none
+                    )
 
+                -- |> (\m -> ( m, Storage.saveInventory m.inventory ))
                 ( _, Nothing ) ->
                     ( model, Cmd.none )
 
@@ -119,12 +122,12 @@ update msg model =
 -- VIEW
 
 
-viewInventory : List Item -> Html msg
-viewInventory items =
+viewInventory : Inventory -> Html msg
+viewInventory inventory =
     let
-        viewItem : Item -> Html msg
-        viewItem i =
-            div [ class "item" ] [ text <| Engine.Item.iconString i ]
+        viewItemStack : ItemStack -> Html msg
+        viewItemStack stack =
+            div [ class "item" ] [ text <| Engine.Item.iconString stack.item ++ "x" ++ String.fromInt stack.amount ]
     in
     div
         [ css
@@ -143,7 +146,7 @@ viewInventory items =
                 , View.CssExtra.gap 1
                 ]
             ]
-            (List.map viewItem items)
+            (List.map viewItemStack inventory)
         ]
 
 
