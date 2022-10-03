@@ -1,5 +1,6 @@
 port module Storage exposing (inventoryDecoder, saveInventory)
 
+import Engine.Inventory exposing (Inventory, ItemStack)
 import Engine.Item exposing (Item)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Encode as Encode exposing (Value)
@@ -12,11 +13,19 @@ port storeInventory : String -> Cmd msg
 -- ENCODE
 
 
-saveInventory : List Item -> Cmd msg
-saveInventory items =
-    Encode.list itemEncoder items
+saveInventory : Inventory -> Cmd msg
+saveInventory inventory =
+    Encode.list itemStackEncoder inventory
         |> Encode.encode 0
         |> storeInventory
+
+
+itemStackEncoder : ItemStack -> Value
+itemStackEncoder stack =
+    Encode.object
+        [ ( "item", itemEncoder stack.item )
+        , ( "amount", Encode.int stack.amount )
+        ]
 
 
 itemEncoder : Item -> Value
@@ -48,6 +57,13 @@ itemDecoder =
         )
 
 
-inventoryDecoder : Decoder (List Item)
+itemStackDecoder : Decoder ItemStack
+itemStackDecoder =
+    Decode.map2 ItemStack
+        (Decode.field "item" itemDecoder)
+        (Decode.field "amount" Decode.int)
+
+
+inventoryDecoder : Decoder Inventory
 inventoryDecoder =
-    Decode.list itemDecoder
+    Decode.list itemStackDecoder

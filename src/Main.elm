@@ -33,7 +33,7 @@ type alias Model =
 
 
 type alias Config =
-    { saveData : List Item
+    { saveData : Inventory
     , time : Int
     }
 
@@ -52,7 +52,7 @@ init flags =
             ( Model
                 Animal.new
                 Content.Resources.test
-                []
+                cfg.saveData
                 (Random.initialSeed cfg.time)
             , Cmd.none
             )
@@ -103,14 +103,12 @@ update msg model =
         LootItem index ->
             case model.resource |> Resource.lootAtIndex index of
                 ( newResource, Just item ) ->
-                    ( { model
+                    { model
                         | resource = newResource
                         , inventory = Engine.Inventory.add item model.inventory
-                      }
-                    , Cmd.none
-                    )
+                    }
+                        |> (\m -> ( m, Storage.saveInventory m.inventory ))
 
-                -- |> (\m -> ( m, Storage.saveInventory m.inventory ))
                 ( _, Nothing ) ->
                     ( model, Cmd.none )
 
