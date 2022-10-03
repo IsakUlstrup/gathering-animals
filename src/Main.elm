@@ -181,7 +181,22 @@ viewAnimal animal =
 
 viewLoot : Int -> Item -> Html Msg
 viewLoot index item =
-    button [ Html.Styled.Events.onClick <| LootItem index ]
+    button
+        [ Html.Styled.Events.onClick <| LootItem index
+        , css
+            [ Css.padding <| Css.rem 1
+            , Css.fontSize <| Css.rem 1
+            , Css.backgroundImage Css.none
+            , Css.backgroundColor Css.transparent
+            , Css.flexWrap Css.wrap
+
+            -- , Css.display Css.block
+            , Css.border <| Css.rem 0
+
+            -- , Css.borderRadius <| Css.rem 9999
+            -- , Css.lineHeight <| Css.rem 1
+            ]
+        ]
         [ text <| Engine.Item.iconString item ]
 
 
@@ -217,7 +232,7 @@ viewResource resource =
                         Just items ->
                             [ text "exhausted"
                             , div [ css [ Css.displayFlex, View.CssExtra.gap 0.5 ] ] (List.indexedMap viewLoot items)
-                            , button [ Html.Styled.Events.onClick ResetResource ] [ text "Done" ]
+                            , button [ Html.Styled.Events.onClick ResetResource, css [ Css.fontSize (Css.rem 1) ] ] [ text "Done" ]
                             ]
 
                         Nothing ->
