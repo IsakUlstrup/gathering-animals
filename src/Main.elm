@@ -170,6 +170,7 @@ viewAnimal animal =
         [ css
             [ Css.flex (Css.int 1)
             , Transitions.transition [ Transitions.transform 1000 ]
+            , View.Paper.paperSolid <| rgb 255 255 200
             , flexCenter
             , Css.animationName enterAnimation
             , Css.animationDuration <| Css.ms 1500
@@ -189,7 +190,6 @@ viewResource resource =
     div
         [ css
             [ Css.flex <| Css.int 1
-            , View.Paper.paperGradient [ rgb 250 50 0, rgb 255 50 100 ]
             , flexCenter
             ]
         ]
@@ -234,8 +234,9 @@ locationStyle =
     Css.batch
         [ Css.displayFlex
         , Css.flex3 (Css.int 1) (Css.int 1) (Css.int 0)
-        , Css.minHeight (Css.rem 15)
+        , Css.minHeight (Css.rem 10)
         , Css.justifyContent Css.center
+        , Css.padding2 (Css.rem 1) (Css.rem 0)
         ]
 
 
@@ -268,7 +269,11 @@ view model =
         , mainStyle
         ]
         [ div
-            [ css [ locationStyle ] ]
+            [ css
+                [ locationStyle
+                , View.Paper.paperGradient [ rgb 250 50 0, rgb 255 50 100 ]
+                ]
+            ]
             [ viewAnimal model.animal
             , viewResource model.resource
             ]
