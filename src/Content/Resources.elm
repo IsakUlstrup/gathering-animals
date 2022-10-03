@@ -1,4 +1,4 @@
-module Content.Resources exposing (..)
+module Content.Resources exposing (test)
 
 import Content.Items
 import Engine.Resource as Resource exposing (Resource)
