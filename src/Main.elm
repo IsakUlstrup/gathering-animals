@@ -3,17 +3,14 @@ module Main exposing (Model, Msg, main)
 import Browser
 import Browser.Events
 import Content.Resources
-import Css exposing (rgb)
 import Engine.Animal as Animal exposing (Animal)
 import Engine.Inventory exposing (Inventory)
 import Engine.Resource as Resource exposing (Resource)
-import Html.Styled exposing (Html, div, main_, toUnstyled)
-import Html.Styled.Attributes exposing (css, id)
+import Html exposing (Html, div, main_)
 import Json.Decode as Decode exposing (Decoder, Value)
 import Random exposing (Seed)
 import Storage
-import View.MainView
-import View.Paper
+import View.Html
 
 
 
@@ -119,34 +116,15 @@ update msg model =
 view : Model -> Html Msg
 view model =
     main_
-        [ id "app"
-        , css
-            [ Css.minHeight <| Css.vh 100
-            , Css.displayFlex
-            , Css.flexDirection Css.column
-            , Css.alignItems Css.stretch
-            , Css.justifyContent Css.center
-            , View.Paper.paperSolid <| rgb 255 255 200
-            , Css.fontFamily Css.sansSerif
-            ]
-        ]
+        []
         [ div
-            [ css
-                [ View.MainView.locationStyle
-                , View.Paper.paperGradient [ rgb 250 50 0, rgb 255 50 100 ]
-                ]
-            ]
-            [ View.MainView.viewAnimal model.animal
-            , View.MainView.viewResource LootItem ResetResource model.resource
+            []
+            [ View.Html.viewAnimal model.animal
+            , View.Html.viewResource LootItem ResetResource model.resource
             ]
         , div
-            [ css
-                [ View.MainView.locationStyle
-                , View.Paper.paperGradient [ rgb 130 50 70, rgb 30 50 100 ]
-                , View.MainView.flexCenter
-                ]
-            ]
-            [ View.MainView.viewInventory model.inventory ]
+            []
+            [ View.Html.viewInventory model.inventory ]
         ]
 
 
@@ -176,7 +154,7 @@ main : Program Value Model Msg
 main =
     Browser.element
         { init = init
-        , view = view >> toUnstyled
+        , view = view
         , update = update
         , subscriptions = subscriptions
         }
