@@ -13,7 +13,7 @@ import Engine.Animal as Animal exposing (Animal)
 import Engine.Inventory exposing (Inventory, ItemStack)
 import Engine.Item exposing (Item)
 import Engine.Resource as Resource exposing (Resource)
-import Html.Styled exposing (Html, button, div, h3, p, text)
+import Html.Styled exposing (Html, button, div, h3, text)
 import Html.Styled.Attributes exposing (class, css)
 import Html.Styled.Events
 import View.CssExtra
@@ -48,6 +48,14 @@ viewInventory inventory =
         ]
 
 
+enterAnimation : Css.Animations.Keyframes {}
+enterAnimation =
+    Css.Animations.keyframes
+        [ ( 0, [ View.CssExtra.maxWidthAnim 0 ] )
+        , ( 100, [ View.CssExtra.maxWidthAnim 200 ] )
+        ]
+
+
 viewAnimal : Animal -> Html msg
 viewAnimal animal =
     let
@@ -58,13 +66,6 @@ viewAnimal animal =
 
             else
                 []
-
-        enterAnimation : Css.Animations.Keyframes {}
-        enterAnimation =
-            Css.Animations.keyframes
-                [ ( 0, [ View.CssExtra.maxWidthAnim 0 ] )
-                , ( 100, [ View.CssExtra.maxWidthAnim 200 ] )
-                ]
     in
     div
         [ css
@@ -102,44 +103,72 @@ viewLoot lootEvent index item =
 
 viewResource : (Int -> msg) -> msg -> Resource -> Html msg
 viewResource lootEvent resetEvent resource =
+    let
+        state : List Css.Style
+        state =
+            if Resource.isHit resource || Resource.isExhausted resource then
+                [ Css.transform <| Css.translate2 (px 10000) (px 0)
+                , Css.maxWidth (Css.rem 0)
+                , Css.Transitions.transition
+                    [ Css.Transitions.transform 1000
+                    , Css.Transitions.maxWidth 1000
+                    ]
+                ]
+
+            else
+                [ Css.animationName enterAnimation
+                , Css.animationDuration <| Css.ms 1500
+                ]
+    in
     div
         [ css
             [ Css.flex <| Css.int 1
             , flexCenter
             ]
         ]
-        [ div []
-            [ h3 [] [ text "Resource" ]
-            , p []
-                (if Resource.isAlive resource then
-                    [ p [] [ text "done" ]
-                    ]
-
-                 else if Resource.isRegrowing resource then
-                    [ text "Regrowing "
-                    ]
-
-                 else if Resource.isHit resource then
-                    [ p [ class "hit" ] [ text "hit" ]
-                    ]
-
-                 else if Resource.isEvade resource then
-                    [ p [ class "evade" ] [ text "evade" ]
-                    ]
-
-                 else
-                    case Resource.getLoot resource of
-                        Just items ->
-                            [ text "exhausted"
-                            , div [ css [ Css.displayFlex, View.CssExtra.gap 0.5 ] ] (List.indexedMap (viewLoot lootEvent) items)
-                            , button [ Html.Styled.Events.onClick resetEvent, css [ Css.fontSize (Css.rem 1) ] ] [ text "Done" ]
+        [ div [ css [ Css.displayFlex ] ]
+            [ case Resource.getLoot resource of
+                Just items ->
+                    div
+                        [ css
+                            [ Css.animationName enterAnimation
+                            , Css.animationDuration <| Css.ms 1500
                             ]
+                        ]
+                        [ div [ css [ Css.displayFlex, View.CssExtra.gap 0.5 ] ] (List.indexedMap (viewLoot lootEvent) items)
+                        , button [ Html.Styled.Events.onClick resetEvent, css [ Css.fontSize (Css.rem 1) ] ] [ text "Done" ]
+                        ]
 
-                        Nothing ->
-                            [ text "exhausted, no loot"
-                            , button [ Html.Styled.Events.onClick resetEvent ] [ text "Done" ]
-                            ]
-                )
+                Nothing ->
+                    div [] []
+            , div [ css state ] [ h3 [] [ text "Resource" ] ]
+
+            --     h3 [] [ text "Resource" ]
+            -- , p []
+            --     (if Resource.isAlive resource then
+            --         [ p [] [ text "done" ]
+            --         ]
+            --      else if Resource.isRegrowing resource then
+            --         [ text "Regrowing "
+            --         ]
+            --      else if Resource.isHit resource then
+            --         [ p [ class "hit" ] [ text "hit" ]
+            --         ]
+            --      else if Resource.isEvade resource then
+            --         [ p [ class "evade" ] [ text "evade" ]
+            --         ]
+            --      else
+            --         case Resource.getLoot resource of
+            --             Just items ->
+            --                 [ text "exhausted"
+            --                 , div [ css [ Css.displayFlex, View.CssExtra.gap 0.5 ] ] (List.indexedMap (viewLoot lootEvent) items)
+            --                 , button [ Html.Styled.Events.onClick resetEvent, css [ Css.fontSize (Css.rem 1) ] ] [ text "Done" ]
+            --                 ]
+            --             Nothing ->
+            --                 [ text "exhausted, no loot"
+            --                 , button [ Html.Styled.Events.onClick resetEvent ] [ text "Done" ]
+            --                 ]
+            --     )
             ]
         ]
 
