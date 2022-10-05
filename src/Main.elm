@@ -10,7 +10,7 @@ import Html exposing (Html, main_)
 import Json.Decode as Decode exposing (Decoder, Value)
 import Random exposing (Seed)
 import Storage
-import View.Html
+import View
 
 
 
@@ -117,11 +117,11 @@ view : Model -> Html Msg
 view model =
     main_
         []
-        [ View.Html.viewLocation
-            [ View.Html.viewAnimal model.animal
-            , View.Html.viewResource LootItem ResetResource model.resource
+        [ View.viewLocation
+            [ View.viewAnimal model.animal
+            , View.viewResource LootItem ResetResource model.resource
             ]
-        , View.Html.viewLocation [ View.Html.viewInventory model.inventory ]
+        , View.viewLocation [ View.viewInventory model.inventory ]
         ]
 
 

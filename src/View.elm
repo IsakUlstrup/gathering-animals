@@ -1,4 +1,4 @@
-module View.Html exposing (viewAnimal, viewInventory, viewLocation, viewResource)
+module View exposing (viewAnimal, viewInventory, viewLocation, viewResource)
 
 import Engine.Animal exposing (Animal)
 import Engine.Inventory exposing (Inventory, ItemStack)
