@@ -1,1 +1,10 @@
+$paper-texture: url("/assets/cream-paper.png")
 
+@use "paper"
+@use "reset"
+@use "palette"
+
+main
+    background: paper.solid-color($paper-texture, beige)
+    min-height: 100vh
+    padding: palette.$spacing-medium

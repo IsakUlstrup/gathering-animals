@@ -1,0 +1,6 @@
+// FUNCTIONS
+@function texture-gradient($texture, $colors)
+    @return $texture, linear-gradient(to top left, $colors)
+
+@function solid-color($texture, $color)
+    @return $color $texture
