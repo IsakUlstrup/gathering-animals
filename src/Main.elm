@@ -6,7 +6,7 @@ import Content.Resources
 import Engine.Animal as Animal exposing (Animal)
 import Engine.Inventory exposing (Inventory)
 import Engine.Resource as Resource exposing (Resource)
-import Html exposing (Html, div, main_)
+import Html exposing (Html, main_)
 import Json.Decode as Decode exposing (Decoder, Value)
 import Random exposing (Seed)
 import Storage
@@ -117,14 +117,11 @@ view : Model -> Html Msg
 view model =
     main_
         []
-        [ div
-            []
+        [ View.Html.viewLocation
             [ View.Html.viewAnimal model.animal
             , View.Html.viewResource LootItem ResetResource model.resource
             ]
-        , div
-            []
-            [ View.Html.viewInventory model.inventory ]
+        , View.Html.viewLocation [ View.Html.viewInventory model.inventory ]
         ]
 
 

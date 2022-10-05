@@ -1,10 +1,11 @@
-module View.Html exposing (viewAnimal, viewInventory, viewResource)
+module View.Html exposing (viewAnimal, viewInventory, viewLocation, viewResource)
 
 import Engine.Animal exposing (Animal)
 import Engine.Inventory exposing (Inventory, ItemStack)
 import Engine.Item as Item exposing (Item)
 import Engine.Resource as Resource exposing (Resource)
 import Html exposing (Html, button, div, text)
+import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 
 
@@ -39,3 +40,8 @@ viewItemStack stack =
 viewInventory : Inventory -> Html msg
 viewInventory inventory =
     div [] (List.map viewItemStack inventory)
+
+
+viewLocation : List (Html msg) -> Html msg
+viewLocation content =
+    div [ class "location" ] content
