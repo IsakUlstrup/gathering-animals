@@ -4,7 +4,7 @@ import Engine.Animal exposing (Animal)
 import Engine.Inventory exposing (Inventory, ItemStack)
 import Engine.Item as Item exposing (Item)
 import Engine.Resource as Resource exposing (Resource)
-import Html exposing (Html, button, div, h3, p, text)
+import Html exposing (Attribute, Html, button, div, h3, p, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 
@@ -48,6 +48,6 @@ viewInventory inventory =
         ]
 
 
-viewLocation : List (Html msg) -> Html msg
-viewLocation content =
-    div [ class "location" ] content
+viewLocation : List (Attribute msg) -> List (Html msg) -> Html msg
+viewLocation attrs content =
+    div (class "location" :: attrs) content

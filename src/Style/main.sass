@@ -4,6 +4,19 @@ $paper-texture: url("/assets/cream-paper.png")
 @use "reset"
 @use "palette"
 
+// GRADIENTS
+@function red-gradient()
+    @return paper.gradient($paper-texture, (red, orange))
+
+@function cyan-gradient()
+    @return paper.gradient($paper-texture, (rgb(141, 255, 249), rgb(255, 131, 253)))
+
+.red-background
+    background: red-gradient()
+.cyan-background
+    background: cyan-gradient()
+
+// MAIN
 main
     background: paper.solid-color($paper-texture, palette.$secondary-color)
     min-height: 100vh
@@ -16,7 +29,6 @@ main
 
 .location
     padding: palette.$spacing-medium
-    background: paper.gradient($paper-texture, (red, orange))
     min-height: 10rem
 
 .inventory
@@ -50,5 +62,6 @@ main
         bottom: -0.3rem
         background: palette.$secondary-color
         color: palette.$primary-color
+        box-shadow: 0.2rem 0.2rem 0rem rgb(104, 229, 254)
         padding: 0.5rem
         border-radius: 9999rem
