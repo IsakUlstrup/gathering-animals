@@ -7,38 +7,48 @@ $paper-texture: url("/assets/cream-paper.png")
 main
     background: paper.solid-color($paper-texture, palette.$secondary-color)
     min-height: 100vh
-    padding: palette.$spacing-medium
     font-family: Arial, Helvetica, sans-serif
     color: palette.$primary-color
+    display: flex
+    flex-direction: column
+    padding: palette.$spacing-medium
+    gap: palette.$spacing-medium
+
+.location
+    padding: palette.$spacing-medium
+    background: paper.gradient($paper-texture, (red, orange))
+    min-height: 10rem
 
 .inventory
     display: flex
     flex-direction: column
     gap: palette.$spacing-medium
+    align-items: center
     h3
         text-align: center
         font-size: 2rem
         font-weight: 900
+        mix-blend-mode: multiply
     .item-stacks
         display: flex
         gap: palette.$spacing-medium
     .item-stack
-        background: paper.solid-color($paper-texture, rgb(255, 229, 244))
-        border: 0.3rem solid rgb(254, 104, 222)
-        border-radius: 1rem
+        // background: paper.solid-color($paper-texture, rgb(255, 229, 244))
+        // border: 0.3rem solid rgb(254, 104, 222)
+        // border-radius: 1rem
         position: relative
     .item-icon
         font-size: 2rem
         line-height: 1.5rem
         padding: palette.$spacing-small
+        text-shadow: 0.1rem 0.1rem 0rem palette.$secondary-color, 0.2rem 0.2rem 0rem rgb(104, 229, 254)
     .item-amount
         font-size: 0.7rem
         font-weight: 500
         line-height: 0rem
         position: absolute
-        top: -0.5rem
-        right: -0.5rem
-        background: rgb(254, 104, 222)
-        color: rgb(255, 229, 244)
+        bottom: -0.3rem
+        background: palette.$secondary-color
+        color: palette.$primary-color
         padding: 0.5rem
         border-radius: 9999rem
