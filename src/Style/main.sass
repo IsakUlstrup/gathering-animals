@@ -9,7 +9,7 @@ $paper-texture: url("/assets/cream-paper.png")
     @return paper.gradient($paper-texture, (red, orange))
 
 @function cyan-gradient()
-    @return paper.gradient($paper-texture, (rgb(141, 255, 249), rgb(255, 131, 253)))
+    @return paper.gradient($paper-texture, (rgb(81, 187, 205), rgb(255, 131, 253)))
 
 .red-background
     background: red-gradient()
@@ -24,12 +24,15 @@ main
     color: palette.$primary-color
     display: flex
     flex-direction: column
-    padding: palette.$spacing-medium
-    gap: palette.$spacing-medium
+    // padding: palette.$spacing-medium
+    // gap: palette.$spacing-medium
 
 .location
     padding: palette.$spacing-medium
     min-height: 10rem
+    display: flex
+    align-items: center
+    justify-content: center
 
 .inventory
     display: flex
@@ -53,7 +56,7 @@ main
         font-size: 2rem
         line-height: 1.5rem
         padding: palette.$spacing-small
-        text-shadow: 0.1rem 0.1rem 0rem palette.$secondary-color, 0.2rem 0.2rem 0rem rgb(104, 229, 254)
+        text-shadow: 0rem 0.1rem 0rem palette.$secondary-color, 0rem 0.2rem 0rem rgb(254, 104, 189)
     .item-amount
         font-size: 0.7rem
         font-weight: 500
@@ -62,6 +65,6 @@ main
         bottom: -0.3rem
         background: palette.$secondary-color
         color: palette.$primary-color
-        box-shadow: 0.2rem 0.2rem 0rem rgb(104, 229, 254)
-        padding: 0.5rem
+        box-shadow: 0rem 0.1rem 0rem rgb(254, 104, 189)
+        padding: 0.5rem 0.3rem
         border-radius: 9999rem
