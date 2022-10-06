@@ -35,7 +35,7 @@ viewResource lootEvent resetEvent resource =
 viewItemStack : ItemStack -> Html msg
 viewItemStack stack =
     div [ class "item-stack" ]
-        [ p [ class "item-icon" ] [ text <| String.fromChar stack.item.icon ]
+        [ p [ class "item-icon", class "emoji" ] [ text <| String.fromChar stack.item.icon ]
         , p [ class "item-amount" ] [ text <| String.fromInt stack.amount ]
         ]
 
