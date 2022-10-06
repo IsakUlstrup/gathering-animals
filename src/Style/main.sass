@@ -4,6 +4,9 @@ $paper-texture: url("/assets/cream-paper.png")
 @use "reset"
 @use "palette"
 
+// FONTS
+@import url('https://fonts.googleapis.com/css2?family=Chango&display=swap')
+
 // GRADIENTS
 @function red-gradient()
     @return paper.gradient($paper-texture, (red, orange))
@@ -24,8 +27,6 @@ main
     color: palette.$primary-color
     display: flex
     flex-direction: column
-    // padding: palette.$spacing-medium
-    // gap: palette.$spacing-medium
 
 .location
     padding: palette.$spacing-medium
@@ -33,11 +34,6 @@ main
     display: flex
     align-items: center
     justify-content: center
-    h3
-        text-align: center
-        font-size: 2rem
-        font-weight: 900
-        mix-blend-mode: multiply
 
 .inventory
     display: flex
@@ -45,17 +41,15 @@ main
     gap: palette.$spacing-medium
     align-items: center
     h3
+        font-family: 'Chango', cursive
+        text-shadow: 0rem 0.15rem 0rem palette.$secondary-color, 0rem 0.3rem 0rem rgb(254, 104, 189)
         text-align: center
         font-size: 2rem
         font-weight: 900
-        mix-blend-mode: multiply
     .item-stacks
         display: flex
         gap: palette.$spacing-medium
     .item-stack
-        // background: paper.solid-color($paper-texture, rgb(255, 229, 244))
-        // border: 0.3rem solid rgb(254, 104, 222)
-        // border-radius: 1rem
         position: relative
     .item-icon
         font-size: 2rem
