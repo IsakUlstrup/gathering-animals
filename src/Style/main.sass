@@ -5,6 +5,40 @@ $paper-texture: url("/assets/cream-paper.png")
 @use "palette"
 
 main
-    background: paper.solid-color($paper-texture, beige)
+    background: paper.solid-color($paper-texture, palette.$secondary-color)
     min-height: 100vh
     padding: palette.$spacing-medium
+    font-family: Arial, Helvetica, sans-serif
+    color: palette.$primary-color
+
+.inventory
+    display: flex
+    flex-direction: column
+    gap: palette.$spacing-medium
+    h3
+        text-align: center
+        font-size: 2rem
+        font-weight: 900
+    .item-stacks
+        display: flex
+        gap: palette.$spacing-medium
+    .item-stack
+        background: paper.solid-color($paper-texture, rgb(255, 229, 244))
+        border: 0.3rem solid rgb(254, 104, 222)
+        border-radius: 1rem
+        position: relative
+    .item-icon
+        font-size: 2rem
+        line-height: 1.5rem
+        padding: palette.$spacing-small
+    .item-amount
+        font-size: 0.7rem
+        font-weight: 500
+        line-height: 0rem
+        position: absolute
+        top: -0.5rem
+        right: -0.5rem
+        background: rgb(254, 104, 222)
+        color: rgb(255, 229, 244)
+        padding: 0.5rem
+        border-radius: 9999rem

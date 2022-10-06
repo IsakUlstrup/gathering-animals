@@ -4,7 +4,7 @@ import Engine.Animal exposing (Animal)
 import Engine.Inventory exposing (Inventory, ItemStack)
 import Engine.Item as Item exposing (Item)
 import Engine.Resource as Resource exposing (Resource)
-import Html exposing (Html, button, div, text)
+import Html exposing (Html, button, div, h3, p, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
 
@@ -34,12 +34,18 @@ viewResource lootEvent resetEvent resource =
 
 viewItemStack : ItemStack -> Html msg
 viewItemStack stack =
-    div [] [ text (String.fromChar stack.item.icon ++ "x" ++ String.fromInt stack.amount) ]
+    div [ class "item-stack" ]
+        [ p [ class "item-icon" ] [ text <| String.fromChar stack.item.icon ]
+        , p [ class "item-amount" ] [ text <| String.fromInt stack.amount ]
+        ]
 
 
 viewInventory : Inventory -> Html msg
 viewInventory inventory =
-    div [] (List.map viewItemStack inventory)
+    div [ class "inventory" ]
+        [ h3 [] [ text "Inventory" ]
+        , div [ class "item-stacks" ] (List.map viewItemStack inventory)
+        ]
 
 
 viewLocation : List (Html msg) -> Html msg
