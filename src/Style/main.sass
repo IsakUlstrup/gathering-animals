@@ -38,6 +38,8 @@ main
     align-items: center
     justify-content: center
     gap: palette.$spacing-large
+    &>div
+        flex: 1 1 0
 
 .animal
     background: paper.solid-color($paper-texture, palette.$secondary-color)
@@ -54,15 +56,36 @@ main
     .loot
         transition: opacity 200ms
         opacity: 1
+        display: flex
+        flex-direction: column
+        gap: palette.$spacing-medium
     .no-loot
         opacity: 0
+    .loot-list
+        display: flex
+        overflow-x: scroll
+        gap: palette.$spacing-small
+    .loot-button
+        font-size: 1rem
+    .regrow-button
+        color: palette.$primary-color
+        background: palette.$secondary-color
+        border: none
+        outline: none
+        padding: palette.$spacing-small
+        border-radius: 9999rem
+        box-shadow: 0rem 0.15rem 0rem 0rem rgb(104, 198, 104), 0rem 0.3rem 0rem 0rem rgb(165, 83, 206)
 
     .resource
         transition: transform 200ms, opacity 200ms
+        display: flex
+        justify-content: center
+        .resource-icon
+            font-size: 5rem
         &.evade
-            transform: translateY(0.5rem)
+            opacity: 0.7
         &.hit
-            transform: translateX(0.5rem)
+            transform: translateX(0.5rem) rotate(15deg)
             opacity: 0
         &.exhausted
             opacity: 0

@@ -18,7 +18,7 @@ viewAnimal animal =
 
 viewLoot : (Int -> msg) -> Int -> Item -> Html msg
 viewLoot lootEvent index item =
-    button [ onClick (lootEvent index) ] [ text <| Item.iconString item ]
+    button [ class "loot-button", onClick (lootEvent index) ] [ text <| Item.iconString item ]
 
 
 viewResource : (Int -> msg) -> msg -> Resource -> Html msg
@@ -27,8 +27,8 @@ viewResource lootEvent resetEvent resource =
         [ case Resource.getLoot resource of
             Just loot ->
                 div [ class "loot" ]
-                    [ div [] (List.indexedMap (viewLoot lootEvent) loot)
-                    , button [ onClick resetEvent ] [ text "Done" ]
+                    [ div [ class "loot-list" ] (List.indexedMap (viewLoot lootEvent) loot)
+                    , button [ class "regrow-button", onClick resetEvent ] [ text "Done" ]
                     ]
 
             Nothing ->
@@ -41,7 +41,7 @@ viewResource lootEvent resetEvent resource =
                 , ( "exhausted", Resource.isExhausted resource )
                 ]
             ]
-            [ text "Resource" ]
+            [ p [ class "resource-icon", class "emoji" ] [ text "🌲" ] ]
         ]
 
 
