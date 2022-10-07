@@ -1,17 +1,19 @@
 module View exposing (viewAnimal, viewInventory, viewLocation, viewResource)
 
-import Engine.Animal exposing (Animal)
+import Engine.Animal as Animal exposing (Animal)
 import Engine.Inventory exposing (Inventory, ItemStack)
 import Engine.Item as Item exposing (Item)
 import Engine.Resource as Resource exposing (Resource)
 import Html exposing (Attribute, Html, button, div, h3, p, text)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, classList)
 import Html.Events exposing (onClick)
 
 
 viewAnimal : Animal -> Html msg
-viewAnimal _ =
-    div [] [ text "Animal" ]
+viewAnimal animal =
+    div
+        [ class "animal" ]
+        [ p [ classList [ ( "action", Animal.isInteracting animal ) ] ] [ text "Animal" ] ]
 
 
 viewLoot : (Int -> msg) -> Int -> Item -> Html msg
@@ -29,7 +31,14 @@ viewResource lootEvent resetEvent resource =
                 ]
 
         Nothing ->
-            div [] [ text "Resource" ]
+            div
+                [ class "resource"
+                , classList
+                    [ ( "evade", Resource.isEvade resource )
+                    , ( "hit", Resource.isHit resource )
+                    ]
+                ]
+                [ text "Resource" ]
 
 
 viewItemStack : ItemStack -> Html msg

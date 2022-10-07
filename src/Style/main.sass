@@ -37,6 +37,22 @@ main
     display: flex
     align-items: center
     justify-content: center
+    gap: palette.$spacing-large
+
+.animal
+    background: paper.solid-color($paper-texture, palette.$secondary-color)
+    padding: palette.$spacing-medium
+    p
+        transition: transform 200ms
+    &>.action
+        transform: translateX(0.5rem)
+
+.resource
+    transition: transform 200ms
+    &.evade
+        transform: translateY(0.5rem)
+    &.hit
+        transform: translateX(0.5rem)
 
 .inventory
     display: flex
