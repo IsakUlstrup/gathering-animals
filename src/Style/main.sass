@@ -59,6 +59,7 @@ main
         display: flex
         flex-direction: column
         gap: palette.$spacing-medium
+        flex: auto
     .no-loot
         opacity: 0
     .loot-list
@@ -83,12 +84,12 @@ main
         .resource-icon
             font-size: 5rem
         &.evade
-            opacity: 0.7
+            opacity: 0.8
         &.hit
             transform: translateX(0.5rem) rotate(15deg)
             opacity: 0
         &.exhausted
-            opacity: 0
+            display: none
 
 .inventory
     display: flex
