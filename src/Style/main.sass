@@ -44,6 +44,8 @@ main
 .animal
     background: paper.solid-color($paper-texture, palette.$secondary-color)
     padding: palette.$spacing-medium
+    box-shadow: 0.1rem 0.1rem 0.2rem rgba(0, 0, 0, 0.15)
+    height: 7rem
     p
         transition: transform 200ms
     &>.action
@@ -72,21 +74,21 @@ main
         font-size: 1rem
         padding: 1rem
         color: palette.$primary-color
-        background: palette.$secondary-color
+        background: paper.solid-color($paper-texture, palette.$secondary-color)
+        box-shadow: 0.1rem 0.1rem 0.2rem rgba(0, 0, 0, 0.15)
         border: none
         outline: none
         // padding: palette.$spacing-small
         border-radius: 9999rem
-        box-shadow: 0rem 0.15rem 0rem 0rem rgb(104, 198, 104), 0rem 0.3rem 0rem 0rem rgb(165, 83, 206)
-
+        box-shadow: 0rem 0.15rem 0rem 0rem rgb(104, 198, 104), 0rem 0.3rem 0rem 0rem rgb(165, 83, 206), 0.1rem 0.3rem 0.2rem rgba(0, 0, 0, 0.15)
     .regrow-button
         color: palette.$primary-color
-        background: palette.$secondary-color
+        background: paper.solid-color($paper-texture, palette.$secondary-color)
         border: none
         outline: none
         padding: palette.$spacing-small
         border-radius: 9999rem
-        box-shadow: 0rem 0.15rem 0rem 0rem rgb(104, 198, 104), 0rem 0.3rem 0rem 0rem rgb(165, 83, 206)
+        box-shadow: 0rem 0.15rem 0rem 0rem rgb(104, 198, 104), 0rem 0.3rem 0rem 0rem rgb(165, 83, 206), 0.1rem 0.3rem 0.2rem rgba(0, 0, 0, 0.15)
 
     .resource
         transition: transform 200ms, opacity 200ms
