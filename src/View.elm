@@ -18,7 +18,7 @@ viewAnimal animal =
 
 viewLoot : (Int -> msg) -> Int -> Item -> Html msg
 viewLoot lootEvent index item =
-    button [ class "loot-button", onClick (lootEvent index) ] [ text <| Item.iconString item ]
+    button [ class "loot-button", class "emoji", onClick (lootEvent index) ] [ text <| Item.iconString item ]
 
 
 viewResource : (Int -> msg) -> msg -> Resource -> Html msg
