@@ -13,7 +13,7 @@ viewAnimal : Animal -> Html msg
 viewAnimal animal =
     div
         [ class "animal" ]
-        [ p [ classList [ ( "action", Animal.isInteracting animal ) ] ] [ text "Animal" ] ]
+        [ p [ classList [ ( "action", Animal.isInteracting animal ) ] ] [ text "🐮" ] ]
 
 
 viewLoot : (Int -> msg) -> Int -> Item -> Html msg

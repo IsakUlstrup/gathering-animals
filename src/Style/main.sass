@@ -42,14 +42,13 @@ main
         flex: 1 1 0
 
 .animal
-    background: paper.solid-color($paper-texture, palette.$secondary-color)
-    padding: palette.$spacing-medium
-    box-shadow: 0.1rem 0.1rem 0.2rem rgba(0, 0, 0, 0.15)
-    height: 7rem
     p
         transition: transform 200ms
+        font-size: 5rem
+        text-align: center
+        text-shadow: 0rem 0.15rem 0rem palette.$secondary-color, 0rem 0.3rem 0rem rgb(254, 104, 189)
     &>.action
-        transform: translateX(0.5rem)
+        transform: translateX(0.7rem) rotate(5deg)
 
 .resource-container
     display: flex
