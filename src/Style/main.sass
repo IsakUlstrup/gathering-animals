@@ -47,12 +47,25 @@ main
     &>.action
         transform: translateX(0.5rem)
 
-.resource
-    transition: transform 200ms
-    &.evade
-        transform: translateY(0.5rem)
-    &.hit
-        transform: translateX(0.5rem)
+.resource-container
+    display: flex
+    flex-direction: column
+
+    .loot
+        transition: opacity 200ms
+        opacity: 1
+    .no-loot
+        opacity: 0
+
+    .resource
+        transition: transform 200ms, opacity 200ms
+        &.evade
+            transform: translateY(0.5rem)
+        &.hit
+            transform: translateX(0.5rem)
+            opacity: 0
+        &.exhausted
+            opacity: 0
 
 .inventory
     display: flex

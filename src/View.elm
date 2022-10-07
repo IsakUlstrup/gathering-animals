@@ -23,22 +23,26 @@ viewLoot lootEvent index item =
 
 viewResource : (Int -> msg) -> msg -> Resource -> Html msg
 viewResource lootEvent resetEvent resource =
-    case Resource.getLoot resource of
-        Just loot ->
-            div []
-                [ div [] (List.indexedMap (viewLoot lootEvent) loot)
-                , button [ onClick resetEvent ] [ text "Done" ]
-                ]
-
-        Nothing ->
-            div
-                [ class "resource"
-                , classList
-                    [ ( "evade", Resource.isEvade resource )
-                    , ( "hit", Resource.isHit resource )
+    div [ class "resource-container" ]
+        [ case Resource.getLoot resource of
+            Just loot ->
+                div [ class "loot" ]
+                    [ div [] (List.indexedMap (viewLoot lootEvent) loot)
+                    , button [ onClick resetEvent ] [ text "Done" ]
                     ]
+
+            Nothing ->
+                div [ class "loot", class "no-loot" ] []
+        , div
+            [ class "resource"
+            , classList
+                [ ( "evade", Resource.isEvade resource )
+                , ( "hit", Resource.isHit resource )
+                , ( "exhausted", Resource.isExhausted resource )
                 ]
-                [ text "Resource" ]
+            ]
+            [ text "Resource" ]
+        ]
 
 
 viewItemStack : ItemStack -> Html msg
