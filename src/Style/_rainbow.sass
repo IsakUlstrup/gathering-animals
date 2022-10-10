@@ -17,8 +17,32 @@ $color5: rgb(183, 56, 101)
         border-radius: $border-radius 0rem 0rem $border-radius
         box-shadow: shadow-step(1, $color1), shadow-step(2, $color2)
 
+        &::after
+            content: ""
+            background-color: transparent
+            width: 10rem
+            height: 5rem
+            bottom: -5.5rem
+            right: -1.8rem
+            overflow: hidden
+            position: absolute
+            border-top-right-radius: 3rem
+            box-shadow: -0.5rem 0.5rem 0rem 0rem $color1 inset, -1rem 1rem 0rem 0rem $color2 inset
+
     &:nth-child(even)
         border-left: none
         margin-right: $margin
         border-radius: 0rem $border-radius $border-radius 0rem
         box-shadow: shadow-step(1, $color5), shadow-step(2, $color4)
+
+        &::before
+            content: ""
+            background-color: transparent
+            width: 10rem
+            height: 5rem
+            top: -5.5rem
+            left: -1.8rem
+            overflow: hidden
+            position: absolute
+            border-bottom-left-radius: 3rem
+            box-shadow: 0.5rem -0.5rem 0rem 0rem $color5 inset, 1rem -1rem 0rem 0rem $color4 inset
