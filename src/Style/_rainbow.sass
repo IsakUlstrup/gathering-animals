@@ -1,12 +1,24 @@
+$color1: rgb(30, 105, 123)
+$color2: rgb(133, 185, 171)
+$color3: rgb(253, 178, 90)
+$color4: rgb(253, 107, 95)
+$color5: rgb(183, 56, 101)
+
+@function shadow-offset($offset, $color)
+    @return 0rem 0rem 0rem $offset $color
+
+@function shadow-step($step, $color)
+    @return shadow-offset($step * 0.5rem, $color)
+
 @mixin rainbow-border($margin, $border-radius)
     &:nth-child(odd)
-        margin-left: $margin
         border-right: none
+        margin-left: $margin
         border-radius: $border-radius 0rem 0rem $border-radius
-        box-shadow: 0rem 0rem 0rem 0.5rem rgb(30, 105, 123), 0rem 0rem 0rem 1rem rgb(133, 185, 171), 0rem 0rem 0rem 1.5rem rgb(253, 178, 90), 0rem 0rem 0rem 3rem rgb(253, 107, 95)
+        box-shadow: shadow-step(1, $color1), shadow-step(2, $color2)
 
     &:nth-child(even)
-        margin-right: $margin
         border-left: none
+        margin-right: $margin
         border-radius: 0rem $border-radius $border-radius 0rem
-        box-shadow: 0rem 0rem 0rem 0.5rem rgb(183, 56, 101), 0rem 0rem 0rem 1rem rgb(253, 107, 95), 0rem 0rem 1.5rem rgb(253, 178, 90), 0rem 0rem 2rem rgb(133, 185, 171)
+        box-shadow: shadow-step(1, $color5), shadow-step(2, $color4)
