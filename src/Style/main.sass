@@ -3,6 +3,7 @@ $paper-texture: url("/assets/cream-paper.png")
 @use "paper"
 @use "reset"
 @use "palette"
+@use "rainbow"
 
 // FONTS
 @import url('https://fonts.googleapis.com/css2?family=Chango&display=swap')
@@ -45,19 +46,10 @@ main
     justify-content: center
     gap: palette.$spacing-large
     border: 0.5rem solid beige
-    &:nth-child(odd)
-        margin-left: 0.75rem
-        border-right: none
-        border-radius: 2rem 0rem 0rem 2rem
-        box-shadow: 0rem 0rem 0rem 0.5rem rgb(30, 105, 123), 0rem 0rem 0rem 1rem rgb(133, 185, 171), 0rem 0rem 0rem 1.5rem rgb(253, 178, 90)
+    @include rainbow.rainbow-border(0.25rem, 2.5rem)
 
-    &:nth-child(even)
-        margin-right: 0.75rem
-        border-left: none
-        border-radius: 0rem 2rem 2rem 0rem
-        box-shadow: 0rem 0rem 0rem 0.5rem rgb(183, 56, 101 ), 0rem 0rem 0rem 1rem rgb(253, 107, 95 ), 0rem 0rem 1.5rem rgb(253, 178, 90), 0rem 0rem 2rem rgb(133, 185, 171)
-        &>div
-            flex: 1 1 0
+    &>div
+        flex: 1 1 0
 
 .animal
     p

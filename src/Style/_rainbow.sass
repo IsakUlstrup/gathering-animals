@@ -1,0 +1,12 @@
+@mixin rainbow-border($margin, $border-radius)
+    &:nth-child(odd)
+        margin-left: $margin
+        border-right: none
+        border-radius: $border-radius 0rem 0rem $border-radius
+        box-shadow: 0rem 0rem 0rem 0.5rem rgb(30, 105, 123), 0rem 0rem 0rem 1rem rgb(133, 185, 171), 0rem 0rem 0rem 1.5rem rgb(253, 178, 90), 0rem 0rem 0rem 3rem rgb(253, 107, 95)
+
+    &:nth-child(even)
+        margin-right: $margin
+        border-left: none
+        border-radius: 0rem $border-radius $border-radius 0rem
+        box-shadow: 0rem 0rem 0rem 0.5rem rgb(183, 56, 101), 0rem 0rem 0rem 1rem rgb(253, 107, 95), 0rem 0rem 1.5rem rgb(253, 178, 90), 0rem 0rem 2rem rgb(133, 185, 171)
