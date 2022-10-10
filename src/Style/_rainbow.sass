@@ -12,37 +12,52 @@ $color5: rgb(183, 56, 101)
 
 @mixin rainbow-border($margin, $border-radius)
     &:nth-child(odd)
-        border-right: none
-        margin-left: $margin
-        border-radius: $border-radius 0rem 0rem $border-radius
+        // border-right: none
+        // margin-left: $margin
+        // border-radius: $border-radius 0rem 0rem $border-radius
         box-shadow: shadow-step(1, $color1), shadow-step(2, $color2)
 
-        &::after
-            content: ""
-            background-color: transparent
-            width: 10rem
-            height: 5rem
-            bottom: -5.5rem
-            right: -1.8rem
-            overflow: hidden
-            position: absolute
-            border-top-right-radius: 3rem
-            box-shadow: -0.5rem 0.5rem 0rem 0rem $color1 inset, -1rem 1rem 0rem 0rem $color2 inset
+        // &::before
+        //     content: ""
+        //     background-color: transparent
+        //     border-top-right-radius: calc($border-radius + 1.3rem)
+        //     width: 10rem
+        //     height: 10rem
+        //     bottom: calc(-10rem - 1.5rem)
+        //     right: calc( $margin - 1.5rem)
+        //     overflow: hidden
+        //     position: absolute
+        //     box-shadow: 0.5rem -0.5rem 0rem 0rem $color4, 1rem -1rem 0rem 0rem $color5
+        // &::after
+        //     content: ""
+        //     background-color: transparent
+        //     width: 5rem
+        //     height: 5rem
+        //     bottom: -5.5rem
+        //     right: -2.5rem
+        //     overflow: hidden
+        //     position: absolute
+        //     border-top-right-radius: 4rem
+        //     box-shadow: -0.5rem 0.5rem 0rem 0rem $color1 inset, -1rem 1rem 0rem 0rem $color2 inset
 
     &:nth-child(even)
-        border-left: none
-        margin-right: $margin
-        border-radius: 0rem $border-radius $border-radius 0rem
+        // border-left: none
+        // margin-right: $margin
+        // border-radius: 0rem $border-radius $border-radius 0rem
         box-shadow: shadow-step(1, $color5), shadow-step(2, $color4)
 
-        &::before
-            content: ""
-            background-color: transparent
-            width: 10rem
-            height: 5rem
-            top: -5.5rem
-            left: -1.8rem
-            overflow: hidden
-            position: absolute
-            border-bottom-left-radius: 3rem
-            box-shadow: 0.5rem -0.5rem 0rem 0rem $color5 inset, 1rem -1rem 0rem 0rem $color4 inset
+        // &::before
+        //     content: ""
+        //     background-color: transparent
+        //     border-bottom-left-radius: calc($border-radius + 1.3rem)
+        //     width: 10rem
+        //     height: 10rem
+        //     top: calc(-10rem - 1.5rem)
+        //     left: calc( $margin - 1.5rem)
+        //     overflow: hidden
+        //     position: absolute
+        //     box-shadow: -0.5rem 0.5rem 0rem 0rem $color4, -1rem 1rem 0rem 0rem $color5
+
+            // box-shadow: -0.5rem 0.5rem 0rem 0rem beige
+            // border-bottom-left-radius: 3rem
+            // box-shadow: 0.5rem -0.5rem 0rem 0rem $color5 inset, 1rem -1rem 0rem 0rem $color4 inset

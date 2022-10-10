@@ -3,7 +3,6 @@ $paper-texture: url("/assets/cream-paper.png")
 @use "paper"
 @use "reset"
 @use "palette"
-@use "rainbow"
 
 // FONTS
 @import url('https://fonts.googleapis.com/css2?family=Chango&display=swap')
@@ -20,20 +19,15 @@ $paper-texture: url("/assets/cream-paper.png")
 .cyan-background
     background: cyan-gradient()
 
-body
-    background: rgb(253, 178, 90)
-
 // MAIN
 main
+    background: paper.solid-color($paper-texture, beige)
     min-height: 100vh
     font-family: Arial, Helvetica, sans-serif
     color: palette.$primary-color
     display: flex
     flex-direction: column
-    gap: 2.5rem
     touch-action: manipulation
-    padding: 1.5rem 0
-    // padding: 3rem
 
 .emoji
     filter: saturate(90%) sepia(20%)
@@ -45,9 +39,6 @@ main
     display: flex
     align-items: center
     justify-content: center
-    gap: palette.$spacing-large
-    border: 0.5rem solid beige
-    @include rainbow.rainbow-border(0.3rem, 2.5rem)
 
     &>div
         flex: 1 1 0
@@ -60,7 +51,7 @@ main
         text-align: center
         text-shadow: 0rem 0.15rem 0rem palette.$secondary-color, 0rem 0.3rem 0rem rgb(254, 104, 189)
     &>.action
-        transform: translateX(0.7rem) rotate(5deg)
+        transform: translateX(0.5rem) rotate(5deg)
 
 .resource-container
     display: flex
