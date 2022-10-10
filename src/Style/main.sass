@@ -9,7 +9,7 @@ $paper-texture: url("/assets/cream-paper.png")
 
 // GRADIENTS
 @function red-gradient()
-    @return paper.gradient($paper-texture, (red, orange))
+    @return paper.gradient($paper-texture, (red, rgb(255, 53, 114)))
 
 @function cyan-gradient()
     @return paper.gradient($paper-texture, (rgb(81, 187, 205), rgb(255, 131, 253)))
@@ -21,26 +21,43 @@ $paper-texture: url("/assets/cream-paper.png")
 
 // MAIN
 main
-    background: paper.solid-color($paper-texture, palette.$secondary-color)
+    // background: paper.solid-color($paper-texture, palette.$secondary-color)
+    background: rgb(253, 178, 90)
     min-height: 100vh
     font-family: Arial, Helvetica, sans-serif
     color: palette.$primary-color
     display: flex
     flex-direction: column
+    gap: 2.5rem
     touch-action: manipulation
+    padding: 1.5rem 0
+    // padding: 3rem
 
 .emoji
     filter: saturate(90%) sepia(20%)
 
 .location
+    position: relative
     padding: palette.$spacing-medium
     min-height: 17rem
     display: flex
     align-items: center
     justify-content: center
     gap: palette.$spacing-large
-    &>div
-        flex: 1 1 0
+    border: 0.5rem solid beige
+    &:nth-child(odd)
+        margin-left: 0.75rem
+        border-right: none
+        border-radius: 2rem 0rem 0rem 2rem
+        box-shadow: 0rem 0rem 0rem 0.5rem rgb(30, 105, 123), 0rem 0rem 0rem 1rem rgb(133, 185, 171), 0rem 0rem 0rem 1.5rem rgb(253, 178, 90)
+
+    &:nth-child(even)
+        margin-right: 0.75rem
+        border-left: none
+        border-radius: 0rem 2rem 2rem 0rem
+        box-shadow: 0rem 0rem 0rem 0.5rem rgb(183, 56, 101 ), 0rem 0rem 0rem 1rem rgb(253, 107, 95 ), 0rem 0rem 1.5rem rgb(253, 178, 90), 0rem 0rem 2rem rgb(133, 185, 171)
+        &>div
+            flex: 1 1 0
 
 .animal
     p
