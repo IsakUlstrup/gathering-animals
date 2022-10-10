@@ -20,9 +20,11 @@ $paper-texture: url("/assets/cream-paper.png")
 .cyan-background
     background: cyan-gradient()
 
+body
+    background: rgb(253, 178, 90)
+
 // MAIN
 main
-    background: rgb(253, 178, 90)
     min-height: 100vh
     font-family: Arial, Helvetica, sans-serif
     color: palette.$primary-color
@@ -45,7 +47,7 @@ main
     justify-content: center
     gap: palette.$spacing-large
     border: 0.5rem solid beige
-    @include rainbow.rainbow-border(0.25rem, 2.5rem)
+    @include rainbow.rainbow-border(1.5rem, 2.5rem)
 
     &>div
         flex: 1 1 0
