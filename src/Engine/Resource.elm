@@ -4,6 +4,7 @@ module Engine.Resource exposing
     , ResourceState
     , getLoot
     , hitIf
+    , icon
     , isAlive
     , isEvade
     , isExhausted
@@ -134,6 +135,18 @@ isExhausted resource =
 
         _ ->
             False
+
+
+{-| Get resource icon. Returns regrowing icon if state is regrowing, else aliveIcon
+-}
+icon : Resource -> Char
+icon resource =
+    case State.getState resource.state of
+        Regrowing ->
+            resource.regrowingIcon
+
+        _ ->
+            resource.aliveIcon
 
 
 {-| Get loot, only return items if state is exhausted

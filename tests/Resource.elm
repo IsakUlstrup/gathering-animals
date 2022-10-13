@@ -74,6 +74,17 @@ state =
                     |> Resource.isAlive
                     |> Expect.equal
                         (randomInt >= 1000)
+        , test "Verify regrowing icon" <|
+            \_ ->
+                Resource.new 'a' 'r' []
+                    |> Resource.hitIf True (Random.initialSeed 0)
+                    |> Tuple.first
+                    |> Resource.tick 200
+                    |> Resource.tick 0
+                    |> Resource.tick 200
+                    |> Resource.tick 0
+                    |> Resource.icon
+                    |> Expect.equal 'r'
         ]
 
 
