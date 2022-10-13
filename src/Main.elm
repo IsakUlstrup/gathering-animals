@@ -47,7 +47,7 @@ init flags =
         Ok cfg ->
             ( Model
                 Animal.new
-                Content.Resources.test
+                Content.Resources.evergreen
                 []
                 cfg.saveData
                 (Random.initialSeed cfg.time)
@@ -57,7 +57,7 @@ init flags =
         Err _ ->
             ( Model
                 Animal.new
-                Content.Resources.test
+                Content.Resources.evergreen
                 []
                 []
                 (Random.initialSeed 134857)

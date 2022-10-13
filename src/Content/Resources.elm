@@ -1,12 +1,13 @@
-module Content.Resources exposing (test)
+module Content.Resources exposing (evergreen)
 
 import Content.Items
 import Engine.Resource as Resource exposing (Resource)
 
 
-test : Resource
-test =
-    Resource.new
+evergreen : Resource
+evergreen =
+    Resource.new '🌲'
+        '🌱'
         [ ( 1, Content.Items.mango )
         , ( 9, Content.Items.coconut )
         , ( 90, Content.Items.strawberry )

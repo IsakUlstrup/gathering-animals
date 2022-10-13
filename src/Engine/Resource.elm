@@ -62,14 +62,16 @@ type alias DropTable =
 type alias Resource =
     { state : State ResourceState
     , dropTable : DropTable
+    , aliveIcon : Char
+    , regrowingIcon : Char
     }
 
 
 {-| Resource constructor
 -}
-new : DropTable -> Resource
-new dropTable =
-    Resource aliveState dropTable
+new : Char -> Char -> DropTable -> Resource
+new aliveicon regrowingIcon dropTable =
+    Resource aliveState dropTable aliveicon regrowingIcon
 
 
 {-| Is state alive predicate
