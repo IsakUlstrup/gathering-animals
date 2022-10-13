@@ -164,18 +164,9 @@ view model =
 -- SUBSCRIPTIONS
 
 
-disableTick : Model -> Bool
-disableTick model =
-    Resource.isExhausted model.resource && Animal.isIdle model.animal
-
-
 subscriptions : Model -> Sub Msg
-subscriptions model =
-    if disableTick model then
-        Sub.none
-
-    else
-        Browser.Events.onAnimationFrameDelta (round >> Tick)
+subscriptions _ =
+    Browser.Events.onAnimationFrameDelta (round >> Tick)
 
 
 
