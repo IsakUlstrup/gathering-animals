@@ -7,7 +7,7 @@ import Engine.Animal as Animal exposing (Animal)
 import Engine.Inventory exposing (Inventory)
 import Engine.Item exposing (Item)
 import Engine.Resource as Resource exposing (Resource)
-import Html exposing (Html, main_)
+import Html exposing (Html, div, main_)
 import Html.Attributes exposing (class)
 import Json.Decode as Decode exposing (Decoder, Value)
 import Random exposing (Seed)
@@ -150,8 +150,10 @@ view model =
     main_
         []
         [ View.viewLocation [ class "red-background" ]
-            [ View.viewAnimal model.animal
-            , View.viewResource model.resource
+            [ div [ class "animal-v-resource" ]
+                [ View.viewAnimal model.animal
+                , View.viewResource model.resource
+                ]
             , View.viewLoot LootItem model.loot
             ]
         , View.viewLocation [ class "cyan-background" ] [ View.viewInventory model.inventory ]

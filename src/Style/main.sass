@@ -37,11 +37,14 @@ main
     padding: palette.$spacing-medium
     min-height: 17rem
     display: flex
+    flex-direction: column
     align-items: center
     justify-content: center
+    gap: palette.$spacing-medium
 
-    &>div
-        flex: 1 1 0
+.animal-v-resource
+    display: flex
+    gap: palette.$spacing-medium
 
 .animal
     p
@@ -78,6 +81,7 @@ main
 .no-loot
     opacity: 0
 .loot-list
+    height: 3rem
     display: flex
     flex-wrap: wrap
     justify-content: center
