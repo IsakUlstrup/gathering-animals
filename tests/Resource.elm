@@ -60,7 +60,7 @@ state =
                     |> Resource.isRegrowing
                     |> Expect.equal
                         True
-        , fuzz int "Tick regrowing resource by random dt, if above grow time of 1000 should be alive" <|
+        , fuzz int "Tick regrowing resource by random dt, if above grow time of 3000 should be alive" <|
             \randomInt ->
                 Resource.new 'a' 'r' []
                     |> Resource.hitIf True (Random.initialSeed 0)
@@ -73,7 +73,7 @@ state =
                     |> Resource.tick 0
                     |> Resource.isAlive
                     |> Expect.equal
-                        (randomInt >= 1000)
+                        (randomInt >= 3000)
         , test "Verify regrowing icon" <|
             \_ ->
                 Resource.new 'a' 'r' []

@@ -51,7 +51,7 @@ exhaustedState =
 
 regrowingState : State ResourceState
 regrowingState =
-    TimedState 1000 Regrowing aliveState
+    TimedState 3000 Regrowing aliveState
 
 
 type alias DropTable =
