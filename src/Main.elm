@@ -72,7 +72,33 @@ init flags =
 type Msg
     = Tick Int
     | LootItem Int
-    | ResetResource
+
+
+lootAtIndex : Int -> List Item -> ( List Item, Maybe Item )
+lootAtIndex index items =
+    case ( items, index >= 0 ) of
+        ( loot, True ) ->
+            let
+                item : Maybe Item
+                item =
+                    loot |> List.drop index |> List.head
+
+                first : List Item
+                first =
+                    loot |> List.take index
+
+                second : List Item
+                second =
+                    loot |> List.drop (index + 1)
+
+                newLoot : List Item
+                newLoot =
+                    first ++ second
+            in
+            ( newLoot, item )
+
+        _ ->
+            ( items, Nothing )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -89,28 +115,30 @@ update msg model =
                     model.resource
                         |> Resource.tick dt
                         |> Resource.hitIf action model.seed
+
+                ( loot, seed2 ) =
+                    Resource.getLoot seed resource
             in
             ( { model
                 | animal = animal
                 , resource = resource
-                , seed = seed
+                , seed = seed2
+                , loot = (loot |> Maybe.withDefault []) ++ model.loot
               }
             , Cmd.none
             )
 
         LootItem index ->
-            -- case model.resource |> Resource.lootAtIndex index of
-            --     ( newResource, Just item ) ->
-            --         { model
-            --             | resource = newResource
-            --             , inventory = Engine.Inventory.add item model.inventory
-            --         }
-            --             |> (\m -> ( m, Storage.saveInventory m.inventory ))
-            --     ( _, Nothing ) ->
-            ( model, Cmd.none )
+            case model.loot |> lootAtIndex index of
+                ( newLoot, Just item ) ->
+                    { model
+                        | loot = newLoot
+                        , inventory = Engine.Inventory.add item model.inventory
+                    }
+                        |> (\m -> ( m, Storage.saveInventory m.inventory ))
 
-        ResetResource ->
-            ( model, Cmd.none )
+                ( _, Nothing ) ->
+                    ( model, Cmd.none )
 
 
 
@@ -124,6 +152,7 @@ view model =
         [ View.viewLocation [ class "red-background" ]
             [ View.viewAnimal model.animal
             , View.viewResource model.resource
+            , View.viewLoot LootItem model.loot
             ]
         , View.viewLocation [ class "cyan-background" ] [ View.viewInventory model.inventory ]
         ]

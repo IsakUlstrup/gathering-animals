@@ -1,4 +1,4 @@
-module View exposing (viewAnimal, viewInventory, viewLocation, viewResource)
+module View exposing (viewAnimal, viewInventory, viewLocation, viewLoot, viewResource)
 
 import Engine.Animal as Animal exposing (Animal)
 import Engine.Inventory exposing (Inventory, ItemStack)
@@ -16,9 +16,14 @@ viewAnimal animal =
         [ p [ classList [ ( "action", Animal.isInteracting animal ) ] ] [ text "🐮" ] ]
 
 
-viewLoot : (Int -> msg) -> Int -> Item -> Html msg
-viewLoot lootEvent index item =
-    button [ class "loot-button", class "emoji", onClick (lootEvent index) ] [ text <| Item.iconString item ]
+viewLoot : (Int -> msg) -> List Item -> Html msg
+viewLoot lootEvent items =
+    let
+        lootBtn : Int -> Item -> Html msg
+        lootBtn index i =
+            button [ class "loot-button", class "emoji", onClick (lootEvent index) ] [ text <| Item.iconString i ]
+    in
+    div [ class "loot-list" ] (List.indexedMap lootBtn items)
 
 
 viewResource : Resource -> Html msg
