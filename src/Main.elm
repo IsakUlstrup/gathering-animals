@@ -5,6 +5,7 @@ import Browser.Events
 import Content.Resources
 import Engine.Animal as Animal exposing (Animal)
 import Engine.Inventory exposing (Inventory)
+import Engine.Item exposing (Item)
 import Engine.Resource as Resource exposing (Resource)
 import Html exposing (Html, main_)
 import Html.Attributes exposing (class)
@@ -21,6 +22,7 @@ import View
 type alias Model =
     { animal : Animal
     , resource : Resource
+    , loot : List Item
     , inventory : Inventory
     , seed : Seed
     }
@@ -46,6 +48,7 @@ init flags =
             ( Model
                 Animal.new
                 Content.Resources.test
+                []
                 cfg.saveData
                 (Random.initialSeed cfg.time)
             , Cmd.none
@@ -55,6 +58,7 @@ init flags =
             ( Model
                 Animal.new
                 Content.Resources.test
+                []
                 []
                 (Random.initialSeed 134857)
             , Cmd.none
@@ -95,19 +99,18 @@ update msg model =
             )
 
         LootItem index ->
-            case model.resource |> Resource.lootAtIndex index of
-                ( newResource, Just item ) ->
-                    { model
-                        | resource = newResource
-                        , inventory = Engine.Inventory.add item model.inventory
-                    }
-                        |> (\m -> ( m, Storage.saveInventory m.inventory ))
-
-                ( _, Nothing ) ->
-                    ( model, Cmd.none )
+            -- case model.resource |> Resource.lootAtIndex index of
+            --     ( newResource, Just item ) ->
+            --         { model
+            --             | resource = newResource
+            --             , inventory = Engine.Inventory.add item model.inventory
+            --         }
+            --             |> (\m -> ( m, Storage.saveInventory m.inventory ))
+            --     ( _, Nothing ) ->
+            ( model, Cmd.none )
 
         ResetResource ->
-            ( { model | resource = Resource.setRegrowing model.resource }, Cmd.none )
+            ( model, Cmd.none )
 
 
 
@@ -120,7 +123,7 @@ view model =
         []
         [ View.viewLocation [ class "red-background" ]
             [ View.viewAnimal model.animal
-            , View.viewResource LootItem ResetResource model.resource
+            , View.viewResource model.resource
             ]
         , View.viewLocation [ class "cyan-background" ] [ View.viewInventory model.inventory ]
         ]

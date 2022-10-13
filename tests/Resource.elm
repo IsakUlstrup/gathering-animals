@@ -1,5 +1,6 @@
 module Resource exposing (constructor, loot, state)
 
+import Content.Items
 import Engine.Resource as Resource
 import Expect
 import Fuzz exposing (int)
@@ -35,7 +36,7 @@ state =
                     |> Tuple.first
                     |> Resource.isEvade
                     |> Expect.equal True
-        , fuzz int "Hit alive resource, tick by random dt, get loot. If randomInt is above hit state time of 200 should return some loot" <|
+        , fuzz int "Hit alive resource, tick by random int. Should be exhausted" <|
             \randomInt ->
                 Resource.new []
                     |> Resource.hitIf True (Random.initialSeed 0)
@@ -43,23 +44,19 @@ state =
                     |> Resource.tick randomInt
                     |> Resource.tick 0
                     |> Resource.isExhausted
-                    |> Expect.equal
-                        (randomInt >= 200)
-        , test "Set alive resource to regrow. should remain in alive state" <|
-            \_ ->
-                Resource.new []
-                    |> Resource.setRegrowing
-                    |> Resource.isAlive
-                    |> Expect.equal
-                        True
-        , test "Set exhausted resource to regrow." <|
+                    |> Expect.equal (randomInt >= 200)
+        , test "Tick exhausted resource, verify that it's regrowing" <|
             \_ ->
                 Resource.new []
                     |> Resource.hitIf True (Random.initialSeed 0)
                     |> Tuple.first
+                    -- Hit state
                     |> Resource.tick 200
                     |> Resource.tick 0
-                    |> Resource.setRegrowing
+                    -- Exhausted state
+                    |> Resource.tick 200
+                    |> Resource.tick 0
+                    -- regrowing state
                     |> Resource.isRegrowing
                     |> Expect.equal
                         True
@@ -70,7 +67,8 @@ state =
                     |> Tuple.first
                     |> Resource.tick 200
                     |> Resource.tick 0
-                    |> Resource.setRegrowing
+                    |> Resource.tick 200
+                    |> Resource.tick 0
                     |> Resource.tick randomInt
                     |> Resource.tick 0
                     |> Resource.isAlive
@@ -92,32 +90,38 @@ isJust maybe =
 loot : Test
 loot =
     describe "Loot"
-        [ test "Get loot from exhausted resource" <|
+        [ test "Get loot from hit resource" <|
             \_ ->
                 Resource.new []
                     |> Resource.hitIf True (Random.initialSeed 0)
                     |> Tuple.first
                     |> Resource.tick 200
-                    |> Resource.tick 0
-                    |> Resource.getLoot
+                    -- |> Resource.tick 0
+                    |> Resource.getLoot (Random.initialSeed 0)
+                    |> Tuple.first
                     |> isJust
                     |> Expect.equal True
+        , fuzz int "Hit alive resource, tick by random dt, get loot. If randomInt is above hit state time of 200 should return some loot" <|
+            \randomInt ->
+                Resource.new [ ( 100, Content.Items.coconut ) ]
+                    |> Resource.hitIf True (Random.initialSeed 0)
+                    |> Tuple.first
+                    |> Resource.tick randomInt
+                    -- |> Resource.tick 0
+                    |> Resource.getLoot (Random.initialSeed 0)
+                    |> Tuple.first
+                    |> Expect.equal
+                        (if randomInt >= 200 then
+                            Just [ Content.Items.coconut ]
+
+                         else
+                            Nothing
+                        )
         , test "Get loot from alive resource, should be nothing" <|
             \_ ->
                 Resource.new []
-                    |> Resource.getLoot
+                    |> Resource.getLoot (Random.initialSeed 0)
+                    |> Tuple.first
                     |> isJust
                     |> Expect.equal False
-
-        -- , fuzz int "Loot at random index in loot list with length of 3, check item" <|
-        --     \randomInt ->
-        --         ( Resource.new [ ( 100, Content.Items.coconut ) ], Random.initialSeed 0 )
-        --             |> Resource.hitIf True
-        --             |> Resource.tick 200
-        --             |> Tuple.first
-        --             |> Resource.lootAtIndex randomInt
-        --             |> Tuple.second
-        --             |> isJust
-        --             |> Expect.equal
-        --                 (randomInt >= 0 && randomInt <= 4)
         ]

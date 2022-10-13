@@ -21,28 +21,41 @@ viewLoot lootEvent index item =
     button [ class "loot-button", class "emoji", onClick (lootEvent index) ] [ text <| Item.iconString item ]
 
 
-viewResource : (Int -> msg) -> msg -> Resource -> Html msg
-viewResource lootEvent resetEvent resource =
-    div [ class "resource-container" ]
-        [ case Resource.getLoot resource of
-            Just loot ->
-                div [ class "loot" ]
-                    [ div [ class "loot-list" ] (List.indexedMap (viewLoot lootEvent) loot)
-                    , button [ class "regrow-button", onClick resetEvent ] [ text "Done" ]
-                    ]
-
-            Nothing ->
-                div [ class "loot", class "no-loot" ] []
-        , div
-            [ class "resource"
-            , classList
-                [ ( "evade", Resource.isEvade resource )
-                , ( "hit", Resource.isHit resource )
-                , ( "exhausted", Resource.isExhausted resource )
-                ]
+viewResource : Resource -> Html msg
+viewResource resource =
+    div
+        [ class "resource"
+        , classList
+            [ ( "evade", Resource.isEvade resource )
+            , ( "hit", Resource.isHit resource )
+            , ( "exhausted", Resource.isExhausted resource )
             ]
-            [ p [ class "resource-icon", class "emoji" ] [ text "🌲" ] ]
         ]
+        [ p [ class "resource-icon", class "emoji" ] [ text "🌲" ] ]
+
+
+
+-- viewResource : (Int -> msg) -> msg -> Resource -> Html msg
+-- viewResource lootEvent resetEvent resource =
+--     div [ class "resource-container" ]
+--         [ case Resource.getLoot resource of
+--             Just loot ->
+--                 div [ class "loot" ]
+--                     [ div [ class "loot-list" ] (List.indexedMap (viewLoot lootEvent) loot)
+--                     , button [ class "regrow-button", onClick resetEvent ] [ text "Done" ]
+--                     ]
+--             Nothing ->
+--                 div [ class "loot", class "no-loot" ] []
+--         , div
+--             [ class "resource"
+--             , classList
+--                 [ ( "evade", Resource.isEvade resource )
+--                 , ( "hit", Resource.isHit resource )
+--                 , ( "exhausted", Resource.isExhausted resource )
+--                 ]
+--             ]
+--             [ p [ class "resource-icon", class "emoji" ] [ text "🌲" ] ]
+--         ]
 
 
 viewItemStack : ItemStack -> Html msg
