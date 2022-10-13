@@ -123,7 +123,7 @@ update msg model =
                 | animal = animal
                 , resource = resource
                 , seed = seed2
-                , loot = (loot |> Maybe.withDefault []) ++ model.loot
+                , loot = (loot |> Maybe.withDefault []) ++ model.loot |> List.take 5
               }
             , Cmd.none
             )
