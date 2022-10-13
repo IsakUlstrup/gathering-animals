@@ -70,6 +70,9 @@ main
         opacity: 0
     &.exhausted
         opacity: 0
+    &.growing .resource-icon
+        transform-origin: bottom center
+        transform: scale(0.5)
 
 .loot
     transition: opacity 200ms

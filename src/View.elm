@@ -34,6 +34,7 @@ viewResource resource =
             [ ( "evade", Resource.isEvade resource )
             , ( "hit", Resource.isHit resource )
             , ( "exhausted", Resource.isExhausted resource )
+            , ( "growing", Resource.isRegrowing resource )
             ]
         ]
         [ p [ class "resource-icon", class "emoji" ] [ text (Resource.icon resource |> String.fromChar) ] ]
