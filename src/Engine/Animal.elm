@@ -12,6 +12,17 @@ module Engine.Animal exposing
 import Engine.StateMachine as State exposing (State(..))
 
 
+{-| Animal type, just the state for now
+-}
+type alias Animal =
+    { state : State AnimalState
+    }
+
+
+
+-- STATE
+
+
 {-| Animal state
 -}
 type AnimalState
@@ -20,11 +31,8 @@ type AnimalState
     | Cooldown
 
 
-{-| Animal type, just the state for now
--}
-type alias Animal =
-    { state : State AnimalState
-    }
+
+-- STATE CONSTRUCTORS
 
 
 {-| Idle state constructor
@@ -48,23 +56,8 @@ cooldownState =
     TimedState 1000 Cooldown idleState
 
 
-{-| Animal constructor
--}
-new : Animal
-new =
-    Animal cooldownState
 
-
-{-| Is animal idle predicate
--}
-isIdle : Animal -> Bool
-isIdle animal =
-    case State.getState animal.state of
-        Idle ->
-            True
-
-        _ ->
-            False
+-- STATE TRANSITIONS
 
 
 {-| Transition animal state to interact
@@ -74,16 +67,22 @@ setInteract animal =
     { animal | state = State.transition interactState animal.state }
 
 
+
+-- STATE PREDICATES
+
+
 {-| Is animal interacting predicate
 -}
 isInteracting : Animal -> Bool
 isInteracting animal =
-    case State.getState animal.state of
-        Interact ->
-            True
+    State.isState Interact animal.state
 
-        _ ->
-            False
+
+{-| Is animal idle predicate
+-}
+isIdle : Animal -> Bool
+isIdle animal =
+    State.isState Idle animal.state
 
 
 {-| Is animal done interacting predicate
@@ -97,12 +96,18 @@ isDoneInteracting animal =
 -}
 isCooling : Animal -> Bool
 isCooling animal =
-    case State.getState animal.state of
-        Cooldown ->
-            True
+    State.isState Cooldown animal.state
 
-        _ ->
-            False
+
+
+-- GENERAL
+
+
+{-| Animal constructor
+-}
+new : Animal
+new =
+    Animal cooldownState
 
 
 {-| Tick state by dt in ms
