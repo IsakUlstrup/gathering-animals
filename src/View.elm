@@ -12,15 +12,13 @@ import Html.Events exposing (onClick)
 viewAnimal : Animal -> Html msg
 viewAnimal animal =
     div
-        [ class "animal" ]
-        [ p
-            [ classList
-                [ ( "action", Animal.isInteracting animal )
-                , ( "idle", Animal.isIdle animal )
-                ]
+        [ class "animal"
+        , classList
+            [ ( "action", Animal.isInteracting animal )
+            , ( "idle", Animal.isIdle animal )
             ]
-            [ text "🐮" ]
         ]
+        [ p [] [ text "🐮" ] ]
 
 
 viewLoot : (Int -> msg) -> List Item -> Html msg

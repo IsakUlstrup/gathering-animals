@@ -63,10 +63,10 @@ main
         font-size: 5rem
         text-align: center
         text-shadow: 0rem 0.15rem 0rem palette.$secondary-color, 0rem 0.3rem 0rem rgb(254, 104, 189)
-    &>.idle
+    &.idle p
         animation: wiggle 2000ms ease-in-out infinite
-    &>.action
-        transform: translateX(0.5rem) rotate(5deg)
+    &.action p
+        transform: translateX(0.5rem) rotate(4deg)
 
 .resource
     transition: transform 200ms, opacity 200ms
