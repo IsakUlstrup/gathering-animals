@@ -2,6 +2,7 @@ module Engine.StateMachine exposing
     ( State(..)
     , getState
     , isDone
+    , isState
     , tick
     , transition
     )
@@ -81,3 +82,15 @@ isDone s state =
 
         _ ->
             False
+
+
+{-| Is current state equal to provided state
+-}
+isState : s -> State s -> Bool
+isState s state =
+    case state of
+        State st _ ->
+            st == s
+
+        TimedState _ st _ ->
+            st == s

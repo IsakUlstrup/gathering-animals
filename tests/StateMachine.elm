@@ -155,4 +155,10 @@ get =
                     |> getLoot
                     |> Expect.equal
                         (Just [ Content.Items.coconut, Content.Items.mango ])
+        , test "Is current state equal to provided state" <|
+            \_ ->
+                aliveState
+                    |> State.transition hitState
+                    |> State.isState Hit
+                    |> Expect.equal True
         ]
