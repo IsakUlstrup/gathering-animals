@@ -71,6 +71,8 @@ state =
                     |> Resource.tick 0
                     |> Resource.tick randomInt
                     |> Resource.tick 0
+                    |> Resource.tick 200
+                    |> Resource.tick 0
                     |> Resource.isAlive
                     |> Expect.equal
                         (randomInt >= 3000)
