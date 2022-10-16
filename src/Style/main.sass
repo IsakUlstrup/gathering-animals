@@ -16,18 +16,12 @@ $dark-paper-texture: url("/assets/black-paper.png")
     @return paper.gradient($paper-texture, (rgb(81, 187, 205), rgb(255, 131, 253)))
 
 @mixin outline-filter()
-    filter: url('data:image/svg+xml,\
-                    <svg xmlns="http://www.w3.org/2000/svg">\
-                        <filter id="outline">\
-                            <feMorphology in="SourceAlpha" result="DILATED" operator="dilate" radius="3"></feMorphology>\
-                            <feFlood flood-color="beige" flood-opacity="1" result="PINK"></feFlood>\
-                            <feComposite in="PINK" in2="DILATED" operator="in" result="OUTLINE"></feComposite>\
-                            <feMerge>\
-                                <feMergeNode in="OUTLINE" />\
-                                <feMergeNode in="SourceGraphic" />\
-                            </feMerge>\
-                        </filter>\
-                    </svg>#outline')
+    &::before
+        position: absolute
+        z-index: -1
+        content: attr(title)
+        transform: scale(1.2)
+        filter: brightness(20)
 
 .red-background
     background: red-gradient()
@@ -67,7 +61,7 @@ main
         color: rgb(51, 60, 63)
         text-shadow: 0rem 0.2rem 0rem rgb(255, 0, 0), 0rem 0.4rem 0rem rgb(153, 0, 255), 0rem 0.6rem 0rem rgb(255, 183, 0), 0rem 0.6rem 0.5rem rgb(48, 48, 48)
     &.dark
-        background: paper.solid-color($dark-paper-texture, #2b3239)
+        background: paper.solid-color($dark-paper-texture, #1c2125)
 
 .location
     position: relative
@@ -104,26 +98,30 @@ main
         text-shadow: 0rem 0rem 3rem white
 
 .resource
-    transition: transform 200ms, opacity 200ms, filter 200ms, text-shadow 200ms
     display: flex
     justify-content: center
     transform-origin: bottom center
+    // box-shadow: 0rem 0.2rem 0rem 0rem rgb(122, 120, 100), 0.2rem 0.2rem 1rem 0rem rgba(0, 0, 0, 0.4)
+    // background: beige
+    // border-radius: 9999rem
     .resource-icon
+        transition: transform 200ms, opacity 200ms, filter 200ms, text-shadow 200ms
         font-size: 5rem
-        text-shadow: 0rem 0.3rem 0rem beige
-        // @include outline-filter()
+        line-height: 3rem
+        // text-shadow: 0rem -0.3rem 0rem beige
+        @include outline-filter()
 
-    &.evade
+    &.evade .resource-icon
         transform: rotate(5deg)
-    &.hit
+    &.hit .resource-icon
         transform: translateX(0.5rem) rotate(15deg)
         opacity: 0
-    &.exhausted
+    &.exhausted .resource-icon
         opacity: 0
         transform: scale(0)
-    &.growing
-        transform: scale(0.5)
-    &.regrown
+    &.growing .resource-icon
+        transform: scale(0.8)
+    &.regrown .resource-icon
         filter: brightness(100)
         text-shadow: 0rem 0rem 2rem palette.$secondary-color
 
