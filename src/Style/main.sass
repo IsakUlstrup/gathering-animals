@@ -68,13 +68,23 @@ main
     &.action p
         transform: translateX(0.5rem) rotate(4deg)
 
+@keyframes flash-in
+    0%
+        opacity: 0
+        text-shadow: 0rem 0rem 0rem white
+
+    100%
+        opacity: 1
+        text-shadow: 0rem 0rem 3rem white
+
 .resource
-    transition: transform 200ms, opacity 200ms
+    transition: transform 200ms, opacity 200ms, filter 200ms, text-shadow 200ms
     display: flex
     justify-content: center
     transform-origin: bottom center
     .resource-icon
         font-size: 5rem
+        transition: opacity 200ms
     &.evade
         transform: rotate(5deg)
     &.hit
@@ -82,9 +92,12 @@ main
         opacity: 0
     &.exhausted
         opacity: 0
-    &.growing .resource-icon
-        transform-origin: bottom center
+        transform: scale(0)
+    &.growing
         transform: scale(0.5)
+    &.regrown
+        filter: brightness(100)
+        text-shadow: 0rem 0rem 2rem palette.$secondary-color
 
 .loot
     transition: opacity 200ms

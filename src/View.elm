@@ -36,10 +36,12 @@ viewResource resource =
     div
         [ class "resource"
         , classList
-            [ ( "evade", Resource.isEvade resource )
+            [ ( "alive", Resource.isAlive resource )
+            , ( "evade", Resource.isEvade resource )
             , ( "hit", Resource.isHit resource )
             , ( "exhausted", Resource.isExhausted resource )
             , ( "growing", Resource.isRegrowing resource )
+            , ( "regrown", Resource.isRegrown resource )
             ]
         ]
         [ p [ class "resource-icon", class "emoji" ] [ text (Resource.icon resource |> String.fromChar) ] ]

@@ -10,6 +10,7 @@ module Engine.Resource exposing
     , isExhausted
     , isHit
     , isRegrowing
+    , isRegrown
     , new
     , tick
     )
@@ -27,6 +28,7 @@ type ResourceState
     | Evade
     | Exhausted
     | Regrowing
+    | Regrown
 
 
 aliveState : State ResourceState
@@ -51,7 +53,12 @@ exhaustedState =
 
 regrowingState : State ResourceState
 regrowingState =
-    TimedState 3000 Regrowing aliveState
+    TimedState 3000 Regrowing regrownState
+
+
+regrownState : State ResourceState
+regrownState =
+    TimedState 200 Regrown aliveState
 
 
 type alias DropTable =
@@ -81,6 +88,18 @@ isAlive : Resource -> Bool
 isAlive resource =
     case State.getState resource.state of
         Alive ->
+            True
+
+        _ ->
+            False
+
+
+{-| Is state alive predicate
+-}
+isRegrown : Resource -> Bool
+isRegrown resource =
+    case State.getState resource.state of
+        Regrown ->
             True
 
         _ ->
@@ -143,6 +162,9 @@ icon : Resource -> Char
 icon resource =
     case State.getState resource.state of
         Regrowing ->
+            resource.regrowingIcon
+
+        Regrown ->
             resource.regrowingIcon
 
         _ ->
