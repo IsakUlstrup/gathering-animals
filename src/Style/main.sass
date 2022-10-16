@@ -14,6 +14,24 @@ $paper-texture: url("/assets/cream-paper.png")
 @function cyan-gradient()
     @return paper.gradient($paper-texture, (rgb(81, 187, 205), rgb(255, 131, 253)))
 
+@mixin outline-filter()
+    &::before
+        content: attr(title)
+        position: absolute
+        z-index: -1
+        filter: url('data:image/svg+xml,\
+                    <svg xmlns="http://www.w3.org/2000/svg">\
+                        <filter id="outline">\
+                            <feMorphology in="SourceAlpha" result="DILATED" operator="dilate" radius="3"></feMorphology>\
+                            <feFlood flood-color="beige" flood-opacity="1" result="PINK"></feFlood>\
+                            <feComposite in="PINK" in2="DILATED" operator="in" result="OUTLINE"></feComposite>\
+                            <feMerge>\
+                                <feMergeNode in="OUTLINE" />\
+                                <feMergeNode in="SourceGraphic" />\
+                            </feMerge>\
+                        </filter>\
+                    </svg>#outline')
+
 .red-background
     background: red-gradient()
 .cyan-background
@@ -46,15 +64,15 @@ main
     display: flex
     gap: palette.$spacing-large
 
-@keyframes wiggle
-    0%
-        transform: rotate(0deg)
-    30%
-        transform: rotate(-3deg)
-    70%
-        transform: rotate(4deg)
-    100%
-        transform: rotate(0deg)
+// @keyframes wiggle
+//     0%
+//         transform: rotate(0deg)
+//     30%
+//         transform: rotate(-3deg)
+//     70%
+//         transform: rotate(4deg)
+//     100%
+//         transform: rotate(0deg)
 
 .animal
     p
@@ -62,9 +80,10 @@ main
         transform-origin: bottom center
         font-size: 5rem
         text-align: center
-        text-shadow: 0rem 0.15rem 0rem palette.$secondary-color, 0rem 0.3rem 0rem rgb(254, 104, 189)
-    &.idle p
-        animation: wiggle 2000ms ease-in-out infinite
+        @include outline-filter()
+        // text-shadow: 0rem 0.15rem 0rem palette.$secondary-color, 0rem 0.3rem 0rem rgb(254, 104, 189)
+    // &.idle p
+    //     animation: wiggle 2000ms ease-in-out infinite
     &.action p
         transform: translateX(0.5rem) rotate(4deg)
 
@@ -84,7 +103,8 @@ main
     transform-origin: bottom center
     .resource-icon
         font-size: 5rem
-        transition: opacity 200ms
+        @include outline-filter()
+
     &.evade
         transform: rotate(5deg)
     &.hit

@@ -18,7 +18,7 @@ viewAnimal animal =
             , ( "idle", Animal.isIdle animal )
             ]
         ]
-        [ p [] [ text "🐮" ] ]
+        [ p [ class "emoji", Html.Attributes.title "🐮" ] [ text "🐮" ] ]
 
 
 viewLoot : (Int -> msg) -> List Item -> Html msg
@@ -44,7 +44,7 @@ viewResource resource =
             , ( "regrown", Resource.isRegrown resource )
             ]
         ]
-        [ p [ class "resource-icon", class "emoji" ] [ text (Resource.icon resource |> String.fromChar) ] ]
+        [ p [ class "resource-icon", class "emoji", Html.Attributes.title (Resource.icon resource |> String.fromChar) ] [ text (Resource.icon resource |> String.fromChar) ] ]
 
 
 viewItemStack : ItemStack -> Html msg
