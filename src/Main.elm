@@ -149,14 +149,20 @@ view : Model -> Html Msg
 view model =
     main_
         []
-        [ View.viewLocation [ class "red-background" ]
-            [ div [ class "animal-v-resource" ]
-                [ View.viewAnimal model.animal
-                , View.viewResource model.resource
+        [ div [ class "area", class "dark" ]
+            [ Html.h1 [ class "red" ] [ Html.text "Forest" ]
+            , View.viewLocation []
+                [ div [ class "animal-v-resource" ]
+                    [ View.viewAnimal model.animal
+                    , View.viewResource model.resource
+                    ]
+                , View.viewLoot LootItem model.loot
                 ]
-            , View.viewLoot LootItem model.loot
             ]
-        , View.viewLocation [ class "cyan-background" ] [ View.viewInventory model.inventory ]
+        , div [ class "area" ]
+            [ Html.h1 [ class "cyan" ] [ Html.text "Debug" ]
+            , View.viewLocation [] [ View.viewInventory model.inventory ]
+            ]
         ]
 
 

@@ -1,4 +1,5 @@
 $paper-texture: url("/assets/cream-paper.png")
+$dark-paper-texture: url("/assets/black-paper.png")
 
 @use "paper"
 @use "reset"
@@ -46,6 +47,28 @@ main
 .emoji
     filter: saturate(90%) sepia(20%)
 
+.area
+    padding: palette.$spacing-medium
+    h1
+        text-align: center
+        font-size: 3rem
+        line-height: 5rem
+        font-family: 'Chango', cursive
+    .red
+        // background: paper.gradient($paper-texture, (rgb(255, 0, 0), rgb(255, 181, 53)))
+        // background-clip: text
+        // color: transparent
+        color: rgb(255, 232, 192)
+        text-shadow: 0rem 0.2rem 0rem rgb(255, 0, 0), 0rem 0.4rem 0rem rgb(153, 0, 255), 0rem 0.6rem 0rem rgb(255, 183, 0), 0rem 0.6rem 0.5rem rgb(48, 48, 48)
+    .cyan
+        // background: paper.gradient($paper-texture, (rgb(195, 0, 255), rgb(53, 255, 252)))
+        // background-clip: text
+        // color: transparent
+        color: rgb(51, 60, 63)
+        text-shadow: 0rem 0.2rem 0rem rgb(255, 0, 0), 0rem 0.4rem 0rem rgb(153, 0, 255), 0rem 0.6rem 0rem rgb(255, 183, 0), 0rem 0.6rem 0.5rem rgb(48, 48, 48)
+    &.dark
+        background: paper.solid-color($dark-paper-texture, #2b3239)
+
 .location
     position: relative
     padding: palette.$spacing-medium
@@ -66,7 +89,8 @@ main
         transform-origin: bottom center
         font-size: 5rem
         text-align: center
-        @include outline-filter()
+        // @include outline-filter()
+        text-shadow: 0rem 0.3rem 0rem beige
     &.action p
         transform: translateX(0.5rem) rotate(4deg)
 
@@ -86,7 +110,8 @@ main
     transform-origin: bottom center
     .resource-icon
         font-size: 5rem
-        @include outline-filter()
+        text-shadow: 0rem 0.3rem 0rem beige
+        // @include outline-filter()
 
     &.evade
         transform: rotate(5deg)
@@ -137,11 +162,11 @@ main
     gap: palette.$spacing-medium
     align-items: center
     h3
-        font-family: 'Chango', cursive
-        text-shadow: 0rem 0.15rem 0rem palette.$secondary-color, 0rem 0.3rem 0rem rgb(254, 104, 189)
+        // font-family: 'Chango', cursive
+        // text-shadow: 0rem 0.15rem 0rem palette.$secondary-color, 0rem 0.3rem 0rem rgb(254, 104, 189)
         text-align: center
-        font-size: 2rem
-        font-weight: 900
+        font-size: 1.5rem
+        // font-weight: 900
     .item-stacks
         display: flex
         gap: palette.$spacing-medium
