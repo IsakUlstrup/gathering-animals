@@ -159,7 +159,7 @@ view model =
                 , View.viewLoot LootItem model.loot
                 ]
             ]
-        , div [ class "area" ]
+        , div [ class "area", class "light" ]
             [ Html.h1 [ class "cyan" ] [ Html.text "Debug" ]
             , View.viewLocation [] [ View.viewInventory model.inventory ]
             ]
