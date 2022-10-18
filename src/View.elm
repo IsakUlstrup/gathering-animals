@@ -70,7 +70,7 @@ viewLocation attrs content =
 
 viewSocial : Html msg
 viewSocial =
-    div [ style "display" "flex", style "justify-content" "center", style "gap" "2rem" ]
-        [ div [] [ p [] [ text "Github:" ], a [ href "https://github.com/IsakUlstrup/gathering-animals" ] [ text "gathering-animals" ] ]
-        , div [ class "qr-code" ] []
+    div [ style "text-align" "center", style "display" "flex", style "align-items" "center", style "gap" "2rem", style "flex-direction" "column" ]
+        [ p [] [ text "Github: ", a [ href "https://github.com/IsakUlstrup/gathering-animals" ] [ text "gathering-animals" ] ]
+        , p [] [ text "This page: ", div [ class "qr-code" ] [] ]
         ]
