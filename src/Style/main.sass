@@ -38,7 +38,7 @@ main
 
 .area
     padding: palette.$spacing-medium
-    border-radius: 0.4rem
+    border-radius: 0.2rem
     width: 100%
     max-width: 40rem
     min-width: 20rem
@@ -56,12 +56,12 @@ main
     &.dark
         background: paper.solid-color($dark-paper-texture, #1c2125)
         border-bottom: 0.1rem solid #52606c
-        box-shadow: 0rem 0.2rem 0rem 0rem #39434b
+        box-shadow: 0rem 0.2rem 0rem 0rem #39434b, 0.1rem 0.3rem 0.3rem rgba(0, 0, 0, 0.5)
         color: palette.$secondary-color
     &.light
         background: paper.solid-color($paper-texture, palette.$secondary-color)
         border-bottom: 0.1rem solid #fffef7
-        box-shadow: 0rem 0.2rem 0rem 0rem #feffdc
+        box-shadow: 0rem 0.2rem 0rem 0rem #feffdc, 0.1rem 0.3rem 0.3rem rgba(0, 0, 0, 0.5)
 
 .location
     position: relative
