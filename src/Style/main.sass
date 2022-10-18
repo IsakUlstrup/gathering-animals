@@ -9,27 +9,8 @@ $background-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/200
 // FONTS
 @import url('https://fonts.googleapis.com/css2?family=Chango&display=swap')
 
-// GRADIENTS
-@function red-gradient()
-    @return paper.gradient($paper-texture, (red, rgb(255, 53, 114)))
-
-@function cyan-gradient()
-    @return paper.gradient($paper-texture, (rgb(81, 187, 205), rgb(255, 131, 253)))
-
-@mixin outline-filter()
-    &::before
-        position: absolute
-        z-index: -1
-        content: attr(title)
-        transform: scale(1.2)
-        filter: brightness(20)
-
-.red-background
-    background: red-gradient()
-.cyan-background
-    background: cyan-gradient()
 body
-    background-color: #cc5577
+    background-color: #CD420D
 
 // MAIN
 main
@@ -85,8 +66,6 @@ main
         transform-origin: bottom center
         font-size: 5rem
         text-align: center
-        // @include outline-filter()
-        // text-shadow: 0rem 0.3rem 0rem beige
     &.action p
         transform: translateX(0.5rem) rotate(4deg)
 
@@ -103,15 +82,10 @@ main
     display: flex
     justify-content: center
     transform-origin: bottom center
-    // box-shadow: 0rem 0.2rem 0rem 0rem rgb(122, 120, 100), 0.2rem 0.2rem 1rem 0rem rgba(0, 0, 0, 0.4)
-    // background: beige
-    // border-radius: 9999rem
     .resource-icon
         transition: transform 200ms, opacity 200ms, filter 200ms, text-shadow 200ms
         font-size: 5rem
         line-height: 3rem
-        // text-shadow: 0rem -0.3rem 0rem beige
-        // @include outline-filter()
 
     &.evade .resource-icon
         transform: rotate(5deg)
@@ -153,7 +127,6 @@ main
     box-shadow: 0.1rem 0.1rem 0.2rem rgba(0, 0, 0, 0.15)
     border: none
     outline: none
-        // padding: palette.$spacing-small
     border-radius: 9999rem
     box-shadow: 0rem 0.15rem 0rem 0rem rgb(104, 198, 104), 0rem 0.3rem 0rem 0rem rgb(165, 83, 206), 0.1rem 0.3rem 0.2rem rgba(0, 0, 0, 0.15)
 
@@ -163,11 +136,9 @@ main
     gap: palette.$spacing-medium
     align-items: center
     h3
-        // font-family: 'Chango', cursive
-        // text-shadow: 0rem 0.15rem 0rem palette.$secondary-color, 0rem 0.3rem 0rem rgb(254, 104, 189)
         text-align: center
         font-size: 1.5rem
-        // font-weight: 900
+
     .item-stacks
         display: flex
         gap: palette.$spacing-medium
@@ -177,7 +148,7 @@ main
         font-size: 2rem
         line-height: 1.5rem
         padding: palette.$spacing-small
-        // text-shadow: 0rem 0.15rem 0rem palette.$secondary-color, 0rem 0.3rem 0rem rgb(254, 104, 189)
+
     .item-amount
         font-size: 0.7rem
         font-weight: 500
@@ -186,6 +157,5 @@ main
         bottom: -0.3rem
         background: palette.$primary-color
         color: palette.$secondary-color
-        // box-shadow: 0rem 0.15rem 0rem rgb(254, 104, 189)
         padding: 0.5rem 0.3rem
         border-radius: 9999rem
