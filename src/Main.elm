@@ -163,6 +163,10 @@ view model =
             [ Html.h1 [ class "cyan" ] [ Html.text "Debug" ]
             , View.viewLocation [] [ View.viewInventory model.inventory ]
             ]
+        , div [ class "area", class "dark" ]
+            [ Html.h1 [ class "cyan" ] [ Html.text "Social" ]
+            , View.viewSocial
+            ]
         ]
 
 

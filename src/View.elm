@@ -1,11 +1,11 @@
-module View exposing (viewAnimal, viewInventory, viewLocation, viewLoot, viewResource)
+module View exposing (viewAnimal, viewInventory, viewLocation, viewLoot, viewResource, viewSocial)
 
 import Engine.Animal as Animal exposing (Animal)
 import Engine.Inventory exposing (Inventory, ItemStack)
 import Engine.Item as Item exposing (Item)
 import Engine.Resource as Resource exposing (Resource)
-import Html exposing (Attribute, Html, button, div, h3, p, text)
-import Html.Attributes exposing (class, classList)
+import Html exposing (Attribute, Html, a, button, div, h3, p, text)
+import Html.Attributes exposing (class, classList, href, style)
 import Html.Events exposing (onClick)
 
 
@@ -66,3 +66,11 @@ viewInventory inventory =
 viewLocation : List (Attribute msg) -> List (Html msg) -> Html msg
 viewLocation attrs content =
     div (class "location" :: attrs) content
+
+
+viewSocial : Html msg
+viewSocial =
+    div [ style "display" "flex", style "justify-content" "center", style "gap" "2rem" ]
+        [ div [] [ p [] [ text "Github:" ], a [ href "https://github.com/IsakUlstrup/gathering-animals" ] [ text "gathering-animals" ] ]
+        , div [ class "qr-code" ] []
+        ]
