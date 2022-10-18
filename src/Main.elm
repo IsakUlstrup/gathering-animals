@@ -164,7 +164,7 @@ view model =
             , View.viewLocation [] [ View.viewInventory model.inventory ]
             ]
         , div [ class "area", class "dark" ]
-            [ Html.h1 [ class "cyan" ] [ Html.text "Social" ]
+            [ Html.h1 [ class "cyan" ] [ Html.text "Links" ]
             , View.viewSocial
             ]
         ]
