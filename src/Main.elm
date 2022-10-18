@@ -165,7 +165,7 @@ view model =
             ]
         , div [ class "area", class "dark" ]
             [ Html.h1 [ class "cyan" ] [ Html.text "Links" ]
-            , View.viewSocial
+            , View.viewLocation [] [ View.viewSocial ]
             ]
         ]
 
