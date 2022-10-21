@@ -49,19 +49,14 @@ main
         font-size: 3rem
         line-height: 5rem
         font-family: 'Chango', cursive
-        background-color: rgb(29, 105, 122)
-        background-image: $background-pattern
-        background-clip: text
-        background-repeat: repeat
-        -webkit-background-clip: text
-        color: rgba(255, 33, 144, 0.4)
-        text-shadow: 0rem 0rem 0.1rem rgba(255, 255, 255, 0.2)
-    &.dark
+        mix-blend-mode: darken
+        color: palette.$primary-color
+
+    &:nth-child(odd)
         background: paper.solid-color($dark-paper-texture, #1c2125)
         border-bottom: 0.1rem solid #52606c
         box-shadow: 0rem 0.2rem 0rem 0rem #39434b, 0.1rem 0.3rem 0.3rem rgba(0, 0, 0, 0.5)
-        color: palette.$secondary-color
-    &.light
+    &:nth-child(even)
         background: paper.solid-color($paper-texture, palette.$secondary-color)
         border-bottom: 0.1rem solid #fffef7
         box-shadow: 0rem 0.2rem 0rem 0rem #feffdc, 0.1rem 0.3rem 0.3rem rgba(0, 0, 0, 0.5)
