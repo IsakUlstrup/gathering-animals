@@ -6,6 +6,7 @@ import Content.Resources
 import Engine.Animal as Animal
 import Engine.Inventory exposing (Inventory)
 import Engine.Item exposing (Item)
+import Engine.Resource
 import GameState exposing (GameState, actionUpdate, lootUpdate, tickUpdate)
 import Html exposing (Html, div, main_)
 import Html.Attributes exposing (class)
@@ -109,7 +110,16 @@ update msg model =
             )
 
         Interact ->
-            ( { model | animal = Animal.toggleAuto model.animal }, Cmd.none )
+            ( { model
+                | animal =
+                    if Engine.Resource.isAlive model.resource then
+                        Animal.toggleAuto model.animal
+
+                    else
+                        model.animal
+              }
+            , Cmd.none
+            )
 
         LootItem index ->
             case model.loot |> lootAtIndex index of
