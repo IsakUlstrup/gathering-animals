@@ -66,6 +66,7 @@ init flags =
 
 type Msg
     = Tick Int
+    | Interact
     | LootItem Int
 
 
@@ -107,6 +108,9 @@ update msg model =
             , Cmd.none
             )
 
+        Interact ->
+            ( { model | animal = Animal.toggleAuto model.animal }, Cmd.none )
+
         LootItem index ->
             case model.loot |> lootAtIndex index of
                 ( newLoot, Just item ) ->
@@ -133,7 +137,7 @@ view model =
             , View.viewLocation []
                 [ div [ class "animal-v-resource" ]
                     [ View.viewAnimal model.animal
-                    , View.viewResource model.resource
+                    , View.viewResource Interact model.resource
                     ]
                 , View.viewLoot LootItem model.loot
                 ]

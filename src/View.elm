@@ -31,8 +31,8 @@ viewLoot lootEvent items =
     div [ class "loot-list" ] (List.indexedMap lootBtn items)
 
 
-viewResource : Resource -> Html msg
-viewResource resource =
+viewResource : msg -> Resource -> Html msg
+viewResource interactMsg resource =
     div
         [ class "resource"
         , classList
@@ -44,7 +44,7 @@ viewResource resource =
             , ( "regrown", Resource.isRegrown resource )
             ]
         ]
-        [ p [ class "resource-icon", class "emoji", Html.Attributes.title (Resource.icon resource |> String.fromChar) ] [ text (Resource.icon resource |> String.fromChar) ] ]
+        [ p [ onClick interactMsg, class "resource-icon", class "emoji", Html.Attributes.title (Resource.icon resource |> String.fromChar) ] [ text (Resource.icon resource |> String.fromChar) ] ]
 
 
 viewItemStack : ItemStack -> Html msg

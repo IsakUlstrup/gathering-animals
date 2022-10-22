@@ -1,12 +1,14 @@
 module Engine.Animal exposing
     ( Animal
     , AnimalState
+    , disableAutoIf
     , interactIf
     , isCooling
     , isIdle
     , isInteracting
     , new
     , tick
+    , toggleAuto
     )
 
 import Engine.StateMachine as State exposing (State(..))
@@ -16,6 +18,7 @@ import Engine.StateMachine as State exposing (State(..))
 -}
 type alias Animal =
     { state : State AnimalState
+    , auto : Bool
     }
 
 
@@ -107,7 +110,7 @@ isCooling animal =
 -}
 new : Animal
 new =
-    Animal cooldownState
+    Animal cooldownState False
 
 
 {-| Tick state by dt in ms
@@ -132,3 +135,17 @@ interactIf shouldInteract animal =
 
     else
         ( animal, False )
+
+
+disableAutoIf : Bool -> Animal -> Animal
+disableAutoIf flag animal =
+    if flag then
+        { animal | auto = False }
+
+    else
+        animal
+
+
+toggleAuto : Animal -> Animal
+toggleAuto animal =
+    { animal | auto = not animal.auto }

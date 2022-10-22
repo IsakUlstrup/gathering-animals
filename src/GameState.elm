@@ -33,13 +33,18 @@ actionUpdate state =
     let
         ( animal, action ) =
             state.animal
-                |> Engine.Animal.interactIf (Engine.Resource.isAlive state.resource)
+                |> Engine.Animal.disableAutoIf (state.resource |> Engine.Resource.isExhausted)
+                |> Engine.Animal.interactIf (Engine.Resource.isAlive state.resource && state.animal.auto)
 
         ( resource, seed ) =
             state.resource
                 |> Engine.Resource.hitIf action state.seed
     in
-    { state | animal = animal, resource = resource, seed = seed }
+    { state
+        | animal = animal
+        , resource = resource
+        , seed = seed
+    }
 
 
 lootUpdate : GameState -> GameState
