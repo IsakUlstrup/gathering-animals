@@ -3,14 +3,14 @@ module Main exposing (Model, Msg, main)
 import Browser
 import Browser.Events
 import Content.Resources
-import Engine.Animal as Animal exposing (Animal)
+import Engine.Animal as Animal
 import Engine.Inventory exposing (Inventory)
 import Engine.Item exposing (Item)
-import Engine.Resource as Resource exposing (Resource)
+import GameState exposing (GameState, actionUpdate, lootUpdate, tickUpdate)
 import Html exposing (Html, div, main_)
 import Html.Attributes exposing (class)
 import Json.Decode as Decode exposing (Decoder, Value)
-import Random exposing (Seed)
+import Random
 import Storage
 import View
 
@@ -20,12 +20,7 @@ import View
 
 
 type alias Model =
-    { animal : Animal
-    , resource : Resource
-    , loot : List Item
-    , inventory : Inventory
-    , seed : Seed
-    }
+    GameState
 
 
 type alias Config =
@@ -45,7 +40,7 @@ init : Value -> ( Model, Cmd Msg )
 init flags =
     case Decode.decodeValue configDecoder flags of
         Ok cfg ->
-            ( Model
+            ( GameState
                 Animal.new
                 Content.Resources.evergreen
                 []
@@ -55,7 +50,7 @@ init flags =
             )
 
         Err _ ->
-            ( Model
+            ( GameState
                 Animal.new
                 Content.Resources.evergreen
                 []
@@ -105,26 +100,10 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Tick dt ->
-            let
-                ( animal, action ) =
-                    model.animal
-                        |> Animal.tick dt
-                        |> Animal.interactIf (Resource.isAlive model.resource)
-
-                ( resource, seed ) =
-                    model.resource
-                        |> Resource.tick dt
-                        |> Resource.hitIf action model.seed
-
-                ( loot, seed2 ) =
-                    Resource.getLoot seed resource
-            in
-            ( { model
-                | animal = animal
-                , resource = resource
-                , seed = seed2
-                , loot = (loot |> Maybe.withDefault []) ++ model.loot |> List.take 5
-              }
+            ( model
+                |> tickUpdate dt
+                |> actionUpdate
+                |> lootUpdate
             , Cmd.none
             )
 
